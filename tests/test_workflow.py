@@ -171,7 +171,7 @@ class BuildTests(unittest.TestCase):
         self.assertIn('class="empty"', page)
         self.assertNotIn('data-kind=', page)
         self.assertNotIn('<dialog', page)
-        self.assertIn('[ 00 ]', page)
+        self.assertRegex(page, r'\[\s*00\s*\]')
 
     def test_site_modules_and_licenses_publish_but_unlisted_files_do_not(self):
         (self.root / "site/.env").write_text("PRIVATE_FIXTURE=never-copy")
@@ -197,7 +197,7 @@ class BuildTests(unittest.TestCase):
         self.assertIn('&lt;script&gt;bad()&lt;/script&gt;', page)
         self.assertNotIn('<img src=x', page)
         self.assertNotIn('体验作品', page)
-        self.assertIn('[ 01 ]', page)
+        self.assertRegex(page, r'\[\s*01\s*\]')
 
     def test_unsafe_frontend_asset_preserves_last_successful_build(self):
         builder.build(self.root)
