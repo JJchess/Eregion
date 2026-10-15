@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#f0f5f8">
+  <meta name="description" content="JJchess 的 UI 作品集：用对话迭代的组件、页面与交互实验。作品预览、设计思路和源码，一起留下。">
+  <title>JJchess — 把想法做成界面</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="filter.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#works">跳到作品</a>
+  <div class="shell">
+    <header>
+      <a class="identity" href="./" aria-label="JJchess 首页"><span class="monogram" aria-hidden="true">j.</span>JJchess</a>
+      <nav aria-label="主导航"><a href="#works">作品</a><a href="#about">关于</a><a href="https://github.com/JJchess">GitHub ↗</a></nav>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="title">
+        <div class="hero-copy"><p class="eyebrow">A VIBE CODER’S PORTFOLIO</p>
+          <h1 id="title">把想法<br>做成<span class="accent">界面<span class="cursor" aria-hidden="true"></span></span>。</h1>
+          <p class="intro">用对话迭代，凭体验打磨。<br>我是 JJchess，这里是我在开发中留下的 UI 作品。</p>
+          <a class="view-works" href="#works">看作品 <span aria-hidden="true">↓</span></a>
+        </div>
+        <aside class="conversation" aria-label="创作方式">
+          <span class="conversation-label">FROM A CONVERSATION</span>
+          <div class="prompt">“这个想法，<br>能不能做出来？”<span class="prompt-tail" aria-hidden="true"></span></div>
+          <div class="answer"><span class="answer-mark" aria-hidden="true">↳</span><span>写出来。试一试。<br>再改好一点。</span></div>
+          <span class="conversation-end">TO SOMETHING YOU CAN TOUCH.</span>
+        </aside>
+      </section>
+      <section id="works" class="collection" aria-labelledby="works-title">
+        <div class="section-top"><div><p class="eyebrow">SELECTED WORK</p><h2 id="works-title">值得留下的。</h2></div><!-- FILTERS --></div>
+        <div class="works-grid"><!-- WORKS --></div>
+        <p class="filter-empty" hidden>这个分类还没有作品。试试其他分类。</p>
+        <p class="sr-only" id="filter-status" role="status" aria-live="polite"></p>
+      </section>
+      <section id="about" class="about" aria-labelledby="about-title"><p class="eyebrow">BEHIND THE INTERFACE</p>
+        <div><h2 id="about-title">用对话迭代，<br>用作品说话。</h2><p>我是深度 vibe coder，在 Codex 里把想法一步步做出来。从一个小组件到一个完整页面，我关心它看起来如何，也关心它用起来如何。</p><p>这个作品集收录开发中值得留下的片段。每件作品都会附上源码、运行方式与设计说明，让想法可以被看见，也可以被继续创造。</p><a class="text-link" href="https://github.com/JJchess/portfolio">在 GitHub 看完整归档 ↗</a></div>
+      </section>
+    </main>
+    <footer><span>JJchess <span class="footer-dot">·</span> Made through conversation.</span><a href="#title">回到顶部 ↑</a></footer>
+  </div>
+</body>
+</html>

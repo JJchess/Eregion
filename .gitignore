@@ -1,0 +1,10 @@
+_site/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.*
+!.env.example
+node_modules/
+.portfolio-drafts/
+.portfolio-curator/
