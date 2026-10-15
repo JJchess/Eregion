@@ -170,6 +170,47 @@ class BuildTests(unittest.TestCase):
         page = (self.root / "_site/index.html").read_text()
         self.assertIn('class="empty"', page)
         self.assertNotIn('data-kind=', page)
+        self.assertNotIn('<dialog', page)
+        self.assertIn('[ 00 ]', page)
+
+    def test_site_modules_and_licenses_publish_but_unlisted_files_do_not(self):
+        (self.root / "site/.env").write_text("PRIVATE_FIXTURE=never-copy")
+        (self.root / "site/private-notes.txt").write_text("not public")
+        builder.build(self.root)
+        output = self.root / "_site"
+        for asset in builder.SITE_FILES:
+            self.assertEqual((output / asset).read_bytes(), (self.root / "site" / asset).read_bytes())
+        self.assertFalse((output / ".env").exists())
+        self.assertFalse((output / "private-notes.txt").exists())
+
+    def test_details_share_archive_data_and_escape_user_text(self):
+        folder, info = self.work()
+        info["summary"] = '<img src=x onerror="alert(1)">'
+        info["highlights"] = ['<script>bad()</script>']
+        (folder / "work.json").write_text(json.dumps(info))
+        builder.build(self.root)
+        page = (self.root / "_site/index.html").read_text()
+        self.assertIn('data-detail="detail-test-component"', page)
+        self.assertIn('id="detail-test-component" aria-labelledby="detail-title-test-component"', page)
+        self.assertIn('id="detail-title-test-component"', page)
+        self.assertEqual(page.count('&lt;img src=x onerror=&quot;alert(1)&quot;&gt;'), 2)
+        self.assertIn('&lt;script&gt;bad()&lt;/script&gt;', page)
+        self.assertNotIn('<img src=x', page)
+        self.assertNotIn('体验作品', page)
+        self.assertIn('[ 01 ]', page)
+
+    def test_unsafe_frontend_asset_preserves_last_successful_build(self):
+        builder.build(self.root)
+        output = self.root / "_site/index.html"
+        original = output.read_bytes()
+        asset = self.root / "site/hero.js"
+        asset.unlink()
+        secret = self.root / "private.js"
+        secret.write_text("not public")
+        asset.symlink_to(secret)
+        with self.assertRaises(ValueError):
+            builder.build(self.root)
+        self.assertEqual(output.read_bytes(), original)
 
     def test_approved_work_renders_and_only_public_assets_are_copied(self):
         folder, info = self.work()

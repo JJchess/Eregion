@@ -22,7 +22,7 @@ works/<slug>/
   src/            # 整理后的源码与必要依赖清单、锁文件
   preview.webp    # 实际作品截图（也支持 PNG / JPEG）
   demo/           # 可选，可独立访问的静态演示
-site/             # 展示页模板、样式、筛选交互
+site/             # 互动首页、作品展示、自产素材与固定版本的前端依赖
 scripts/build.py  # 验证作品资料并生成静态站点
 automation/       # 可安装到 Codex 的收录技能与 hooks
 ```
@@ -40,6 +40,12 @@ python3 -m http.server 4173 --directory _site
 ```
 
 打开 `http://localhost:4173`。构建只输出页面、已收录作品预览及明确指定的静态演示，不会把整个工作区打包上网。
+
+首页包含可旋转、拆解及重组的原创金属 JJ 装置，作品支持画廊／索引布局和详情展开。3D 加载失败会显示静态预览；减少动态效果设置、键盘访问和原生滚动均保留。Three.js 与字体随站点托管，版本和许可证见 [首页设计记录](docs/homepage-design.md)。
+
+作品资料仍只维护 `work.json`：卡片、计数、筛选和详情均由它生成。源码与说明保留在作品目录，详情中的入口直接指向对应 GitHub 目录。当前没有正式收录作品时，不显示虚构案例。
+
+可选浏览器集成检查需要已安装 Playwright 与 Chromium：运行 `node tests/browser.cjs`。如果工具装在其他目录，通过 `PLAYWRIGHT_MODULE` 指定 Playwright 包路径，`CHROMIUM_EXECUTABLE` 指定浏览器；`PORTFOLIO_ARTIFACTS` 可指定截图和录屏保存目录。夹具在系统临时目录生成，始终不会进入公开作品归档。
 
 ## 安装 Codex 收录流程
 
