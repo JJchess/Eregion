@@ -63,8 +63,59 @@ class HookTests(unittest.TestCase):
     def test_plan_mode_does_not_start_extra_work(self):
         self.assertEqual(hook.handle(self.event("Stop", permission_mode="plan", last_assistant_message="组件计划"), self.cfg), {})
 
+    def test_claude_prompt_ids_cover_edits_receipts_and_later_prompts(self):
+        base = {"session_id": "claude-session", "prompt_id": "prompt-one"}
+        start = hook.handle({"session_id": "claude-session", "hook_event_name": "SessionStart"}, self.cfg)
+        self.assertEqual(start["hookSpecificOutput"]["hookEventName"], "SessionStart")
+        prompt = hook.handle({**base, "hook_event_name": "UserPromptSubmit", "prompt": "修复显示问题"}, self.cfg)
+        self.assertIn("prompt-one", prompt["hookSpecificOutput"]["additionalContext"])
+        hook.handle({**base, "hook_event_name": "PostToolUse", "tool_name": "Write",
+                     "tool_input": {"file_path": "/tmp/component.tsx", "content": "export default () => null"}}, self.cfg)
+        stop = {**base, "hook_event_name": "Stop", "last_assistant_message": "Done"}
+        self.assertEqual(hook.handle(stop, self.cfg)["decision"], "block")
+        self.assertEqual(hook.handle(stop, self.cfg), {})
+        with hook.state(self.cfg, "claude-session", "prompt-one") as state:
+            state["outcome"] = "proposed"
+        self.assertEqual(hook.handle(stop, self.cfg), {})
+        next_stop = {**stop, "prompt_id": "prompt-two", "last_assistant_message": "页面已完成"}
+        self.assertEqual(hook.handle(next_stop, self.cfg)["decision"], "block")
+
+    def test_claude_subagent_cannot_mark_parent_for_curation(self):
+        base = {"session_id": "claude-session", "prompt_id": "prompt-one"}
+        hook.handle({**base, "hook_event_name": "PostToolUse", "agent_id": "child",
+                     "tool_name": "Edit", "tool_input": {"file_path": "/tmp/demo.html"}}, self.cfg)
+        self.assertEqual(hook.handle({**base, "hook_event_name": "Stop"}, self.cfg), {})
+
 
 class InstallerTests(unittest.TestCase):
+    def test_claude_install_preserves_other_settings_and_hooks(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            repo, home = root / "repo", root / "claude"
+            (repo / "works").mkdir(parents=True)
+            (repo / "works/README.md").write_text("Works")
+            home.mkdir()
+            original = {"model": "existing-model", "enabledPlugins": {"existing": True},
+                        "disableAllHooks": True, "hooks": {"PreToolUse": [{"hooks": [{"type": "command", "command": "echo existing"}]}]}}
+            (home / "settings.json").write_text(json.dumps(original))
+            (home / "CLAUDE.md").write_text("Existing user preferences.\n")
+            cmd = [sys.executable, str(ROOT / "automation/install.py"), "--repo", str(repo),
+                   "--client", "claude", "--claude-home", str(home)]
+            subprocess.run(cmd, check=True, capture_output=True)
+            subprocess.run(cmd, check=True, capture_output=True)
+            installed = json.loads((home / "settings.json").read_text())
+            self.assertEqual({k: v for k, v in installed.items() if k != "hooks"},
+                             {k: v for k, v in original.items() if k != "hooks"})
+            self.assertEqual(installed["hooks"]["PreToolUse"], original["hooks"]["PreToolUse"])
+            for event in ["SessionStart", "UserPromptSubmit", "PostToolUse", "Stop"]:
+                self.assertEqual(len(installed["hooks"][event]), 1)
+            self.assertTrue((home / "CLAUDE.md").read_text().startswith("Existing user preferences.\n"))
+            self.assertEqual((home / "CLAUDE.md").read_text().count("<!-- portfolio-curator:start -->"), 1)
+            self.assertFalse((home / "AGENTS.md").exists())
+            cfg = json.loads((home / "skills/portfolio-curator/config.json").read_text())
+            self.assertEqual(cfg["state_dir"], str(repo.parent / ".portfolio-curator/state/claude"))
+            self.assertEqual(cfg["drafts_dir"], str(repo.parent / ".portfolio-curator/drafts"))
+
     def test_preserves_existing_config_and_does_not_write_trust(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Local Codex reminders only: no source copying, network calls or publishing."""
+"""Local Codex/Claude Code reminders: no source copying, network or publishing."""
 import argparse
 from contextlib import contextmanager
 import fcntl
@@ -64,6 +64,10 @@ def context(cfg, event):
 
 
 def handle(event, cfg):
+    # Claude Code uses prompt_id; Codex uses turn_id. Keep receipts per prompt.
+    if event.get("agent_id"):
+        return {}  # Subagent events must not overwrite the main session's receipt.
+    event = {**event, "turn_id": event.get("turn_id") or event.get("prompt_id") or ""}
     name = event.get("hook_event_name")
     session, turn = event.get("session_id"), event.get("turn_id")
     if name == "SessionStart":
@@ -79,7 +83,7 @@ def handle(event, cfg):
         inp = event.get("tool_input", {})
         raw = inp if isinstance(inp, str) else json.dumps(inp, ensure_ascii=False)
         # Read operations do not count. Signals request an evaluation, never publication.
-        edited = tool in {"apply_patch", "Edit", "Write"} or (tool == "Bash" and EDIT.search(raw))
+        edited = tool in {"apply_patch", "Edit", "MultiEdit", "Write"} or (tool == "Bash" and EDIT.search(raw))
         if edited and UI_FILE.search(raw):
             with state(cfg, session, turn) as current:
                 current["ui"] = True

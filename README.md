@@ -57,4 +57,16 @@ python3 automation/install.py --repo "$PWD"
 
 停用时可以在 `/hooks` 禁用本技能的四个 hooks，并移除全局 `AGENTS.md` 的 `portfolio-curator` 标记段；不影响其他 hooks。
 
-参考：[Codex hooks](https://learn.chatgpt.com/docs/hooks)、[GitHub Pages 工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
+## 安装 Claude Code 全局收录流程
+
+```bash
+python3 automation/install.py --client claude --repo "$PWD"
+```
+
+安装到 `~/.claude/skills/portfolio-curator/`，向 `~/.claude/settings.json` 合并四个 hooks，并在 `~/.claude/CLAUDE.md` 中记录收录约定。保留已有 hooks、模型、插件及其他设置，修改前自动备份。设置了 `CLAUDE_CONFIG_DIR` 时使用该目录，也可通过 `--claude-home` 指定。
+
+新开一个 Claude Code 会话即可加载完整上下文，输入 `/hooks` 可检查全局条目，或使用 `/portfolio-curator` 明确调用技能。收录规则与 Codex 相同：自主发现先准备候选并询问，明确要求收录则直接完成发布。仓库和草稿目录共用，回执状态独立；适配 Claude Code 的 `prompt_id`、`Write` / `Edit` / `Bash` 事件，并忽略子代理事件对主会话的干扰。
+
+停用时从 `settings.json` 移除 `statusMessage` 为 `Portfolio curator` 的四个处理器，并删除 `CLAUDE.md` 的对应标记段。不要删除其他 hooks，也不自动修改已有的 `disableAllHooks` 设置。
+
+参考：[Codex hooks](https://learn.chatgpt.com/docs/hooks)、[Claude Code hooks](https://code.claude.com/docs/en/hooks)、[GitHub Pages 工作流](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)。
