@@ -1,0 +1,30 @@
+{
+  "Chat": {
+    "voiceMode": {
+      "enter": "语音模式",
+      "mute": "静音",
+      "unmute": "取消静音",
+      "muted": "已静音",
+      "invite": "复制语音邀请链接",
+      "end": "结束语音",
+      "leave": "离开语音",
+      "speaking": "在说",
+      "thinking": "正在思考",
+      "cut": "已打断",
+      "waitingHost": "等待房主开始",
+      "reconnecting": "正在重连…",
+      "listening": "在听",
+      "ready": "就绪",
+      "statusMuted": "静音",
+      "addAgent": "加入语音",
+      "removeAgent": "移出语音",
+      "orbConnecting": "正在连接…",
+      "orbSelf": "<who>你</who>正在发言",
+      "orbSpeaking": "<who>{name}</who> 正在发言",
+      "orbPreparing": "<who>{name}</who> 正在准备回答",
+      "orbAnswering": "<who>{name}</who> 正在回答",
+      "orbThinking": "思考中…",
+      "orbEnded": "通话已结束"
+    }
+  }
+}

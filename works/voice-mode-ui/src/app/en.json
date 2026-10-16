@@ -1,0 +1,30 @@
+{
+  "Chat": {
+    "voiceMode": {
+      "enter": "Voice mode",
+      "mute": "Mute",
+      "unmute": "Unmute",
+      "muted": "Muted",
+      "invite": "Copy voice invite link",
+      "end": "End voice",
+      "leave": "Leave voice",
+      "speaking": "Speaking",
+      "thinking": "Thinking",
+      "cut": "Interrupted",
+      "waitingHost": "Waiting for the host",
+      "reconnecting": "Reconnecting…",
+      "listening": "Listening",
+      "ready": "Ready",
+      "statusMuted": "Muted",
+      "addAgent": "Add to voice",
+      "removeAgent": "Remove from voice",
+      "orbConnecting": "Connecting…",
+      "orbSelf": "<who>You</who> are speaking",
+      "orbSpeaking": "<who>{name}</who> is speaking",
+      "orbPreparing": "<who>{name}</who> is preparing an answer",
+      "orbAnswering": "<who>{name}</who> is answering",
+      "orbThinking": "Thinking…",
+      "orbEnded": "Call ended"
+    }
+  }
+}

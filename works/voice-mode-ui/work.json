@@ -1,0 +1,29 @@
+{
+  "locale": "en",
+  "title": "Voice Mode UI",
+  "summary": "A chat composer becomes a voice dock with a liquid orb, speaker colors and progressive transcripts. Play a scripted conversation to explore listening, thinking, speaking and ending states without a microphone or backend.",
+  "kind": "component",
+  "date": "2026-10-16",
+  "tags": ["React", "WebGL", "GLSL", "Interaction design"],
+  "highlights": [
+    "The voice entry button and active dock share a transition, keeping controls connected to the conversation.",
+    "A procedural orb changes palette and activity as the demo moves between self, Agent and peer speech.",
+    "Progressive transcripts, speaker status and waveform motion follow one scripted timeline.",
+    "Play, pause, replay, mute and end controls make the English/Chinese demo explorable without audio access."
+  ],
+  "preview": "preview.webp",
+  "demo": "demo/index.html",
+  "translations": {
+    "zh": {
+      "title": "语音模式 UI",
+      "summary": "聊天输入区转为语音控制台，用流动球体、说话人配色和逐步字幕表达状态。播放示例对话，体验聆听、思考、说话和结束流程，无需麦克风或后端。",
+      "tags": ["React", "WebGL", "GLSL", "交互设计"],
+      "highlights": [
+        "语音入口按钮与通话控制台使用共享转场，让控件与对话保持连续。",
+        "程序化球体随本人、Agent 和同伴的示例发言切换配色与动态强度。",
+        "逐步字幕、说话人状态和波形动画共用一条示例时间线。",
+        "播放、暂停、重播、静音和结束操作让中英文演示无需音频权限即可体验。"
+      ]
+    }
+  }
+}

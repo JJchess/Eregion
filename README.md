@@ -15,9 +15,9 @@ python3 scripts/serve.py --port 4179
 
 Open `http://localhost:4179/portfolio/` for English or `http://localhost:4179/portfolio/zh/` for Chinese. This preserves the established local preview address. The production site uses `/Eregion/`; GitHub Actions passes that base path to the same builder. To inspect the production path locally, use `python3 scripts/build.py --base-path /Eregion/` and `python3 scripts/serve.py --port 4179 --base-path /Eregion/` together.
 
-The personal site includes Home, About, Projects and individual pages generated for approved works. Its light palette, large typography and original four-part UI installation are shared across both languages. Native controls provide the interaction; optional Three.js rendering adds decoration. The first approved work is [Galaxy Skill Market](works/galaxy-skill-market/README.md), a navigable pearl-like skill map extracted with synthetic data and a standalone demo. Empty states remain available when a filter has no matching works.
+The personal site includes Home, About, Projects and individual pages generated for approved works. Its light palette, large typography and original four-part UI installation are shared across both languages. Native controls provide the interaction; optional Three.js rendering adds decoration. Approved works include [Galaxy Skill Market](works/galaxy-skill-market/README.md), a navigable pearl-like skill map, and [Voice Mode UI](works/voice-mode-ui/README.md), a chat voice dock with progressive text and a procedural orb. Both use synthetic data and standalone demos. Empty states remain available when a filter has no matching works.
 
-The personal site and Galaxy demo are validated locally with official Google Chrome 155. GitHub Actions builds and publishes the approved archive through Pages; see the [design and verification record](docs/homepage-design.md) and the [work README](works/galaxy-skill-market/README.md) for their separate tested scopes and remaining device-test limits.
+The personal site, Galaxy Skill Market and Voice Mode UI are validated locally with official Google Chrome 155. GitHub Actions builds and publishes the approved archive through Pages; see the [design and verification record](docs/homepage-design.md) and each work's README for their separate tested scopes and remaining device-test limits.
 
 ## 个人站与作品资料
 
@@ -62,6 +62,12 @@ replicas/         # 本地研究版，不进入公开构建
 
 ```bash
 CDP_PORT=9224 PLAYWRIGHT_MODULE=/path/to/playwright node tests/browser.cjs
+```
+
+语音模式的独立回归连接同一官方 Chrome；先保持上方 4179 本地预览运行，再从仓库根目录执行：
+
+```bash
+CDP_PORT=9224 PLAYWRIGHT_MODULE=/path/to/playwright node tests/voice-browser.cjs
 ```
 
 根页面和独立滚动容器保持 `overscroll-behavior: none`，内容仍可原生滚动。浏览器自动化不能替代物理手机或触控板的弹性滚动实测。Three.js 和字体随站点托管，版本与许可证见设计记录。

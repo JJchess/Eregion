@@ -96,7 +96,7 @@ The repository's current 28 Python tests passed. A fresh official Chrome 155 pas
 
 The Galaxy clean `npm ci`, type check and static build passed under Node.js 20.20.2/npm 10.8.2, along with four focused model tests covering layout reachability/spacing, spring timing/reduced motion, installation/material states and Agent validation/storage fallback. The build's rendered-module inventory contains 20 runtime packages; 21 complete license files cover those packages plus the declared Motion entry package. The source and standalone demo notices and license files match byte for byte.
 
-The real archive now builds with one approved work, and all 28 repository Python tests passed again after collection. Its 1440 × 960 `preview.webp` is a direct official Chrome CDP screenshot, with no generated background or reference-image composition. Desktop overview, category/detail and dark-theme views, plus 390 px Chinese list/detail views, were visually reviewed without uncaught runtime exceptions.
+At the Galaxy collection milestone, the real archive built with one approved work and all 28 repository Python tests passed again. Its 1440 × 960 `preview.webp` is a direct official Chrome CDP screenshot, with no generated background or reference-image composition. Desktop overview, category/detail and dark-theme views, plus 390 px Chinese list/detail views, were visually reviewed without uncaught runtime exceptions.
 
 The complete Galaxy regression passed in official Chrome 155.0.8059.84:
 
@@ -107,3 +107,24 @@ The complete Galaxy regression passed in official Chrome 155.0.8059.84:
 - No business API or remote-resource requests, failed HTTP responses or uncaught exceptions occurred in the exercised flows.
 
 These are local browser results. Physical phone/trackpad elastic scrolling and hardware frame rates remain unmeasured; context loss after successful WebGL creation was not tested. Publication runs through the repository's GitHub Actions Pages workflow; the formal site and demo use `/Eregion/` while default local preview remains `/portfolio/`.
+
+## Second approved work: Voice Mode UI
+
+The user explicitly approved collecting the current Edumanus chat voice interface. [`works/voice-mode-ui/`](../works/voice-mode-ui/README.md) archives the voice dock, controls, progressive text, height transitions and native WebGL orb as a `component` entry, with English primary metadata and a complete Chinese translation. Its standalone shell uses synthetic members and a scripted conversation; it never requests microphone access, captures/plays real audio, opens a WebSocket or calls a business service.
+
+The orb is adapted from beUI Voice Orb, © 2026 Saurabh Chauhan, under MIT, at upstream revision `9deb728d936b5f89c859ab6c1f169235aa24b3ad`. Edumanus's state integration and the standalone demo are documented separately from that contribution. The older ElevenLabs-derived `voice` prototype, reference footage, recordings, room tokens and real conversations are excluded. Full applicable notices must accompany both source and static demo.
+
+The Voice extraction passed clean `npm ci`, all five focused tests, type checking and a production build. Tests cover scene/turn boundaries, mute and Agent membership, deterministic complete bilingual transcripts, bounded simulated activity, and the speaker-ID-to-activity-reader mapping consumed by the dock. The actual bundle inventory contains 12 JavaScript packages; complete notices for those packages, the Geist font and beUI renderer total 14 license files. Their source and demo copies were checked byte for byte.
+
+The 1440 × 960 `preview.webp` is a direct official Chrome CDP WebP capture and was visually reviewed. All 28 repository Python tests passed. The actual two-work portfolio passed Chrome integration checks for its `02` count, component/page/empty filters, bilingual detail pages, the next-work cycle, 390 px layouts and native demo links. A production-base build contains 14 HTML documents, and all 292 scanned links resolve.
+
+All nine Voice browser check groups passed in official Chrome 155.0.8059.84:
+
+- Play/pause/replay, actual changes in the simulated activity signal, all speaker states/palettes, and progressive transcripts.
+- Mute, participant controls, modal focus/Escape, end/composer and a single reopened orb; English/Chinese, themes, Chinese muted status and input focus.
+- At 390 px, natural caption following, a native CDP upward touch swipe that preserves reading position during later captions, and replay/scene following reset. At 390/320 px, touch controls, unclipped captions, scroll boundaries, reduced motion and horizontal-overflow checks.
+- WebGL creation failure with a usable still-orb fallback; no device/audio/transport calls, business or remote-asset requests, failed resources or uncaught exceptions.
+
+The reusable harness is `tests/voice-browser.cjs`; run `CDP_PORT=9224 PLAYWRIGHT_MODULE=/path/to/playwright node tests/voice-browser.cjs` while the port 4179 preview and official Chrome are running. The final report is kept outside the published tree under `voice-mode-ui-20261016/browser-final/voice-report.json` in the local research directory.
+
+These results cover simulated visual interaction. Physical phone/trackpad elastic scrolling, hardware frame rates and WebGL context loss after successful creation remain untested. Publication is handled by the Pages workflow; these checks do not claim that deployment has already been verified.

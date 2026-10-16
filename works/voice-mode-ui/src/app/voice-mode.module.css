@@ -1,0 +1,607 @@
+/* Voice mode on the chat page. --c is the speaker's avatar colour. */
+
+/* ---------- status next to the name ---------- */
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--text-meta);
+  line-height: 16px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.status::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c);
+}
+.status[data-phase="cut"] {
+  color: var(--text-tertiary);
+}
+.status[data-phase="cut"]::before {
+  background: var(--text-tertiary);
+}
+
+/* ---------- live text ---------- */
+.interim {
+  color: var(--text-secondary);
+}
+.onBrand .interim {
+  /* Standalone adaptation: readable interim text on the deeper sample bubble. */
+  color: rgb(255 255 255 / 0.9);
+}
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.05em;
+  margin-left: 2px;
+  vertical-align: -0.14em;
+  border-radius: 1px;
+  background: var(--c, currentColor);
+  animation: voice-blink 1s steps(1) infinite;
+}
+.onBrand .caret,
+.inBubble .caret {
+  background: currentColor;
+}
+/* An agent's words not spoken yet: there, but waiting for the voice. */
+.unsaid {
+  opacity: 0.32;
+}
+.dots {
+  display: inline-flex;
+  gap: 6px;
+  height: 28px;
+  align-items: center;
+}
+.dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--text-tertiary);
+  animation: voice-dot 1.2s ease-in-out infinite;
+}
+.dots i:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.dots i:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* ---------- status beside a participant row ---------- */
+.member {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  font-size: var(--text-meta);
+  line-height: 16px;
+  font-weight: 400;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.member::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--status-success, #22a06b);
+}
+.member[data-status="speaking"] {
+  color: var(--text-primary);
+}
+.member[data-status="speaking"]::before,
+.member[data-status="thinking"]::before {
+  background: var(--c);
+}
+.member[data-status="muted"]::before {
+  background: var(--text-tertiary);
+}
+
+/* ---------- the composer's slot: composer ↔ voice dock, height eased only while they swap ---------- */
+.smoothHeight {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.smoothHeight[data-easing] {
+  transition: height 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.smoothInner {
+  position: relative;
+}
+@media (prefers-reduced-motion: reduce) {
+  .smoothHeight[data-easing] {
+    transition: none;
+  }
+}
+
+/* ---------- voice dock, in the composer's place: mute · orb · ✕, then who is speaking and their wave ---------- */
+.dock {
+  /* The orb's colour, shared by its light, the mic's glow and the wave. */
+  --orb-c: #c9c9d3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Room above for the orb's light (the composer column scrolls, so it would be clipped). */
+  padding: 20px 0 20px;
+}
+.dock[data-palette="violet"] {
+  --orb-c: #ac95f6;
+}
+.dock[data-palette="blue"] {
+  --orb-c: #7ea8f8;
+}
+.dock[data-palette="lavender"] {
+  --orb-c: #bbb2f7;
+}
+/* The controls sit level with the orb's centre, one either side. */
+.dock .control {
+  gap: 32px;
+}
+/* After the orb has grown out of the voice button, its controls and words slide out of it. */
+.dock .mic {
+  animation: dock-from-orb-left 0.28s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.dock .close {
+  animation: dock-from-orb-right 0.28s 0.3s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.dock .orbLabel,
+.dock .orbSub {
+  animation: dock-rise 0.28s 0.36s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+/* Call ended: the buttons go first, then the small orb shrinks back into the voice button. */
+.dock[data-orb-state="ended"] :is(.mic, .close) {
+  animation: voice-fade-out 0.2s ease both;
+  pointer-events: none;
+}
+
+.orbStage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  color: var(--orb-c);
+  transition: color 0.4s ease;
+}
+.orbStage::before {
+  content: "";
+  position: absolute;
+  inset: -16%;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in oklab, currentColor 34%, transparent) 0%,
+    transparent 100%
+  );
+  opacity: 0.9;
+  transition: opacity 0.4s ease;
+}
+.dock:is(
+    [data-orb-state="listening"],
+    [data-orb-state="muted"],
+    [data-orb-state="connecting"],
+    [data-orb-state="reconnecting"],
+    [data-orb-state="waiting"],
+    [data-orb-state="ended"]
+  )
+  .orbStage::before {
+  opacity: 0.4;
+}
+.orbBall {
+  position: relative;
+  width: 112px;
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+/* Call ended: the orb settles small before it goes; the words follow it up. */
+.dock[data-orb-state="ended"] .orbBall {
+  transform: scale(0.6);
+}
+.orbLabel,
+.orbSub {
+  transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.dock[data-orb-state="ended"] :is(.orbLabel, .orbSub) {
+  transform: translateY(-20px);
+}
+.orbArc {
+  position: absolute;
+  inset: -10px;
+  width: calc(100% + 20px);
+  height: calc(100% + 20px);
+  fill: none;
+  stroke: var(--orb-c);
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  stroke-dasharray: 90 212;
+  opacity: 0.8;
+  animation: voice-spin 2.4s linear infinite;
+}
+/* Who is speaking: the name in the primary colour, what they do in the secondary one. */
+.orbLabel {
+  position: relative;
+  display: grid;
+  place-items: center;
+  margin: 8px 0 0;
+  width: 100%;
+  height: 20px;
+  font-size: 12px;
+  line-height: 20px;
+  color: var(--text-secondary);
+}
+.orbLine {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  min-width: 0;
+  white-space: nowrap;
+}
+.orbText {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.orbWho {
+  font-weight: 500;
+  color: var(--text-primary);
+}
+.orbChip {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--c);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+/* Second line: the wave, or "thinking"; it always holds its height, and fades rather than pops. */
+.orbSub {
+  display: grid;
+  place-items: center;
+  margin-top: 4px;
+  height: 16px;
+}
+.orbSub > * {
+  grid-area: 1 / 1;
+  transition: opacity 0.24s ease;
+}
+.orbSub > [data-shown="false"] {
+  opacity: 0;
+}
+.orbHint {
+  font-size: 12px;
+  line-height: 16px;
+  color: var(--text-tertiary);
+}
+.wave {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  height: 16px;
+  color: var(--orb-c);
+}
+.wave i {
+  width: 2px;
+  height: 16px;
+  border-radius: 1px;
+  background: currentColor;
+  opacity: calc((0.35 + var(--w) * 0.5) * 0.85);
+  transform: scaleY(calc(0.12 + var(--h, 0) * var(--w) * 0.88));
+}
+@media (max-width: 599.98px) {
+  .dock {
+    padding: 16px 0 16px;
+  }
+  .dock .control {
+    gap: 20px;
+  }
+  .orbBall {
+    width: 80px;
+  }
+}
+
+/* ---------- agent toggle and voice invite (participant list) ---------- */
+.agentToggle:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+.agentToggle {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.agentToggle:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+.agentToggle[aria-pressed="true"] {
+  background: color-mix(in oklab, var(--action-primary) 16%, transparent);
+  color: var(--action-primary);
+}
+.inviteVoice {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 24px;
+  padding: 0 8px;
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-meta);
+  cursor: pointer;
+  white-space: nowrap;
+}
+.inviteVoice:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+.inviteVoice:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+.inviteVoice:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+/* ---------- composer control, like ChatGPT: the voice entry, then just mute + ✕ ---------- */
+.control {
+  --mic: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: none;
+}
+.mic,
+.close {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    opacity 0.15s ease,
+    transform 0.1s ease;
+}
+.mic:active,
+.close:active {
+  transform: scale(0.94);
+}
+.mic:focus-visible,
+.close:focus-visible {
+  outline: 2px solid var(--brand-primary);
+  outline-offset: 2px;
+}
+.mic:disabled,
+.close:disabled {
+  cursor: default;
+  opacity: 0.5;
+}
+
+.control:not([data-on]) .mic {
+  background: var(--action-primary);
+  color: var(--action-primary-foreground);
+}
+.control:not([data-on]) .mic:hover {
+  background: var(--action-primary-hover);
+}
+
+.control[data-on] .mic {
+  background: var(--bg-muted);
+  color: var(--text-primary);
+}
+.control[data-on] .mic:hover {
+  background: var(--surface-hover);
+}
+/* The only "listening" cue: a ring that follows your own voice. */
+.control[data-on] .mic::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  border: 2px solid var(--self-c);
+  pointer-events: none;
+  opacity: calc(0.18 + var(--mic) * 0.82);
+  transform: scale(calc(1 + var(--mic) * 0.16));
+}
+.control[data-on][data-muted] .mic {
+  color: var(--text-secondary);
+}
+.control[data-on][data-muted] .mic::after {
+  display: none;
+}
+.control[data-on][data-conn="waiting"] .mic,
+.control[data-on][data-conn="reconnecting"] .mic,
+.control[data-on][data-conn="connecting"] .mic,
+.control[data-on][data-conn="closed"] .mic {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.close {
+  background: var(--text-primary);
+  color: var(--bg-primary);
+}
+.close:hover {
+  opacity: 0.88;
+}
+
+/* In the dock, mute and ✕ are one quiet pair of glass buttons around the orb. */
+.dock .control .mic,
+.dock .control .close {
+  width: 44px;
+  height: 44px;
+  color: var(--text-primary);
+  /* Liquid glass: a curved sheen over a tinted pane, a lit top rim, a shaded bottom edge. */
+  background-color: rgba(255, 255, 255, 0.56);
+  background-image: radial-gradient(
+    120% 120% at 30% 20%,
+    rgba(255, 255, 255, 0.72),
+    transparent 70%
+  );
+  border: 1px solid color-mix(in oklab, var(--text-primary) 10%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 1px rgba(15, 15, 30, 0.05),
+    0 1px 2px rgba(15, 15, 30, 0.06),
+    0 4px 12px rgba(15, 15, 30, 0.06);
+  backdrop-filter: blur(12px) saturate(180%);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.1s ease;
+}
+:global(html.dark) .dock .control .mic,
+:global(html.dark) .dock .control .close {
+  background-color: rgba(255, 255, 255, 0.04);
+  background-image: radial-gradient(
+    120% 120% at 30% 20%,
+    rgba(255, 255, 255, 0.14),
+    transparent 70%
+  );
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 1px rgba(0, 0, 0, 0.25);
+}
+.dock .control .mic:hover {
+  background-color: color-mix(
+    in oklab,
+    var(--orb-c) 14%,
+    rgba(255, 255, 255, 0.8)
+  );
+}
+:global(html.dark) .dock .control .mic:hover {
+  background-color: color-mix(in oklab, var(--orb-c) 18%, transparent);
+}
+/* Your voice lights the mic from inside, in the orb's colour. */
+.dock .control[data-on] .mic::after {
+  inset: 0;
+  border: 0;
+  background: radial-gradient(
+    circle closest-side,
+    color-mix(in oklab, var(--orb-c) 55%, transparent),
+    transparent
+  );
+  opacity: calc(var(--mic) * 0.9);
+  transform: scale(calc(0.7 + var(--mic) * 0.3));
+}
+.dock .control[data-muted] .mic {
+  color: var(--text-secondary);
+  background-color: color-mix(in oklab, var(--text-primary) 6%, transparent);
+}
+.dock .control .close:hover,
+:global(html.dark) .dock .control .close:hover {
+  color: var(--color-destructive);
+  background-color: color-mix(
+    in oklab,
+    var(--color-destructive) 12%,
+    transparent
+  );
+  border-color: color-mix(in oklab, var(--color-destructive) 24%, transparent);
+}
+.dock .control .mic svg,
+.dock .control .close svg {
+  width: 20px;
+  height: 20px;
+  stroke-width: 1.75;
+}
+
+@keyframes voice-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes dock-from-orb-left {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+}
+@keyframes dock-from-orb-right {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+@keyframes voice-fade {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes voice-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes dock-rise {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+@keyframes voice-blink {
+  50% {
+    opacity: 0;
+  }
+}
+@keyframes voice-dot {
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+  }
+  30% {
+    opacity: 1;
+  }
+}
+
+/* Still light, colour only. */
+@media (prefers-reduced-motion: reduce) {
+  .control .mic::after {
+    transform: none !important;
+  }
+  .caret,
+  .orbArc,
+  .dots i {
+    animation: none;
+  }
+  .dock :is(.mic, .close, .orbLabel, .orbSub) {
+    animation-name: voice-fade;
+    animation-delay: 0s;
+  }
+  .orbStage,
+  .orbStage::before,
+  .orbBall,
+  .orbLabel,
+  .orbSub {
+    transition: none;
+  }
+  .wave i {
+    transform: scaleY(0.12);
+  }
+  .mic,
+  .close {
+    transition: none;
+  }
+}
