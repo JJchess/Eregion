@@ -1,0 +1,17 @@
+.fluid-cursor {
+  position: fixed;
+  z-index: 120;
+  pointer-events: none;
+  user-select: none;
+  overscroll-behavior: none;
+  background: transparent;
+  contain: layout style;
+}
+.fluid-cursor[hidden] {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .fluid-cursor {
+    display: none !important;
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "locale": "en",
+  "title": "Galaxy Skill Market",
+  "summary": "Explore a skill catalog as a pearl-like galaxy: enter a category, inspect a skill and try a local installation. An interactive archive of a product interface, with synthetic data and an editable Agent at its center.",
+  "kind": "page",
+  "date": "2026-10-16",
+  "tags": ["React", "Three.js", "GLSL", "Interaction design"],
+  "highlights": [
+    "A deterministic sphere layout connects the full catalog to category views through animated transitions.",
+    "Custom pearl shading, camera navigation and HTML labels make the catalog spatial and actionable.",
+    "Search, skill details, simulated installation and Agent customization work with local demo state.",
+    "English and Chinese, light and dark themes, and a mobile list keep the same synthetic catalog accessible."
+  ],
+  "preview": "preview.webp",
+  "demo": "demo/index.html",
+  "translations": {
+    "zh": {
+      "title": "Galaxy 技能星图",
+      "summary": "把技能目录变成可探索的珠光星系：进入分类、查看技能，再体验本地模拟安装。这个从产品界面整理出的交互作品使用合成数据，并把可编辑的 Agent 放在星图中心。",
+      "tags": ["React", "Three.js", "GLSL", "交互设计"],
+      "highlights": [
+        "确定性球体布局通过连续动画连接目录全景与分类视图。",
+        "自定义珠光材质、相机导航和 HTML 标签，让技能目录既有空间感，也能直接操作。",
+        "搜索、技能详情、模拟安装和 Agent 定制使用独立的本地演示状态。",
+        "中英文、明暗主题及移动端列表共用同一份合成技能目录。"
+      ]
+    }
+  }
+}

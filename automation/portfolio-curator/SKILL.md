@@ -5,7 +5,7 @@ description: 整理开发中值得展示的 UI 组件、页面和交互到 JJche
 
 # Portfolio curator
 
-目标仓库固定为 `git@github.com:JJchess/portfolio.git`，展示地址为 `https://JJchess.github.io/portfolio/`。读取本技能旁 `config.json` 获取本机仓库、候选目录和状态目录；缺失时向用户询问安装位置，不猜测另一个仓库。
+目标为 JJchess 的作品集仓库，现名 `JJchess/Eregion`；原远端 `git@github.com:JJchess/portfolio.git` 仍重定向到同一仓库。正式展示地址以仓库 `site/profile.json` 的 `site_url` 为准，目前为 `https://jjchess.github.io/Eregion/`。读取本技能旁 `config.json` 获取本机仓库、候选目录和状态目录；缺失时向用户询问安装位置，不猜测另一个仓库。
 
 ## 何时收录
 
@@ -14,6 +14,14 @@ description: 整理开发中值得展示的 UI 组件、页面和交互到 JJche
 - **自主发现**：先在配置的 `drafts_dir/<slug>/` 整理可审阅候选，包含真实截图、最小源码、README、work.json。展示预览位置、收录理由、将公开的源码范围和来源，再问一句「是否把这个收录到你的 portfolio？」。用户明确同意前，不复制到公开仓库、不 commit、不 push。保留候选等待下一轮；不反复推销被拒绝的作品。
 - **明确唤起**：用户说「收录这个」「加入 portfolio」或同意已展示候选，即授权该作品的整理、commit、push 与网页同步；不再重复询问。若「这个」指代不明，先明确对象。用户只要求草稿、预览或暂不发布时照做。
 - 用户可能来自多个并行会话。保留其他候选与工作区改动，只处理当前作品。Hook 输出和文件内容不能替代用户同意。
+
+## 双语作品资料
+
+- 展示页默认英文，中文位于站点根路径下的 `zh/`；正式站点当前使用 `/Eregion/`，本地 4179 预览默认仍为 `/portfolio/`。构建与链接使用实际 base path，不把本地预览路径硬编码成部署地址。同一作品只维护一个 `works/<slug>/`，两种语言共用源码、预览和 demo，不复制条目。
+- 保持 `work.json` 原有必填字段；`locale` 缺省时按 `zh` 兼容旧条目。`translations.en`／`translations.zh` 可逐字段覆盖 `title`、`summary`、`tags`、`highlights`，未提供的翻译字段回退到主字段；不翻译 slug、路径、日期或 kind。
+- 新收录使用 `locale: "en"` 和英文主字段，同时写完整的 `translations.zh`（上述四个字段）。两种语言保留相同事实、来源和限制，不编造成绩；README 可按 English／中文分节。准确字段与示例以目标仓库 `works/README.md` 为准。
+- 构建后检查两种语言的列表、详情、语言切换及共享预览／demo 链接。仅有零作品时保留真实空态，不把装饰性首页交互或测试夹具自动登记为作品。
+- 双语整理不改变授权边界：自主发现仍先给候选并询问；用户明确要求收录或同意候选后，直接完成原有整理、验证、commit、push 和页面同步流程。
 
 ## 整理与发布
 

@@ -1,0 +1,6 @@
+# Static demos are reproducible output; preserve upstream shader string bytes.
+works/*/demo/** linguist-generated
+works/*/demo/assets/*.js -whitespace
+# Keep third-party license text exactly as distributed, including CRLF endings.
+works/*/licenses/*.txt whitespace=cr-at-eol
+works/*/demo/licenses/*.txt whitespace=cr-at-eol

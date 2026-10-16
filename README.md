@@ -1,51 +1,70 @@
 # JJchess · Portfolio
 
-在 Codex 中把想法做成界面，把值得留下的界面整理成作品。
+JJchess's personal site and approved UI archive. Build ideas into interfaces with Codex or Claude Code, then keep the work worth revisiting.
 
-[浏览作品集](https://JJchess.github.io/portfolio/) · [作品源码](works/) · [Codex 收录技能](automation/portfolio-curator/SKILL.md)
+[English site](https://jjchess.github.io/Eregion/) · [中文站](https://jjchess.github.io/Eregion/zh/) · [GitHub](https://github.com/JJchess/Eregion) · [作品源码](works/) · [收录技能](automation/portfolio-curator/SKILL.md)
+
+## Local preview
+
+Python 3.10+; no Python packages to install. Build the static output, then serve the same `_site` directory used by GitHub Pages:
+
+```bash
+python3 scripts/build.py
+python3 scripts/serve.py --port 4179
+```
+
+Open `http://localhost:4179/portfolio/` for English or `http://localhost:4179/portfolio/zh/` for Chinese. This preserves the established local preview address. The production site uses `/Eregion/`; GitHub Actions passes that base path to the same builder. To inspect the production path locally, use `python3 scripts/build.py --base-path /Eregion/` and `python3 scripts/serve.py --port 4179 --base-path /Eregion/` together.
+
+The personal site includes Home, About, Projects and individual pages generated for approved works. Its light palette, large typography and original four-part UI installation are shared across both languages. Native controls provide the interaction; optional Three.js rendering adds decoration. The first approved work is [Galaxy Skill Market](works/galaxy-skill-market/README.md), a navigable pearl-like skill map extracted with synthetic data and a standalone demo. Empty states remain available when a filter has no matching works.
+
+The personal site and Galaxy demo are validated locally with official Google Chrome 155. GitHub Actions builds and publishes the approved archive through Pages; see the [design and verification record](docs/homepage-design.md) and the [work README](works/galaxy-skill-market/README.md) for their separate tested scopes and remaining device-test limits.
+
+## 个人站与作品资料
+
+在 Codex 或 Claude Code 中把想法做成界面，把值得留下的界面整理成作品。首页的原创 UI 装置可以拆开体验四个组件，再重新组合；它是站点交互，不自动算作已收录作品。
+
+英文是默认语言，中文有独立 URL。`work.json` 是作品展示资料的唯一来源，列表、计数、分类和真实作品详情均由它生成。新条目使用英文主字段、`locale: "en"` 和完整的 `translations.zh`；旧条目没有 `locale` 时按中文兼容。源码、预览和 demo 两种语言共用，完整约定见 [works/README.md](works/README.md)。
+
+`replicas/lusion/` 保留原站本地研究版，和公开个人站分开。个人站构建只取明确允许的前端资源和获准作品，不发布 `replicas/`，也不依赖仓库外的研究缓存。
 
 ## 作品怎样进入这里
 
-1. 在任意项目继续正常开发。Codex 会留意有展示价值的组件、页面和交互。
-2. Codex 主动发现时，先整理本地候选，给出真实预览、收录理由和公开范围，询问是否收录。
-3. 用户同意，或直接说「把这个收录到 portfolio」后，Codex 整理源码和 README，验证后提交到本仓库。
+1. 在任意项目继续正常开发。Codex 或 Claude Code 会留意有展示价值的组件、页面和交互。
+2. 代理主动发现时，先整理本地候选，给出真实预览、收录理由和公开范围，询问是否收录。
+3. 用户同意，或直接说「把这个收录到 portfolio」后，代理整理源码、双语资料和 README，验证后 commit、push 到本仓库，不重复确认同一授权。
 4. GitHub Actions 从作品资料构建并发布网页。源码和网页使用同一份资料。
 
-未确认的候选保存在仓库外，不会被提交。Hook 负责提醒和防遗漏，作品质量与适用性由当前 Codex 会话结合开发上下文判断。Hook 本身不启动第二个 AI 进程，也不会执行 Git push。
+未确认的候选保存在仓库外，不会被提交。Hook 负责提醒和防遗漏，作品质量与适用性由当前会话结合开发上下文判断。Hook 本身不启动第二个 AI 进程，也不会执行 Git push。用户只要求草稿或暂不发布时，遵循该范围。
 
 ## 仓库结构
 
 ```text
 works/<slug>/
-  work.json       # 标题、简介、类别、日期、亮点、预览与演示路径
+  work.json       # 共享资料、主语言和中英文展示字段
   README.md       # 作品说明、运行方式、交互、来源和验证情况
   src/            # 整理后的源码与必要依赖清单、锁文件
   preview.webp    # 实际作品截图（也支持 PNG / JPEG）
   demo/           # 可选，可独立访问的静态演示
-site/             # 互动首页、作品展示、自产素材与固定版本的前端依赖
-scripts/build.py  # 验证作品资料并生成静态站点
-automation/       # 可安装到 Codex 的收录技能与 hooks
+site/             # 原创个人站界面、自产素材与固定版本的前端依赖
+scripts/build.py  # 验证作品资料并生成双语静态站点
+scripts/serve.py  # 在 /portfolio/ 子路径预览 _site
+automation/       # 可安装到 Codex / Claude Code 的收录技能与 hooks
+replicas/         # 本地研究版，不进入公开构建
 ```
 
 没有默认授权为所有作品选定开源许可证。每件作品保留其实际来源和适用许可；需要新授权决定时单独确认。
 
-## 本地预览
+## 验证与发布边界
 
-需要 Python 3.10+，无需安装依赖。
+运行 `python3 -m unittest discover -s tests -v` 检查构建与收录流程，再构建站点。浏览器验收使用真实 Chrome，检查桌面、手机尺寸、组件操作、语言切换、详情直达、键盘、减少动态效果和资源加载失败。测试夹具应留在系统临时目录，不进入作品归档。具体已完成的验证以 [设计记录](docs/homepage-design.md) 为准。
+
+可选浏览器检查连接到已经运行、开放 CDP 9224 端口的官方 Chrome；需要可用的 Playwright 包。检查脚本不会启动或关闭 Chrome，测试服务器和作品夹具独立创建并清理：
 
 ```bash
-python3 -m unittest discover -s tests -v
-python3 scripts/build.py
-python3 -m http.server 4173 --directory _site
+CDP_PORT=9224 PLAYWRIGHT_MODULE=/path/to/playwright node tests/browser.cjs
 ```
 
-打开 `http://localhost:4173`。构建只输出页面、已收录作品预览及明确指定的静态演示，不会把整个工作区打包上网。
-
-首页包含可旋转、拆解及重组的原创金属 JJ 装置，作品支持画廊／索引布局和详情展开。3D 加载失败会显示静态预览；减少动态效果设置、键盘访问和原生滚动均保留。Three.js 与字体随站点托管，版本和许可证见 [首页设计记录](docs/homepage-design.md)。
-
-作品资料仍只维护 `work.json`：卡片、计数、筛选和详情均由它生成。源码与说明保留在作品目录，详情中的入口直接指向对应 GitHub 目录。当前没有正式收录作品时，不显示虚构案例。
-
-可选浏览器集成检查需要已安装 Playwright 与 Chromium：运行 `node tests/browser.cjs`。如果工具装在其他目录，通过 `PLAYWRIGHT_MODULE` 指定 Playwright 包路径，`CHROMIUM_EXECUTABLE` 指定浏览器；`PORTFOLIO_ARTIFACTS` 可指定截图和录屏保存目录。夹具在系统临时目录生成，始终不会进入公开作品归档。
+根页面和独立滚动容器保持 `overscroll-behavior: none`，内容仍可原生滚动。浏览器自动化不能替代物理手机或触控板的弹性滚动实测。Three.js 和字体随站点托管，版本与许可证见设计记录。
 
 ## 安装 Codex 收录流程
 

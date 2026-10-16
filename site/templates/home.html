@@ -1,0 +1,74 @@
+<section class="home-hero" id="playground" aria-labelledby="hero-title">
+  <div class="hero-editorial">
+    <h1 id="hero-title">
+      {{hero_line_one}}<br /><span>{{hero_line_two}}</span>
+    </h1>
+    <div class="hero-aside">
+      <p>{{hero_copy}}</p>
+      <a class="round-link" href="{{about_url}}" aria-label="{{nav_about}}"
+        >↗</a
+      >
+    </div>
+  </div>
+  <div class="hero-device">{{playground}}</div>
+  <div class="cross-line">
+    <span aria-hidden="true">+</span>
+    <p>{{hero_caption}}</p>
+    <a href="#introduction">{{hero_scroll}} ↓</a
+    ><span aria-hidden="true">+</span>
+  </div>
+</section>
+<section class="intro-section section-wrap" id="introduction">
+  <p class="eyebrow"><span class="small-dot"></span>{{intro_label}}</p>
+  <h2>{{intro_heading}}</h2>
+  <div class="intro-bottom">
+    <div class="orbit-art" aria-hidden="true">
+      <span></span><span></span><span></span>
+    </div>
+    <div>
+      <p>{{intro_copy}}</p>
+      <a class="pill dark" href="{{about_url}}"
+        >{{intro_link}} <span aria-hidden="true">↗</span></a
+      >
+    </div>
+  </div>
+</section>
+<section class="selected-section section-wrap" id="works">
+  <div class="section-heading">
+    <h2>{{selected_heading}}<sup>{{count}}</sup></h2>
+    <p>{{selected_copy}}</p>
+  </div>
+  <div class="project-grid">{{cards}}</div>
+  <div class="all-projects">
+    <a class="pill dark" href="{{projects_url}}"
+      >{{all_projects_label}} <span aria-hidden="true">↗</span></a
+    >
+  </div>
+</section>
+<section class="story" data-story>
+  <div class="story-stage">
+    <div class="story-heading">
+      <p class="eyebrow">{{story_label}}</p>
+      <h2>{{story_heading}}</h2>
+      <p class="story-description">{{story_copy}}</p>
+    </div>
+    <div class="story-device">{{playground}}</div>
+    <ol class="story-phases" aria-label="{{story_label}}">
+      <li data-phase="0"><span>01</span>{{story_structure}}</li>
+      <li data-phase="1"><span>02</span>{{story_style}}</li>
+      <li data-phase="2"><span>03</span>{{story_interaction}}</li>
+    </ol>
+    <p class="story-end">{{story_end}}</p>
+  </div>
+</section>
+<section class="contact-section" data-contact>
+  <div class="contact-decor" aria-hidden="true">
+    <i></i><i></i><i></i><i></i><i></i><i></i>
+  </div>
+  <p class="eyebrow">{{contact_kicker}}</p>
+  <a class="contact-link" href="{{github_url}}" target="_blank" rel="noopener"
+    ><span>{{contact_line_one}}</span><span>{{contact_line_two}}</span></a
+  ><a class="pill light" href="{{github_url}}" target="_blank" rel="noopener"
+    >{{contact_link}} ↗</a
+  >
+</section>

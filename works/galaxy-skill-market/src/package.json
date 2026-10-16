@@ -1,0 +1,33 @@
+{
+  "name": "galaxy-skill-market-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "typecheck": "tsc --noEmit",
+    "test": "node --import tsx --test tests/*.test.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/geist": "5.3.0",
+    "@react-three/drei": "10.7.8",
+    "@react-three/fiber": "9.7.0",
+    "lucide-react": "0.522.0",
+    "motion": "12.38.0",
+    "react": "19.2.1",
+    "react-dom": "19.2.1",
+    "three": "0.182.0",
+    "use-intl": "4.13.2"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.3",
+    "@types/react": "19.2.7",
+    "@types/react-dom": "19.2.3",
+    "@types/three": "0.182.0",
+    "tsx": "4.20.5",
+    "typescript": "5.9.3",
+    "vite": "8.3.4"
+  }
+}

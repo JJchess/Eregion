@@ -1,0 +1,142 @@
+<section
+  class="playground"
+  data-playground
+  lang="{{locale}}"
+  aria-label="{{play_label}}"
+  data-label-light="{{play_light}}"
+  data-label-dark="{{play_dark}}"
+  data-label-assembled="{{play_assembled}}"
+  data-label-exploded="{{play_exploded}}"
+  data-label-reset="{{play_reset_done}}"
+>
+  <div class="pg-viewport" data-pg-viewport>
+    <div class="pg-floor" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="pg-renderer" data-pg-renderer aria-hidden="true"></div>
+    <div class="pg-assembly" data-pg-assembly>
+      <section class="pg-piece pg-status-piece" data-pg-piece="status">
+        <div class="pg-piece-face">
+          <div class="pg-status-heading">
+            <span class="pg-live-dot" aria-hidden="true"></span>
+            <h3>{{play_status_title}}</h3>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 7h16M4 12h10M4 17h16" />
+            </svg>
+          </div>
+          <div class="pg-count-display">
+            <strong data-pg-count>00</strong><span>{{play_clicks}}</span>
+          </div>
+          <dl class="pg-live-values">
+            <div>
+              <dt>{{play_state_count}}</dt>
+              <dd data-pg-count-value>0</dd>
+            </div>
+            <div>
+              <dt>{{play_state_theme}}</dt>
+              <dd data-pg-theme-value>{{play_light}}</dd>
+            </div>
+            <div>
+              <dt>{{play_state_radius}}</dt>
+              <dd>
+                <span data-pg-radius-value>24</span
+                ><span aria-hidden="true">px</span>
+              </dd>
+            </div>
+          </dl>
+          <span class="pg-status-thread" aria-hidden="true"></span>
+        </div>
+      </section>
+      <section class="pg-piece pg-action-piece" data-pg-piece="action">
+        <div class="pg-piece-face">
+          <h3>{{play_action_title}}</h3>
+          <button type="button" class="pg-action-button" data-pg-action>
+            <span>{{play_action}}</span
+            ><svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14m-6-6 6 6-6 6" />
+            </svg>
+          </button>
+        </div>
+      </section>
+      <section class="pg-piece pg-theme-piece" data-pg-piece="theme">
+        <div class="pg-piece-face">
+          <h3>{{play_theme_title}}</h3>
+          <label class="pg-theme-control">
+            <span class="pg-control-name">{{play_theme_label}}</span>
+            <input type="checkbox" role="switch" data-pg-theme />
+            <span class="pg-toggle-track" aria-hidden="true"
+              ><span
+                ><svg viewBox="0 0 20 20">
+                  <path
+                    d="M14.8 12.9A6 6 0 0 1 7.1 5.2a6 6 0 1 0 7.7 7.7Z"
+                  /></svg></span
+            ></span>
+            <span class="pg-theme-word" data-pg-theme-value
+              >{{play_light}}</span
+            >
+          </label>
+        </div>
+      </section>
+      <section class="pg-piece pg-radius-piece" data-pg-piece="radius">
+        <div class="pg-piece-face">
+          <h3>{{play_radius_title}}</h3>
+          <label class="pg-radius-control"
+            ><span class="pg-control-name">{{play_radius_label}}</span
+            ><input
+              type="range"
+              min="4"
+              max="36"
+              step="1"
+              value="24"
+              data-pg-radius
+            /><output
+              ><span data-pg-radius-value>24</span
+              ><span aria-hidden="true">px</span></output
+            ></label
+          >
+        </div>
+      </section>
+    </div>
+  </div>
+  <div class="pg-bottom">
+    <p class="pg-hint">
+      <span class="pg-hint-drag">{{play_hint}}</span
+      ><span class="pg-hint-touch">{{play_hint_touch}}</span>
+    </p>
+    <div class="pg-view-controls">
+      <button
+        type="button"
+        class="pg-turn"
+        data-pg-turn="-1"
+        aria-label="{{play_rotate_left}}"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m8 5-4 4 4 4M4 9h9a6 6 0 0 1 0 12" />
+        </svg>
+      </button>
+      <button type="button" data-pg-assemble aria-pressed="false">
+        {{play_assemble}}
+      </button>
+      <button type="button" data-pg-explode aria-pressed="true">
+        {{play_explode}}
+      </button>
+      <button type="button" data-pg-reset>{{play_reset}}</button>
+      <button
+        type="button"
+        class="pg-turn"
+        data-pg-turn="1"
+        aria-label="{{play_rotate_right}}"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m16 5 4 4-4 4m4-4h-9a6 6 0 0 0 0 12" />
+        </svg>
+      </button>
+    </div>
+    <output class="pg-view-label" data-pg-view>{{play_exploded}}</output>
+  </div>
+  <span
+    class="pg-announcement"
+    role="status"
+    aria-live="polite"
+    aria-atomic="true"
+    data-pg-announcement
+  ></span>
+</section>

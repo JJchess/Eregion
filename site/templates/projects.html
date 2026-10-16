@@ -1,0 +1,18 @@
+<section class="archive-head section-wrap">
+  <p class="eyebrow">{{projects_label}}</p>
+  <h1>{{projects_heading}}<sup>{{count}}</sup></h1>
+  <p class="archive-intro">{{projects_copy}}</p>
+</section>
+<section
+  class="archive-collection section-wrap"
+  aria-label="{{projects_heading}}"
+>
+  {{filters}}
+  <div class="project-grid">{{cards}}</div>
+  <p class="filter-empty" hidden>{{filter_empty}}</p>
+  <p class="sr-only" data-filter-status aria-live="polite"></p>
+</section>
+<section class="next-section section-wrap">
+  <p class="eyebrow">{{about_label}}</p>
+  <a href="{{about_url}}">{{nav_about}}<span aria-hidden="true">↗</span></a>
+</section>

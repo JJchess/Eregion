@@ -1,386 +1,367 @@
-/* Optional integration check: PLAYWRIGHT_MODULE=/path/to/playwright node tests/browser.cjs */
+/* Attach to an already running official Chrome; never launch or close it.
+ * CDP_PORT=9224 PLAYWRIGHT_MODULE=/path/to/playwright node tests/browser.cjs
+ * Both HTTP servers and synthetic works exist only for this test process.
+ */
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
-const http = require("node:http");
-const { execFileSync } = require("node:child_process");
-const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
+const readline = require("node:readline");
+const { execFileSync, spawn } = require("node:child_process");
 const root = path.resolve(__dirname, "..");
-const temporary = fs.mkdtempSync(
-  path.join(os.tmpdir(), "jj-portfolio-browser-"),
-);
-const artifacts =
-  process.env.PORTFOLIO_ARTIFACTS ||
-  fs.mkdtempSync(path.join(os.tmpdir(), "jj-portfolio-review-"));
+const { chromium } = require(process.env.PLAYWRIGHT_MODULE || "playwright");
+const temporary = fs.mkdtempSync(path.join(os.tmpdir(), "jj-portfolio-browser-"));
+const artifacts = process.env.PORTFOLIO_ARTIFACTS || fs.mkdtempSync(path.join(os.tmpdir(), "jj-portfolio-review-"));
 fs.mkdirSync(artifacts, { recursive: true });
+const servers = [], pages = [], contexts = [], errors = [];
 
-execFileSync("python3", ["scripts/build.py"], { cwd: root });
-// Synthetic content is created outside works/ and cannot enter the Pages deployment.
-execFileSync("python3", [
-  "-c",
-  `
+function buildFixtures() {
+  execFileSync("python3", ["scripts/build.py"], { cwd: root, stdio: "inherit" });
+  // Empty and populated fixtures live outside the archive, which may grow.
+  execFileSync("python3", ["-c", `
 import sys,json,shutil,base64
 from pathlib import Path
 root=Path(sys.argv[1]); fixture=Path(sys.argv[2])
 sys.path.insert(0,str(root/'scripts'))
 from build import build
+empty=fixture.parent/'empty'
+shutil.copytree(root/'site',empty/'site')
+(empty/'works').mkdir()
+build(empty)
 shutil.copytree(root/'site',fixture/'site')
 (fixture/'works').mkdir()
 for i,kind in enumerate(['component','page','page']):
- folder=fixture/'works'/f'fixture-{i}'
- (folder/'src').mkdir(parents=True)
- (folder/'src/index.html').write_text('<button>Test fixture only</button>')
- (folder/'README.md').write_text('Synthetic browser fixture, never publish.')
- (folder/'preview.png').write_bytes(base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aGZkAAAAASUVORK5CYII='))
- demo=None
- if i==0:
-  (folder/'demo').mkdir(); (folder/'demo/index.html').write_text('<h1>Local demo fixture</h1>'); demo='demo/index.html'
- info={'title':f'测试夹具 {i}','summary':'仅供自动化验证，不是作品。','kind':kind,'date':f'2026-10-{10+i}', 'tags':['Fixture'],'highlights':['Keyboard and focus check'],'preview':'preview.png','demo':demo}
- (folder/'work.json').write_text(json.dumps(info))
+    folder=fixture/'works'/f'fixture-{i}'
+    (folder/'src').mkdir(parents=True)
+    (folder/'src/index.html').write_text('<button>Test fixture only</button>')
+    (folder/'README.md').write_text('Synthetic browser fixture, never publish.')
+    (folder/'preview.png').write_bytes(base64.b64decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aGZkAAAAASUVORK5CYII='))
+    demo=None
+    if i==0:
+        (folder/'demo').mkdir()
+        (folder/'demo/index.html').write_text('<h1>Local demo fixture</h1>')
+        demo='demo/index.html'
+    info={'title':f'Browser fixture {i}','summary':'Temporary test content; not portfolio work.',
+          'kind':kind,'date':f'2026-10-{10+i}','locale':'en','tags':['Fixture'],
+          'highlights':['Real static detail page'],'preview':'preview.png','demo':demo,
+          'translations':{'zh':{'title':f'浏览器夹具 {i}','summary':'临时测试内容，不是作品。',
+                               'tags':['测试夹具'],'highlights':['独立静态详情页']}}}
+    (folder/'work.json').write_text(json.dumps(info),encoding='utf-8')
 build(fixture)
-`,
-  root,
-  path.join(temporary, "fixture"),
-]);
+`, root, path.join(temporary, "fixture")], { stdio: "inherit" });
+}
 
-const mime = {
-  ".html": "text/html; charset=utf-8",
-  ".css": "text/css",
-  ".js": "application/javascript",
-  ".svg": "image/svg+xml",
-  ".png": "image/png",
-  ".woff2": "font/woff2",
-};
-const server = http.createServer((request, response) => {
-  const url = new URL(request.url, "http://localhost");
-  const isFixture = url.pathname.startsWith("/fixture/");
-  const prefix = isFixture ? "/fixture/" : "/portfolio/";
-  if (!url.pathname.startsWith(prefix)) {
-    response.writeHead(404).end();
-    return;
-  }
-  const base = isFixture
-    ? path.join(temporary, "fixture/_site")
-    : path.join(root, "_site");
-  const file = path.resolve(
-    base,
-    decodeURIComponent(url.pathname.slice(prefix.length)) || "index.html",
-  );
-  if (!file.startsWith(base + path.sep)) {
-    response.writeHead(403).end();
-    return;
-  }
-  const target =
-    fs.existsSync(file) && fs.statSync(file).isDirectory()
-      ? path.join(file, "index.html")
-      : file;
-  if (!fs.existsSync(target)) {
-    response.writeHead(404).end();
-    return;
-  }
-  response.writeHead(200, {
-    "Content-Type": mime[path.extname(target)] || "text/plain",
+async function serve(directory) {
+  // Reuse the production static handler, with an ephemeral loopback port.
+  const child = spawn("python3", ["-u", "-c", `
+import sys
+from http.server import ThreadingHTTPServer
+sys.path.insert(0,sys.argv[1])
+from serve import make_handler
+with ThreadingHTTPServer(('127.0.0.1',0),make_handler(sys.argv[2])) as server:
+    print(server.server_address[1],flush=True)
+    server.serve_forever()
+`, path.join(root, "scripts"), directory], { stdio: ["ignore", "pipe", "pipe"] });
+  servers.push(child);
+  let diagnostics = "";
+  child.stderr.on("data", data => { diagnostics = (diagnostics + data).slice(-8000); });
+  return new Promise((resolve, reject) => {
+    const lines = readline.createInterface({ input: child.stdout });
+    const timeout = setTimeout(() => reject(new Error(`Static test server did not start: ${diagnostics}`)), 10000);
+    child.once("error", error => { clearTimeout(timeout); reject(error); });
+    child.once("exit", code => { clearTimeout(timeout); reject(new Error(`Static test server exited ${code}: ${diagnostics}`)); });
+    lines.once("line", line => {
+      clearTimeout(timeout); lines.close();
+      const port = Number(line);
+      if (!Number.isInteger(port) || port <= 0) reject(new Error(`Invalid test server port: ${line}`));
+      else resolve(`http://127.0.0.1:${port}`);
+    });
   });
-  fs.createReadStream(target).pipe(response);
-});
+}
 
-(async () => {
-  await new Promise((resolve) => server.listen(0, "127.0.0.1", resolve));
-  const origin = `http://127.0.0.1:${server.address().port}`;
-  const browser = await chromium.launch({
-    headless: true,
-    ...(process.env.CHROMIUM_EXECUTABLE
-      ? { executablePath: process.env.CHROMIUM_EXECUTABLE }
-      : {}),
-    args: [
-      "--enable-webgl",
-      "--use-gl=angle",
-      "--use-angle=swiftshader",
-      "--enable-unsafe-swiftshader",
-    ],
+async function ownPage(context) {
+  const page = await context.newPage();
+  pages.push(page);
+  page.setDefaultTimeout(12000);
+  page.on("pageerror", error => errors.push({ url: page.url(), error: error.message }));
+  await page.bringToFront();
+  return page;
+}
+
+async function ready(page, pathname, name, lang = "en") {
+  await page.waitForFunction(({ pathname, name, lang }) =>
+    location.pathname === pathname && document.documentElement.lang === lang &&
+    document.querySelector("main")?.dataset.page === name &&
+    history.state?.portfolioKey && !document.querySelector("main").inert &&
+    !document.querySelector(".route-transition-layer"), { pathname, name, lang });
+}
+
+async function menuRoute(page, pathname, name, lang = "en") {
+  await page.locator(".menu-toggle").click();
+  await page.locator(`.menu a[href="${pathname}"]`).click();
+  await ready(page, pathname, name, lang);
+}
+
+async function noOverflow(page) {
+  await page.evaluate(() => document.fonts.ready);
+  const dimensions = await page.evaluate(() => ({
+    width: document.documentElement.clientWidth, content: document.documentElement.scrollWidth,
+    offenders: [...document.querySelectorAll("main *,header *,footer *")].filter(node => {
+      const rect = node.getBoundingClientRect();
+      return rect.width && (rect.right > document.documentElement.clientWidth + 1 || rect.left < -1);
+    }).slice(0, 8).map(node => ({ selector: node.tagName.toLowerCase() + (node.className ? "." + String(node.className).split(" ").join(".") : ""), client: node.clientWidth, scroll: node.scrollWidth })),
+  }));
+  assert(dimensions.content <= dimensions.width + 1, `Horizontal overflow: ${JSON.stringify(dimensions)}`);
+}
+
+async function checkBoundaries(page) {
+  const result = await page.evaluate(() => {
+    const nodes = [document.documentElement, document.body, ...document.querySelectorAll("main,.menu,[data-pg-viewport],input,textarea")];
+    return nodes.filter(node => getComputedStyle(node).overscrollBehavior !== "none").map(node => node.className || node.tagName);
   });
-  const errors = [];
-  const checkPage = (page) =>
-    page.on("pageerror", (error) => errors.push(error.message));
-  const waitReady = (page) =>
-    page.waitForFunction(
-      () => document.querySelector("[data-hero]").dataset.state === "ready",
-      null,
-      { timeout: 30000 },
-    );
-  const checkOverflow = async (page) => {
-    const result = await page.evaluate(() => ({
-      viewport: innerWidth,
-      width: document.documentElement.scrollWidth,
-      overflowing: [...document.querySelectorAll("body *")]
-        .filter(
-          (element) => element.getBoundingClientRect().right > innerWidth + 1,
-        )
-        .map((element) => element.className)
-        .slice(0, 12),
-    }));
-    assert(
-      result.width <= result.viewport,
-      `horizontal overflow: ${JSON.stringify(result)}`,
-    );
-  };
+  assert.deepEqual(result, [], "Root and nested scrolling boundaries must use overscroll-behavior:none");
+  // CSS policy only: native touchpad/mobile elasticity requires a physical device.
+}
+
+async function assertPlaygroundState(page, count, dark, radius) {
+  const actual = await page.locator("[data-playground]").evaluateAll(hosts => hosts.map(host => ({
+    count: host.querySelector("[data-pg-count-value]").textContent,
+    dark: host.querySelector("[data-pg-theme]").checked,
+    radius: host.querySelector("[data-pg-radius]").value,
+    theme: host.dataset.theme,
+  })));
+  assert(actual.length > 0, "Expected interactive playground instances");
+  assert.deepEqual(actual, actual.map(() => ({ count: String(count), dark, radius: String(radius), theme: dark ? "dark" : "light" })));
+}
+
+async function main() {
   try {
-    const context = await browser.newContext({
-      viewport: { width: 1440, height: 1000 },
-      recordVideo: { dir: artifacts, size: { width: 1440, height: 1000 } },
-    });
-    const page = await context.newPage();
-    checkPage(page);
-    await page.goto(origin + "/portfolio/");
-    await waitReady(page);
-    await page.waitForTimeout(800);
+    buildFixtures();
+    const origin = await serve(path.join(temporary, "empty/_site"));
+    const fixtureOrigin = await serve(path.join(temporary, "fixture/_site"));
+    const port = Number(process.env.CDP_PORT || 9224);
+    assert(Number.isInteger(port) && port > 0 && port <= 65535, "Invalid CDP_PORT");
+    const browser = await chromium.connectOverCDP(`http://127.0.0.1:${port}`);
+    const context = browser.contexts()[0];
+    assert(context, "Official Chrome must expose its default context");
+    const page = await ownPage(context);
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+
+    // Verify zero-work states independently of the real, growing archive.
+    assert.equal((await page.goto(origin + "/portfolio/")).status(), 200);
+    await ready(page, "/portfolio/", "home");
+    await page.waitForFunction(() => document.querySelector("[data-playground]")?.dataset.theme === "light");
     assert.equal(await page.locator(".work").count(), 0);
-    await checkOverflow(page);
-    await page.screenshot({
-      path: path.join(artifacts, "desktop.png"),
-      fullPage: true,
-    });
-    await page.locator("[data-explode]").click();
-    assert.equal(
-      await page.locator("[data-explode]").getAttribute("aria-pressed"),
-      "true",
-    );
-    await page.waitForTimeout(600);
-    await page.screenshot({ path: path.join(artifacts, "exploded.png") });
-    const rect = await page.locator("[data-scene]").boundingBox();
-    await page.mouse.move(
-      rect.x + rect.width * 0.5,
-      rect.y + rect.height * 0.5,
-    );
-    await page.mouse.down();
-    await page.mouse.move(
-      rect.x + rect.width * 0.7,
-      rect.y + rect.height * 0.55,
-      { steps: 16 },
-    );
-    await page.mouse.up();
-    await page.waitForTimeout(500);
-    await page.locator("[data-reset]").click();
-    assert.equal(
-      await page.locator("[data-explode]").getAttribute("aria-pressed"),
-      "false",
-    );
-    await page.evaluate(() =>
-      document.querySelector("#about").scrollIntoView({ behavior: "instant" }),
-    );
-    await page.waitForFunction(
-      () =>
-        document.querySelector("[data-hero]").dataset.rendering === "paused",
-    );
-    const pausedFrames = await page
-      .locator("[data-hero]")
-      .getAttribute("data-frames");
-    await page.waitForTimeout(150);
-    assert.equal(
-      await page.locator("[data-hero]").getAttribute("data-frames"),
-      pausedFrames,
-    );
-    await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
-    await page.waitForFunction(
-      () =>
-        document.querySelector("[data-hero]").dataset.rendering === "active",
-    );
-    await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.waitForFunction(
-      () => document.querySelector("[data-hero]").dataset.rendering === "still",
-    );
-    const stillFrames = await page
-      .locator("[data-hero]")
-      .getAttribute("data-frames");
-    await page.waitForTimeout(150);
-    assert.equal(
-      await page.locator("[data-hero]").getAttribute("data-frames"),
-      stillFrames,
-    );
-    await page.locator("[data-explode]").focus();
-    await page.keyboard.press("Enter");
-    assert.equal(
-      await page.locator("[data-explode]").getAttribute("aria-pressed"),
-      "true",
-    );
-    await page.evaluate(() =>
-      document
-        .querySelector("canvas")
-        .getContext("webgl2")
-        .getExtension("WEBGL_lose_context")
-        .loseContext(),
-    );
-    await page.waitForFunction(
-      () => document.querySelector("[data-hero]").dataset.state === "fallback",
-    );
-    assert(await page.locator("[data-fallback-note]").isVisible());
-    const video = page.video();
-    await context.close();
-    await video.saveAs(path.join(artifacts, "interaction.webm"));
-    await video.delete();
-    console.log(
-      "PASS desktop: render, drag, buttons, offscreen pause, reduced motion, context-loss fallback",
-    );
+    assert.equal(await page.locator(".empty").count(), 1);
+    await noOverflow(page);
+    await checkBoundaries(page);
+    const hero = page.locator("[data-playground]").first();
+    await assertPlaygroundState(page, 0, false, 24);
+    // JS click() would hide browser hit-testing regressions; use real pointer input.
+    await hero.locator("[data-pg-action]").click();
+    await assertPlaygroundState(page, 1, false, 24);
+    await hero.locator("[data-pg-theme]").check();
+    await hero.locator("[data-pg-radius]").focus();
+    await page.keyboard.press("End");
+    await assertPlaygroundState(page, 1, true, 36);
+    await hero.locator("[data-pg-assemble]").click();
+    assert.equal(await hero.locator("[data-pg-assemble]").getAttribute("aria-pressed"), "true");
+    await hero.locator("[data-pg-explode]").click();
+    assert.equal(await hero.locator("[data-pg-explode]").getAttribute("aria-pressed"), "true");
+    await page.screenshot({ path: path.join(artifacts, "home-controls-desktop.png") });
 
-    const mobile = await browser.newContext({
-      viewport: { width: 390, height: 844 },
-      isMobile: true,
-      hasTouch: true,
-      deviceScaleFactor: 1,
-      reducedMotion: "reduce",
+    await page.locator("[data-language]").click();
+    await ready(page, "/portfolio/zh/", "home", "zh-CN");
+    await assertPlaygroundState(page, 1, true, 36);
+    assert(await page.locator("[data-language]").evaluate(node => node === document.activeElement));
+    await menuRoute(page, "/portfolio/zh/about/", "about", "zh-CN");
+    assert.equal(await page.locator("[data-playground]").count(), 0);
+    await menuRoute(page, "/portfolio/zh/", "home", "zh-CN");
+    await assertPlaygroundState(page, 1, true, 36);
+    await page.locator("[data-language]").click();
+    await ready(page, "/portfolio/", "home");
+    await assertPlaygroundState(page, 1, true, 36);
+    await page.locator(".menu-toggle").click();
+    assert.equal(await page.locator(".menu-toggle").getAttribute("aria-expanded"), "true");
+    await page.keyboard.press("Escape");
+    assert(await page.locator(".menu").isHidden());
+    assert(await page.locator(".menu-toggle").evaluate(node => node === document.activeElement));
+    await menuRoute(page, "/portfolio/projects/", "projects");
+    assert.equal(await page.locator(".work").count(), 0);
+    assert.equal(await page.locator("[data-filter]").count(), 0);
+    assert(await page.locator(".empty").isVisible());
+    console.log("PASS empty archive, pointer controls, shared state across language/remount, menu Escape");
+
+    // Delay one response to make Back happen during both fetch and animation.
+    const delayedURL = origin + "/portfolio/about/";
+    let releaseResponse, requestStarted, handlerFinished;
+    const gate = new Promise(resolve => { releaseResponse = resolve; });
+    const started = new Promise(resolve => { requestStarted = resolve; });
+    const handled = new Promise(resolve => { handlerFinished = resolve; });
+    await page.route(delayedURL, async route => {
+      requestStarted(); await gate;
+      try { await route.continue(); } catch { /* Back may have aborted the fetch. */ }
+      finally { handlerFinished(); }
     });
-    const phone = await mobile.newPage();
-    checkPage(phone);
-    await phone.goto(origin + "/portfolio/");
-    await waitReady(phone);
-    await checkOverflow(phone);
-    await phone.screenshot({
-      path: path.join(artifacts, "mobile.png"),
-      fullPage: true,
-    });
-    const session = await mobile.newCDPSession(phone);
-    await session.send("Input.dispatchTouchEvent", {
-      type: "touchStart",
-      touchPoints: [{ x: 220, y: 650 }],
-    });
-    for (let y = 625; y >= 430; y -= 25) {
-      await session.send("Input.dispatchTouchEvent", {
-        type: "touchMove",
-        touchPoints: [{ x: 220, y }],
-      });
-      await phone.waitForTimeout(20);
+    try {
+      await page.locator(".menu-toggle").click();
+      await page.locator('.menu a[href="/portfolio/about/"]').click();
+      await Promise.race([started, new Promise((_, reject) => setTimeout(() => reject(new Error("Delayed route was not requested")), 12000))]);
+      assert.equal(new URL(page.url()).pathname, "/portfolio/about/", "History must commit before the transition finishes");
+      assert.equal(await page.locator("main").getAttribute("data-page"), "projects");
+      assert(await page.locator(".route-transition-layer").count());
+      await page.evaluate(() => history.back());
+      releaseResponse();
+      await ready(page, "/portfolio/projects/", "projects");
+      await handled;
+      assert.equal(await page.locator("main").getAttribute("aria-busy"), null);
+    } finally {
+      releaseResponse(); await page.unroute(delayedURL);
     }
-    await session.send("Input.dispatchTouchEvent", {
-      type: "touchEnd",
-      touchPoints: [],
-    });
-    await phone.waitForTimeout(150);
-    assert(
-      await phone.evaluate(() => scrollY > 50),
-      "vertical touch on canvas must scroll",
-    );
-    assert.notEqual(
-      await phone.locator("[data-explode]").getAttribute("aria-pressed"),
-      "true",
-    );
-    await mobile.close();
-    console.log(
-      "PASS mobile: no overflow, screenshot, vertical canvas touch scroll",
-    );
+    console.log("PASS Back during pending navigation: destination, history and transition cleanup");
 
-    const fixtureContext = await browser.newContext({
-      viewport: { width: 1280, height: 900 },
-    });
-    const fixture = await fixtureContext.newPage();
-    checkPage(fixture);
-    await fixture.goto(origin + "/fixture/#works");
-    assert.equal(await fixture.locator(".work").count(), 3);
-    await fixture.locator("[data-filter=page]").click();
-    assert.equal(await fixture.locator(".work:visible").count(), 2);
-    await fixture.locator("[data-filter=experiment]").click();
-    assert(await fixture.locator(".filter-empty").isVisible());
-    await fixture.locator("[data-filter=all]").click();
-    await fixture.locator("[data-view=index]").click();
-    assert.equal(
-      await fixture.locator(".works-grid").getAttribute("data-layout"),
-      "index",
-    );
-    await fixture.waitForTimeout(500);
-    const trigger = fixture.locator("[data-detail]").first();
-    await trigger.focus();
-    const before = await fixture.evaluate(() => scrollY);
-    await fixture.keyboard.press("Enter");
-    await fixture.waitForFunction(
-      () => !!document.querySelector("dialog[open]"),
-    );
-    await fixture.waitForTimeout(500);
-    assert.equal(
-      await fixture.locator("dialog[open] h2").innerText(),
-      "测试夹具 2",
-    );
-    assert(
-      await fixture
-        .locator("dialog[open] [data-close]")
-        .evaluate((element) => element === document.activeElement),
-    );
-    await fixture.keyboard.press("Escape");
-    await fixture.waitForFunction(
-      () => !document.querySelector("dialog[open]"),
-    );
-    await fixture.waitForTimeout(500);
-    assert(
-      await trigger.evaluate((element) => element === document.activeElement),
-    );
-    assert(
-      Math.abs((await fixture.evaluate(() => scrollY)) - before) <= 1,
-      "close must restore scroll",
-    );
-    await fixture.locator("[data-view=gallery]").click();
-    await fixture.waitForTimeout(500);
-    await checkOverflow(fixture);
-    assert.equal(
-      await fixture.locator('.work-dialog a[href="demos/fixture-0/"]').count(),
-      1,
-    );
-    assert.equal(
-      (
-        await fixture.request.get(origin + "/fixture/demos/fixture-0/")
-      ).status(),
-      200,
-    );
-    // Reduced-motion open/close, including actual pointer dismissal on the backdrop.
-    await fixture.emulateMedia({ reducedMotion: "reduce" });
-    await trigger.click();
-    await fixture.waitForFunction(
-      () => !!document.querySelector("dialog[open]"),
-    );
-    await fixture.mouse.click(5, 5);
-    await fixture.waitForFunction(
-      () => !document.querySelector("dialog[open]"),
-    );
-    await fixture.setViewportSize({ width: 390, height: 844 });
-    await checkOverflow(fixture);
-    await fixtureContext.close();
-    console.log(
-      "PASS archive: filter/empty category, gallery/index, keyboard dialog, focus/scroll restore, backdrop, subpath demo",
-    );
+    assert.equal((await page.goto(origin + "/portfolio/projects/unknown-work/")).status(), 404);
+    await ready(page, "/portfolio/projects/unknown-work/", "not-found");
+    assert.equal((await page.goto(origin + "/portfolio/zh/unknown/")).status(), 404);
+    await ready(page, "/portfolio/zh/unknown/", "not-found", "zh-CN");
 
-    const offline = await browser.newContext();
-    const failed = await offline.newPage();
-    checkPage(failed);
-    await failed.route("**/vendor/three/three.module.js", (route) =>
-      route.abort(),
-    );
-    await failed.goto(origin + "/portfolio/");
-    await failed.waitForFunction(
-      () => document.querySelector("[data-hero]").dataset.state === "fallback",
-    );
-    assert(await failed.locator("h1").isVisible());
-    await offline.close();
-    const noJs = await browser.newContext({ javaScriptEnabled: false });
-    const plain = await noJs.newPage();
-    await plain.goto(origin + "/fixture/#works");
-    assert.equal(await plain.locator(".work:visible").count(), 3);
-    assert(!(await plain.locator(".filters").isVisible()));
-    assert(
-      (
-        await plain.locator("[data-detail]").first().getAttribute("href")
-      ).startsWith("https://github.com/"),
-    );
-    await noJs.close();
-    assert.deepEqual(errors, [], "uncaught browser exceptions");
-    console.log(
-      "PASS resilience: blocked module, no-JS archive links, no uncaught exceptions",
-    );
+    // Isolated fixture origin, identical deployment path.
+    await page.goto(fixtureOrigin + "/portfolio/projects/");
+    await ready(page, "/portfolio/projects/", "projects");
+    assert.equal(await page.locator(".work").count(), 3);
+    await page.locator("[data-filter=page]").click();
+    assert.equal(await page.locator(".work:not([hidden])").count(), 2);
+    await page.locator("[data-filter=experiment]").click();
+    assert.equal(await page.locator(".work:not([hidden])").count(), 0);
+    assert(await page.locator(".filter-empty").isVisible());
+    await page.locator("[data-filter=component]").click();
+    await page.locator("[data-language]").click();
+    await ready(page, "/portfolio/zh/projects/", "projects", "zh-CN");
+    assert.equal(await page.locator("[data-filter=component]").getAttribute("aria-pressed"), "true");
+    assert.equal(await page.locator(".work:not([hidden]) h3").innerText(), "浏览器夹具 0");
+    await page.locator(".work:not([hidden]) .project-card").click();
+    await ready(page, "/portfolio/zh/projects/fixture-0/", "detail", "zh-CN");
+    assert.equal(await page.locator("h1").innerText(), "浏览器夹具 0");
+    assert.equal(await page.locator(".detail-notes li").innerText(), "独立静态详情页");
+    assert(await page.locator(".detail-preview img").evaluate(img => img.complete && img.naturalWidth > 0));
+    const demo = page.locator('.detail-links a[href="/portfolio/demos/fixture-0/"]');
+    assert.equal(await demo.count(), 1);
+    assert.equal((await page.request.get(fixtureOrigin + await demo.getAttribute("href"))).status(), 200);
+    assert.equal(await page.locator('.detail-links a[href^="https://github.com/"]').count(), 1);
+    const nextHref = await page.locator(".next-project").getAttribute("href");
+    assert.match(nextHref, /^\/portfolio\/zh\/projects\/fixture-[12]\/$/);
+    assert.equal((await page.request.get(fixtureOrigin + nextHref)).status(), 200);
+    await page.locator("[data-language]").click();
+    await ready(page, "/portfolio/projects/fixture-0/", "detail");
+    assert.equal(await page.locator("h1").innerText(), "Browser fixture 0");
+    await noOverflow(page);
+    await page.screenshot({ path: path.join(artifacts, "fixture-detail-desktop.png") });
+    console.log("PASS fixture filters, translated detail/source/demo/next routes and true 404 responses");
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await menuRoute(page, "/portfolio/", "home");
+    const compact = page.locator("[data-playground]").first();
+    await compact.locator("[data-pg-action]").click();
+    await assertPlaygroundState(page, 1, false, 24);
+    await compact.locator("[data-pg-assemble]").click();
+    assert.equal(await compact.locator("[data-pg-assemble]").getAttribute("aria-pressed"), "true");
+    await compact.locator("[data-pg-viewport]").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(150);
+    const still = await compact.locator("[data-pg-assembly]").getAttribute("style");
+    await page.waitForTimeout(180);
+    assert.equal(await compact.locator("[data-pg-assembly]").getAttribute("style"), still, "Reduced motion must stop continuous pose animation");
+    assert.equal(await page.locator(".route-transition-layer").count(), 0);
+    await noOverflow(page); await checkBoundaries(page);
+    await page.screenshot({ path: path.join(artifacts, "home-reduced-mobile.png") });
+    await menuRoute(page, "/portfolio/projects/", "projects");
+    await noOverflow(page);
+    await page.locator("[data-filter=all]").click();
+    await page.locator(".project-card").first().click();
+    await ready(page, "/portfolio/projects/fixture-2/", "detail");
+    await noOverflow(page);
+    console.log("PASS mobile width, reduced-motion controls and static pose, nested boundary policy");
+
+    await page.setViewportSize({ width: 320, height: 720 });
+    for (const locale of ["", "zh/"]) {
+      for (const route of ["", "about/", "projects/"]) {
+        await page.goto(origin + "/portfolio/" + locale + route);
+        await ready(page, "/portfolio/" + locale + route, route ? route.slice(0, -1) : "home", locale ? "zh-CN" : "en");
+        await noOverflow(page);
+      }
+    }
+    console.log("PASS 320px Home/About/Projects in both languages without horizontal overflow");
+    await page.setViewportSize({ width: 390, height: 844 });
+
+    // Blocked module and failed context creation are separate resilience cases.
+    await page.route("**/vendor/three/three.module.js", route => route.abort());
+    await page.goto(origin + "/portfolio/");
+    await ready(page, "/portfolio/", "home");
+    await page.locator("[data-pg-viewport]").first().scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => document.querySelector("[data-playground]")?.dataset.webgl === "fallback");
+    await page.locator("[data-pg-action]").first().click();
+    await assertPlaygroundState(page, 1, false, 24);
+    await page.unroute("**/vendor/three/three.module.js");
+    await page.addInitScript(() => {
+      const original = HTMLCanvasElement.prototype.getContext;
+      HTMLCanvasElement.prototype.getContext = function(type, ...args) {
+        return /webgl/i.test(type) ? null : original.call(this, type, ...args);
+      };
+    });
+    await page.goto(origin + "/portfolio/");
+    await ready(page, "/portfolio/", "home");
+    await page.locator("[data-pg-viewport]").first().scrollIntoViewIfNeeded();
+    await page.waitForFunction(() => document.querySelector("[data-playground]")?.dataset.webgl === "fallback");
+    await page.locator("[data-pg-action]").first().click();
+    await assertPlaygroundState(page, 1, false, 24);
+
+    const noJS = await browser.newContext({ javaScriptEnabled: false, viewport: { width: 1280, height: 900 } });
+    contexts.push(noJS);
+    const plain = await ownPage(noJS);
+    for (const [pathname, pageName, lang, heading] of [
+      ["/portfolio/", "home", "en", null],
+      ["/portfolio/about/", "about", "en", null],
+      ["/portfolio/projects/", "projects", "en", null],
+      ["/portfolio/projects/fixture-0/", "detail", "en", "Browser fixture 0"],
+      ["/portfolio/zh/", "home", "zh-CN", null],
+      ["/portfolio/zh/about/", "about", "zh-CN", null],
+      ["/portfolio/zh/projects/", "projects", "zh-CN", null],
+      ["/portfolio/zh/projects/fixture-0/", "detail", "zh-CN", "浏览器夹具 0"],
+    ]) {
+      assert.equal((await plain.goto(fixtureOrigin + pathname)).status(), 200);
+      assert.equal(await plain.locator("html").getAttribute("lang"), lang);
+      assert.equal(await plain.locator("main").getAttribute("data-page"), pageName);
+      assert(await plain.locator("h1").isVisible());
+      assert(await plain.locator(".no-script-nav").isVisible());
+      if (heading) assert.equal(await plain.locator("h1").innerText(), heading);
+      if (pageName === "projects") assert.equal(await plain.locator(".work:visible").count(), 3);
+    }
+    await plain.locator("[data-language]").click();
+    await plain.waitForURL(fixtureOrigin + "/portfolio/projects/fixture-0/");
+    assert.equal(await plain.locator("h1").innerText(), "Browser fixture 0");
+    assert.equal((await plain.goto(fixtureOrigin + "/portfolio/projects/missing/")).status(), 404);
+    assert.equal(await plain.locator("main").getAttribute("data-page"), "not-found");
+    assert.deepEqual(errors, [], "Uncaught browser exceptions");
+    console.log("PASS blocked Three, failed WebGL, eight independent no-JS routes, native language links, no uncaught exceptions");
+    console.log("Chrome:", browser.version());
     console.log("Artifacts:", artifacts);
+    console.log("Native touchpad/mobile rubber-banding was not physically tested.");
   } finally {
-    await browser.close();
-    await new Promise((resolve) => server.close(resolve));
+    // Close only resources owned by this script; the shared Chrome and existing tabs survive.
+    for (const page of pages.reverse()) if (!page.isClosed()) await page.close().catch(() => {});
+    for (const context of contexts.reverse()) await context.close().catch(() => {});
+    for (const server of servers) {
+      if (server.exitCode !== null) continue;
+      await new Promise(resolve => {
+        const timer = setTimeout(() => { server.kill("SIGKILL"); }, 1500);
+        server.once("exit", () => { clearTimeout(timer); resolve(); });
+        server.kill("SIGTERM");
+      });
+    }
     fs.rmSync(temporary, { recursive: true, force: true });
   }
-})().catch((error) => {
-  console.error(error);
-  server.close();
-  process.exitCode = 1;
-});
+}
+
+// Process exit disconnects this CDP client without sending Browser.close.
+main().then(() => process.exit(0), error => { console.error(error); process.exit(1); });

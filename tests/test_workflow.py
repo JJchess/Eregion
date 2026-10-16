@@ -1,4 +1,5 @@
 import importlib.util
+import io
 import json
 from pathlib import Path
 import shutil
@@ -6,6 +7,7 @@ import subprocess
 import sys
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -18,6 +20,7 @@ def module(name, path):
 
 
 builder = module("builder", ROOT / "scripts/build.py")
+preview = module("preview", ROOT / "scripts/serve.py")
 hook = module("hook", ROOT / "automation/portfolio-curator/scripts/hook.py")
 
 
@@ -145,6 +148,7 @@ class InstallerTests(unittest.TestCase):
             self.assertEqual(json.loads(result.stdout)["hookSpecificOutput"]["hookEventName"], "SessionStart")
 
 
+
 class BuildTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -153,66 +157,157 @@ class BuildTests(unittest.TestCase):
         shutil.copytree(ROOT / "site", self.root / "site")
         (self.root / "works").mkdir()
 
-    def work(self):
-        folder = self.root / "works/test-component"
+    def work(self, slug="test-component", day=15):
+        folder = self.root / "works" / slug
         (folder / "src").mkdir(parents=True)
         (folder / "src/index.html").write_text("<button>Test fixture only</button>")
         (folder / "README.md").write_text("Test fixture only")
-        # A tiny PNG. Test assets never enter the published repository's works/.
+        # Synthetic assets live only in this temporary directory.
         import base64
         (folder / "preview.png").write_bytes(base64.b64decode("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aGZkAAAAASUVORK5CYII="))
-        info = {"title": "<script>alert(1)</script>", "summary": "A test fixture", "kind": "component", "date": "2026-10-15", "tags": ["HTML"], "highlights": ["Small"], "preview": "preview.png", "demo": None}
+        info = {"title": "<script>alert(1)</script>", "summary": "A test fixture", "kind": "component", "date": f"2026-10-{day:02d}", "tags": ["HTML"], "highlights": ["Small"], "preview": "preview.png", "demo": None}
         (folder / "work.json").write_text(json.dumps(info))
         return folder, info
 
-    def test_empty_site_builds_without_invented_works(self):
-        self.assertEqual(builder.build(self.root), 0)
-        page = (self.root / "_site/index.html").read_text()
-        self.assertIn('class="empty"', page)
-        self.assertNotIn('data-kind=', page)
-        self.assertNotIn('<dialog', page)
-        self.assertRegex(page, r'\[\s*00\s*\]')
+    def page(self, path="index.html"):
+        return (self.root / "_site" / path).read_text()
 
-    def test_site_modules_and_licenses_publish_but_unlisted_files_do_not(self):
+    def test_empty_site_builds_both_languages_without_invented_works(self):
+        self.assertEqual(builder.build(self.root), 0)
+        expected = {"index.html", "about/index.html", "projects/index.html", "404.html"}
+        expected |= {"zh/" + path for path in expected.copy()}
+        actual = {str(path.relative_to(self.root / "_site")) for path in (self.root / "_site").rglob("*.html")}
+        self.assertEqual(actual, expected)
+        for prefix, lang in [("", "en"), ("zh/", "zh-CN")]:
+            for route in ["index.html", "projects/index.html"]:
+                page = self.page(prefix + route)
+                self.assertIn(f'<html lang="{lang}">', page)
+                self.assertIn('class="empty"', page)
+                self.assertIn("<sup>00</sup>", page)
+                self.assertNotIn('data-kind=', page)
+                self.assertNotIn('data-filter=', page)
+                self.assertNotIn('<dialog', page)
+        self.assertFalse((self.root / "_site/projects/test-component").exists())
+
+    def test_site_allowlist_publishes_assets_but_not_inputs_or_private_files(self):
         (self.root / "site/.env").write_text("PRIVATE_FIXTURE=never-copy")
         (self.root / "site/private-notes.txt").write_text("not public")
         builder.build(self.root)
         output = self.root / "_site"
         for asset in builder.SITE_FILES:
             self.assertEqual((output / asset).read_bytes(), (self.root / "site" / asset).read_bytes())
-        self.assertFalse((output / ".env").exists())
-        self.assertFalse((output / "private-notes.txt").exists())
+        for private in [".env", "private-notes.txt", "profile.json", "copy.json", "templates", "replicas"]:
+            self.assertFalse((output / private).exists(), private)
 
-    def test_details_share_archive_data_and_escape_user_text(self):
+    def test_legacy_work_has_real_bilingual_detail_and_escaped_original_content(self):
         folder, info = self.work()
         info["summary"] = '<img src=x onerror="alert(1)">'
         info["highlights"] = ['<script>bad()</script>']
         (folder / "work.json").write_text(json.dumps(info))
+        self.assertEqual(builder.load_works(self.root)[0]["locale"], "zh")
         builder.build(self.root)
-        page = (self.root / "_site/index.html").read_text()
-        self.assertIn('data-detail="detail-test-component"', page)
-        self.assertIn('id="detail-test-component" aria-labelledby="detail-title-test-component"', page)
-        self.assertIn('id="detail-title-test-component"', page)
-        self.assertEqual(page.count('&lt;img src=x onerror=&quot;alert(1)&quot;&gt;'), 2)
-        self.assertIn('&lt;script&gt;bad()&lt;/script&gt;', page)
-        self.assertNotIn('<img src=x', page)
-        self.assertNotIn('体验作品', page)
-        self.assertRegex(page, r'\[\s*01\s*\]')
+        for prefix in ["", "zh/"]:
+            page = self.page(prefix + "projects/test-component/index.html")
+            self.assertIn('&lt;img src=x onerror=&quot;alert(1)&quot;&gt;', page)
+            self.assertIn('&lt;script&gt;bad()&lt;/script&gt;', page)
+            self.assertNotIn("<img src=x", page)
+            self.assertNotIn("<script>alert", page)
+            self.assertNotIn('class="next-project"', page)
+            self.assertNotIn('href="None"', page)
+            self.assertIn("https://github.com/JJchess/Eregion/tree/main/works/test-component", page)
+        self.assertIn('class="original-language"', self.page("projects/test-component/index.html"))
+        self.assertNotIn('class="original-language"', self.page("zh/projects/test-component/index.html"))
+        home = self.page()
+        self.assertIn('href="/portfolio/projects/test-component/"', home)
+        self.assertIn('<h3 lang="zh-CN">', home)
+        self.assertIn("<sup>01</sup>", home)
+        self.assertNotIn('<dialog', home)
+
+    def test_translation_is_optional_per_field_and_does_not_invent_missing_copy(self):
+        folder, info = self.work()
+        info.update(locale="en", title="Original title", summary="Original summary",
+                    translations={"zh": {"title": "中文标题", "summary": "中文简介", "tags": ["界面"], "highlights": ["中文亮点"]}})
+        (folder / "work.json").write_text(json.dumps(info))
+        builder.build(self.root)
+        english = self.page("projects/test-component/index.html")
+        chinese = self.page("zh/projects/test-component/index.html")
+        self.assertIn("Original title", english)
+        self.assertNotIn("中文标题", english)
+        self.assertIn("中文标题", chinese)
+        self.assertIn("中文简介", chinese)
+        self.assertNotIn('class="original-language"', chinese)
+        info["translations"]["zh"] = {"title": "中文标题"}
+        (folder / "work.json").write_text(json.dumps(info))
+        builder.build(self.root)
+        chinese = self.page("zh/projects/test-component/index.html")
+        self.assertIn("Original summary", chinese)
+        self.assertIn('class="original-language"', chinese)
+        item = builder.localize_work(builder.load_works(self.root)[0], "zh")
+        self.assertEqual(item["content_languages"]["summary"], "en")
+        self.assertEqual(item["content_languages"]["title"], "zh")
+
+    def test_language_links_preserve_current_route_and_asset_base(self):
+        self.work()
+        builder.build(self.root, base_path="/preview/")
+        page = self.page("projects/test-component/index.html")
+        self.assertIn('href="/preview/zh/projects/test-component/"', page)
+        self.assertIn('src="/preview/media/test-component/preview.png"', page)
+        self.assertIn('src="/preview/app.js"', page)
+        self.assertIn('href="https://jjchess.github.io/Eregion/projects/test-component/"', page)
+        self.assertIn('hreflang="zh-CN" href="https://jjchess.github.io/Eregion/zh/projects/test-component/"', page)
+        self.assertIn('href="/preview/projects/test-component/"', self.page("zh/projects/test-component/index.html"))
+
+    def test_pages_deployment_base_matches_actual_repository_path(self):
+        folder, info = self.work()
+        (folder / "demo").mkdir()
+        (folder / "demo/index.html").write_text("Static demo")
+        info["demo"] = "demo/index.html"
+        (folder / "work.json").write_text(json.dumps(info))
+        # configure-pages supplies a base_path without the trailing slash.
+        self.assertEqual(builder.build(self.root, base_path="/Eregion"), 1)
+        for locale in ["", "zh/"]:
+            page = self.page(locale + "projects/test-component/index.html")
+            self.assertIn('data-base="/Eregion/"', page)
+            self.assertIn('src="/Eregion/app.js"', page)
+            self.assertIn('src="/Eregion/media/test-component/preview.png"', page)
+            self.assertIn('href="/Eregion/demos/test-component/"', page)
+            self.assertIn('href="https://github.com/JJchess/Eregion/tree/main/works/test-component"', page)
+            self.assertIn(f'href="https://jjchess.github.io/Eregion/{locale}projects/test-component/"', page)
+            self.assertIn(f'href="/Eregion/{locale}projects/test-component/"', self.page(locale + "projects/index.html"))
+            self.assertNotIn('/portfolio/', page)
+        self.assertIn('href="/Eregion/zh/projects/test-component/"', self.page("projects/test-component/index.html"))
+        self.assertIn('href="/Eregion/projects/test-component/"', self.page("zh/projects/test-component/index.html"))
+        # Local development deliberately keeps the historical preview prefix.
+        builder.build(self.root)
+        self.assertIn('data-base="/portfolio/"', self.page())
+        self.assertIn('href="https://jjchess.github.io/Eregion/"', self.page())
+
+    def test_home_limits_to_six_but_archive_and_next_links_use_all_real_works(self):
+        for i in range(7):
+            self.work(f"fixture-{i}", day=i + 1)
+        self.assertEqual(builder.build(self.root), 7)
+        home, archive = self.page(), self.page("projects/index.html")
+        self.assertEqual(home.count('class="work" data-kind='), 6)
+        self.assertEqual(archive.count('class="work" data-kind='), 7)
+        self.assertNotIn('href="/portfolio/projects/fixture-0/"', home)
+        self.assertIn('href="/portfolio/projects/fixture-0/"', archive)
+        self.assertLess(archive.index("projects/fixture-6/"), archive.index("projects/fixture-5/"))
+        self.assertIn('class="next-project" href="/portfolio/projects/fixture-5/"', self.page("projects/fixture-6/index.html"))
+        self.assertIn('class="next-project" href="/portfolio/zh/projects/fixture-6/"', self.page("zh/projects/fixture-0/index.html"))
 
     def test_unsafe_frontend_asset_preserves_last_successful_build(self):
         builder.build(self.root)
-        output = self.root / "_site/index.html"
-        original = output.read_bytes()
-        asset = self.root / "site/hero.js"
+        original = self.page()
+        asset = self.root / "site/app.js"
         asset.unlink()
         secret = self.root / "private.js"
         secret.write_text("not public")
         asset.symlink_to(secret)
         with self.assertRaises(ValueError):
             builder.build(self.root)
-        self.assertEqual(output.read_bytes(), original)
+        self.assertEqual(self.page(), original)
 
-    def test_approved_work_renders_and_only_public_assets_are_copied(self):
+    def test_approved_work_copies_only_preview_and_opted_in_static_demo(self):
         folder, info = self.work()
         (folder / ".env").write_text("PRIVATE_FIXTURE=never-copy")
         (folder / "demo").mkdir()
@@ -221,23 +316,29 @@ class BuildTests(unittest.TestCase):
         info["demo"] = "demo/index.html"
         (folder / "work.json").write_text(json.dumps(info))
         self.assertEqual(builder.build(self.root), 1)
-        page = (self.root / "_site/index.html").read_text()
-        self.assertIn("&lt;script&gt;", page)
-        self.assertNotIn("<script>alert", page)
+        for prefix in ["", "zh/"]:
+            self.assertIn('class="pill" href="/portfolio/demos/test-component/"', self.page(prefix + "projects/test-component/index.html"))
         self.assertTrue((self.root / "_site/demos/test-component/style.css").exists())
         self.assertFalse((self.root / "_site/works").exists())
         self.assertEqual(list((self.root / "_site").rglob(".env")), [])
 
-    def test_bad_paths_and_demo_urls_fail_before_replacing_output(self):
+    def test_bad_paths_urls_and_translations_preserve_previous_output(self):
         folder, info = self.work()
         builder.build(self.root)
-        page = (self.root / "_site/index.html").read_text()
-        for change in [{"preview": "../../site/index.html"}, {"demo": "javascript:alert(1)"}, {"kind": "unknown"}]:
+        original = self.page()
+        changes = [
+            {"preview": "../../site/index.html"}, {"demo": "javascript:alert(1)"},
+            {"demo": "https://name:password@example.com"}, {"kind": "unknown"},
+            {"locale": "fr"}, {"translations": []}, {"translations": {"fr": {}}},
+            {"translations": {"en": {"preview": "elsewhere.png"}}},
+            {"translations": {"en": {"title": ""}}}, {"translations": {"en": {"tags": "HTML"}}},
+        ]
+        for change in changes:
             with self.subTest(change=change):
                 (folder / "work.json").write_text(json.dumps({**info, **change}))
                 with self.assertRaises(ValueError):
                     builder.build(self.root)
-                self.assertEqual((self.root / "_site/index.html").read_text(), page)
+                self.assertEqual(self.page(), original)
 
     def test_demo_rejects_symlinks_and_hidden_files(self):
         folder, info = self.work()
@@ -252,6 +353,126 @@ class BuildTests(unittest.TestCase):
         (folder / "demo/leak").symlink_to(self.root / "site")
         with self.assertRaises(ValueError):
             builder.build(self.root)
+
+    def test_undefined_template_token_fails_without_replacing_output(self):
+        builder.build(self.root)
+        original = self.page()
+        path = self.root / "site/templates/home.html"
+        path.write_text(path.read_text() + "{{missing_copy_key}}")
+        with self.assertRaisesRegex(ValueError, "missing_copy_key"):
+            builder.build(self.root)
+        self.assertEqual(self.page(), original)
+        self.assertEqual(builder.render("{{value}}", {"value": "{{literal_user_text}}"}), "{{literal_user_text}}")
+
+    def test_failed_final_rename_restores_previous_build(self):
+        builder.build(self.root)
+        original = self.page()
+        rename = Path.rename
+
+        def fail_publish(path, target):
+            if path.name == "output" and Path(target).name == "_site":
+                raise OSError("Simulated publication failure")
+            return rename(path, target)
+
+        with mock.patch.object(Path, "rename", fail_publish):
+            with self.assertRaisesRegex(OSError, "publication failure"):
+                builder.build(self.root)
+        self.assertEqual(self.page(), original)
+
+    def test_invalid_base_path_and_output_symlink_are_rejected(self):
+        for base in ["https://example.com/", "/../", "/portfolio/?x=1", "/a\\b/"]:
+            with self.subTest(base=base):
+                with self.assertRaises(ValueError):
+                    builder.build(self.root, base_path=base)
+        destination = self.root / "outside"
+        destination.mkdir()
+        (self.root / "_site").symlink_to(destination, target_is_directory=True)
+        with self.assertRaises(ValueError):
+            builder.build(self.root)
+
+
+class PreviewTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name) / "public"
+        self.root.mkdir()
+        for path, text in {
+            "index.html": "HOME", "about/index.html": "ABOUT",
+            "projects/index.html": "PROJECTS", "projects/real-work/index.html": "REAL WORK",
+            "zh/index.html": "中文首页", "zh/about/index.html": "关于",
+            "zh/projects/real-work/index.html": "中文作品",
+            "404.html": "NOT FOUND", "zh/404.html": "未找到页面",
+            "media/clip.mp4": "0123456789",
+        }.items():
+            file = self.root / path
+            file.parent.mkdir(parents=True, exist_ok=True)
+            file.write_text(text)
+
+    def request(self, path, method="GET", headers=None):
+        # Exercise the production handler without opening a port or server.
+        handler_type = preview.make_handler(self.root)
+        handler = handler_type.__new__(handler_type)
+        handler.path = path
+        handler.headers = headers or {}
+        handler.wfile = io.BytesIO()
+        result = {"headers": {}}
+        handler.send_response = lambda status: result.update(status=status)
+        handler.send_header = lambda key, value: result["headers"].update({key: value})
+        handler.end_headers = lambda: None
+        handler.send_error = lambda status: result.update(status=status)
+        handler.respond(method != "HEAD")
+        return {**result, "body": handler.wfile.getvalue()}
+
+    def test_root_and_directory_redirects_keep_the_deployment_prefix(self):
+        self.assertEqual(self.request("/")["headers"]["Location"], "/portfolio/")
+        self.assertEqual(self.request("/")["status"], 302)
+        self.assertEqual(self.request("/portfolio")["status"], 301)
+        redirect = self.request("/portfolio/about?mode=test")
+        self.assertEqual(redirect["status"], 301)
+        self.assertEqual(redirect["headers"]["Location"], "/portfolio/about/?mode=test")
+        self.assertEqual(self.request("/portfolio-other/")["status"], 404)
+
+    def test_real_routes_refresh_without_an_api_or_spa_fallback(self):
+        for route in ["", "about/", "projects/", "projects/real-work/", "zh/", "zh/about/", "zh/projects/real-work/"]:
+            with self.subTest(route=route):
+                self.assertEqual(self.request("/portfolio/" + route)["status"], 200)
+        for path in ["/portfolio/projects/imaginary/", "/api/reference", "/__reference/media.png", "/portfolio/missing.js"]:
+            result = self.request(path)
+            self.assertEqual(result["status"], 404)
+            self.assertEqual(result["body"], b"NOT FOUND")
+        self.assertEqual(self.request("/portfolio/zh/missing/")["body"], b"NOT FOUND")
+        self.assertEqual(self.request("/portfolio/zh/404.html")["body"].decode(), "未找到页面")
+
+    def test_private_traversal_symlinks_and_directory_listing_are_unavailable(self):
+        secret = self.root.parent / "secret.txt"
+        secret.write_text("PRIVATE")
+        (self.root / "leak.txt").symlink_to(secret)
+        (self.root / "cycle").symlink_to(self.root / "cycle")
+        (self.root / "nested").symlink_to(self.root.parent, target_is_directory=True)
+        (self.root / ".env").write_text("PRIVATE")
+        (self.root / "empty").mkdir()
+        for path in ["../secret.txt", "%2e%2e/secret.txt", "%2e%2e%2fsecret.txt",
+                     ".env", "leak.txt", "cycle", "nested/secret.txt", "empty/"]:
+            with self.subTest(path=path):
+                result = self.request("/portfolio/" + path)
+                self.assertEqual(result["status"], 404)
+                self.assertNotIn(b"PRIVATE", result["body"])
+        self.assertEqual(self.request("/portfolio/%00")["status"], 400)
+
+    def test_head_and_video_ranges_match_static_file_semantics(self):
+        result = self.request("/portfolio/media/clip.mp4", method="HEAD")
+        self.assertEqual(result["status"], 200)
+        self.assertEqual(result["body"], b"")
+        self.assertEqual(result["headers"]["Content-Length"], "10")
+        result = self.request("/portfolio/media/clip.mp4", headers={"Range": "bytes=2-5"})
+        self.assertEqual(result["status"], 206)
+        self.assertEqual(result["body"], b"2345")
+        self.assertEqual(result["headers"]["Content-Range"], "bytes 2-5/10")
+        result = self.request("/portfolio/media/clip.mp4", headers={"Range": "bytes=-3"})
+        self.assertEqual(result["body"], b"789")
+        for value in ["bytes=20-", "bytes=5-2", "bytes=-0", "bytes=1-2,4-5"]:
+            self.assertEqual(self.request("/portfolio/media/clip.mp4", headers={"Range": value})["status"], 416)
 
 
 if __name__ == "__main__":

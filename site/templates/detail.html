@@ -1,0 +1,36 @@
+<section class="detail-head section-wrap">
+  <a class="text-link" href="{{projects_url}}">← {{back_projects}}</a>
+  <p class="eyebrow">{{details_label}}</p>
+  <h1 lang="{{work_title_lang}}">{{work_title}}</h1>
+  <div class="detail-meta">
+    <p lang="{{work_summary_lang}}">{{work_summary}}</p>
+    <div>
+      <time>{{work_date}}</time>
+      <p lang="{{work_tags_lang}}">{{work_tags}}</p>
+      {{original_language_notice}}
+    </div>
+  </div>
+  <div class="detail-links">
+    {{demo_link}}<a
+      class="pill dark"
+      href="{{source_url}}"
+      target="_blank"
+      rel="noopener"
+      >{{source_label}} ↗</a
+    >
+  </div>
+</section>
+<div class="detail-preview section-wrap">
+  <img src="{{preview_url}}" alt="{{work_title}}" width="1200" height="800" />
+</div>
+<section class="detail-notes section-wrap">
+  <h2>{{details_highlights}}</h2>
+  <ul lang="{{work_highlights_lang}}">
+    {{work_highlights}}
+  </ul>
+</section>
+<section class="next-section section-wrap">
+  {{next_link}}<a class="text-link" href="{{projects_url}}"
+    >{{back_projects}} ↗</a
+  >
+</section>

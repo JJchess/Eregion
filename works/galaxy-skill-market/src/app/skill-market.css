@@ -1,0 +1,2566 @@
+/* Pearl map presentation ported from the voice prototype. Workspace adaptations follow below. */
+
+[data-skill-market-v2] * {
+  box-sizing: border-box;
+}
+
+[data-skill-market-v2] button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[data-skill-market-v2] button:disabled {
+  cursor: default;
+  opacity: 0.4;
+}
+
+[data-skill-market-v2] button:focus-visible,
+[data-skill-market-v2] a:focus-visible {
+  outline: 2px solid #8469cf;
+  outline-offset: 4px;
+}
+
+[data-skill-market-v2] svg {
+  flex-shrink: 0;
+}
+
+[data-skill-market-v2] ::selection {
+  background: #ddd2fa;
+}
+
+/* Header */
+
+:where([data-skill-market-v2]) .sk-header {
+  z-index: 20;
+  background: transparent;
+  align-items: center;
+  gap: 34px;
+  height: 48px;
+  padding: 0 31px;
+  display: flex;
+  position: relative;
+}
+
+:where([data-skill-market-v2]) .sk-brand {
+  color: #292633;
+  letter-spacing: -0.7px;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 8px;
+  width: 235px;
+  font-size: 15px;
+  font-weight: 750;
+  text-decoration: none;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-search {
+  background: linear-gradient(110deg, #f0eef8, #f6f5fb);
+  border-radius: 4px;
+  flex: 1;
+  align-items: center;
+  max-width: 360px;
+  height: 30px;
+  display: flex;
+  position: relative;
+  box-shadow: inset 0 1px 4px #79718006;
+}
+
+:where([data-skill-market-v2]) .sk-search:focus-within {
+  box-shadow: 0 0 0 2px #9c89c94a;
+}
+
+:where([data-skill-market-v2]) .sk-search input {
+  color: #3e3859;
+  background: none;
+  border: 0;
+  outline: none;
+  width: 100%;
+  padding: 5px 35px 5px 12px;
+  font-size: 12px;
+}
+
+:where([data-skill-market-v2]) .sk-search input::placeholder {
+  color: var(--sk-subtle);
+}
+
+:where([data-skill-market-v2]) .sk-search input::-webkit-search-cancel-button {
+  display: none;
+}
+
+:where([data-skill-market-v2]) .sk-search > svg,
+:where([data-skill-market-v2]) .sk-search > button {
+  color: var(--sk-subtle);
+  place-items: center;
+  padding: 0;
+  display: grid;
+  position: absolute;
+  right: 9px;
+}
+
+:where([data-skill-market-v2]) .sk-nav {
+  align-self: stretch;
+  align-items: stretch;
+  gap: 48px;
+  margin-left: auto;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-nav button {
+  white-space: nowrap;
+  color: var(--sk-muted);
+  padding: 0 8px;
+  font-size: 12px;
+  transition: color 0.18s;
+  position: relative;
+}
+
+:where([data-skill-market-v2]) .sk-nav button:hover,
+:where([data-skill-market-v2]) .sk-nav button[aria-current] {
+  color: #28243e;
+}
+
+:where([data-skill-market-v2]) .sk-nav button[aria-current]::after {
+  content: '';
+  background: #443a67;
+  height: 2px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+:where([data-skill-market-v2]) .sk-profile {
+  border-radius: 50%;
+  place-items: center;
+  margin-left: 12px;
+  padding: 2px;
+  display: grid;
+  box-shadow: 0 0 0 1px #ebe7f3;
+}
+
+:where([data-skill-market-v2]) .sk-profile:hover {
+  box-shadow: 0 0 0 2px #cfc3ec;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-thumb {
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+  box-shadow:
+    inset 0 0 0 1px #ffffff80,
+    0 2px 5px #6f63a033;
+}
+
+/* Sidebar */
+
+:where([data-skill-market-v2]) .sk-layout {
+  height: calc(100dvh - 48px);
+  min-height: 640px;
+  padding-bottom: 20px;
+  display: grid;
+}
+
+:where([data-skill-market-v2]) .has-panel .sk-sidebar {
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+:where([data-skill-market-v2]) .sk-sidebar {
+  flex-direction: column;
+  gap: 15px;
+  min-height: 0;
+  padding: 24px 28px 0;
+  display: flex;
+  overflow-y: auto;
+}
+
+:where([data-skill-market-v2]) .sk-sidebar-heading h2 {
+  letter-spacing: -0.8px;
+  font-size: 22px;
+  font-weight: 550;
+}
+
+:where([data-skill-market-v2]) .sk-summary-card {
+  box-shadow:
+    var(--sk-shadow),
+    inset 0 1px 0 #fff;
+  background: #fff;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+:where([data-skill-market-v2]) .sk-summary-card {
+  text-align: center;
+  padding: 11px 18px 14px;
+}
+
+:where([data-skill-market-v2]) .sk-ring {
+  filter: drop-shadow(0 2px 2px #a290bc16);
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 7px;
+  position: relative;
+}
+
+:where([data-skill-market-v2]) .sk-ring > svg {
+  width: 100%;
+  height: 100%;
+}
+
+:where([data-skill-market-v2]) .sk-ring > div {
+  background: radial-gradient(#f2eefb, #fff 75%);
+  border-radius: 50%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: absolute;
+  inset: 25px;
+}
+
+:where([data-skill-market-v2]) .sk-ring > div > svg {
+  color: #9b86c7;
+  margin-top: 2px;
+}
+
+:where([data-skill-market-v2]) .sk-ring strong {
+  letter-spacing: -1.5px;
+  font-size: 27px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+:where([data-skill-market-v2]) .sk-ring span {
+  color: var(--sk-muted);
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-summary-card h3 {
+  font-size: 13px;
+  font-weight: 550;
+}
+
+:where([data-skill-market-v2]) .sk-summary-card > p {
+  color: var(--sk-muted);
+  justify-content: center;
+  align-items: center;
+  gap: 7px;
+  margin-top: 6px;
+  font-size: 11px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-summary-card > p > i {
+  background: #c7bdce;
+  border-radius: 50%;
+  width: 3px;
+  height: 3px;
+}
+
+:where([data-skill-market-v2]) .sk-summary-rows {
+  gap: 8px;
+  margin-top: 15px;
+  font-size: 11px;
+  display: grid;
+}
+
+:where([data-skill-market-v2]) .sk-summary-rows > div {
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-summary-rows span {
+  color: var(--sk-muted);
+  align-items: center;
+  gap: 8px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-summary-rows strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+
+:where([data-skill-market-v2]) .sk-violet-card {
+  color: #fff;
+  background: linear-gradient(135deg, #7d61e3 0%, #7254d8 55%, #6d4fd3 100%);
+  border: 1px solid #8a70e6;
+  border-radius: 10px;
+  flex-shrink: 0;
+  padding: 16px 19px;
+  box-shadow:
+    0 15px 22px -11px #7554b367,
+    inset 0 1px 2px #eadfff94,
+    inset 0 -1px 2px #6a49bc55;
+}
+
+:where([data-skill-market-v2]) .sk-violet-card > div + div {
+  border-top: 1px solid #fff3;
+  margin-top: 12px;
+  padding-top: 12px;
+}
+
+:where([data-skill-market-v2]) .sk-violet-card span {
+  font-size: 12px;
+}
+
+:where([data-skill-market-v2]) .sk-violet-card strong {
+  letter-spacing: -1.1px;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 28px;
+  font-weight: 450;
+  line-height: 1.4;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-violet-card strong svg {
+  color: #d6c6ff;
+  align-self: center;
+  margin-left: auto;
+}
+
+:where([data-skill-market-v2]) .sk-violet-card small {
+  font-size: 10px;
+  display: block;
+}
+
+/* Stage: the galaxy fills it; the shared toolbar floats above. */
+
+:where([data-skill-market-v2]) .sk-stage {
+  background: var(--sk-plane);
+  isolation: isolate;
+  border-radius: 64px 0 0 64px;
+  min-width: 0;
+  min-height: 0;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 1px 0 14px #f7f8ff99;
+}
+
+:where([data-skill-market-v2]) .sk-spatial {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+}
+
+/* The white tray lives in the DOM so the title can sit between it and the pearls; the camera places it.
+   Reference: a bright white disc, a peach-pink glow low on the left, lavender high on the right, a thin soft rim. */
+:where([data-skill-market-v2]) .sk-tray {
+  pointer-events: none;
+  border-radius: 50%;
+  width: var(--tray-d, 0px);
+  height: var(--tray-d, 0px);
+  position: absolute;
+  top: var(--tray-y, 50%);
+  left: var(--tray-x, 50%);
+  transform: translate(-50%, -50%);
+  background:
+    radial-gradient(circle at 30% 72%, #ffd3c4cc 0, #ffd3c400 30%),
+    radial-gradient(circle at 42% 60%, #f9c2e2a6 0, #f9c2e200 36%),
+    radial-gradient(circle at 70% 36%, #dccdffa6 0, #dccdff00 38%),
+    radial-gradient(circle, #ffffff 0 58%, #fdfaff 80%, #ffffff 100%);
+  box-shadow:
+    0 0 0 calc(var(--tray-d, 0px) * 0.018) #fbfaff,
+    0 0 0 calc(var(--tray-d, 0px) * 0.05) #f3f1fb99,
+    0 calc(var(--tray-d, 0px) * 0.04) calc(var(--tray-d, 0px) * 0.16) #b09ddb33,
+    inset 0 0 calc(var(--tray-d, 0px) * 0.04) #fff;
+}
+
+:where([data-skill-market-v2]) .sk-spatial.is-hidden {
+  visibility: hidden;
+}
+
+/* --zoom is written by the camera every frame; labels inherit it. */
+:where([data-skill-market-v2]) .sk-galaxy {
+  --zoom: 40;
+}
+
+:where([data-skill-market-v2]) .sk-galaxy,
+:where([data-skill-market-v2]) .sk-galaxy > div {
+  width: 100%;
+  height: 100%;
+}
+
+:where([data-skill-market-v2]) .sk-galaxy canvas {
+  cursor: grab;
+  touch-action: none;
+}
+
+:where([data-skill-market-v2]) .sk-stage-heading {
+  z-index: 8;
+  text-align: center;
+  pointer-events: none;
+  position: absolute;
+  top: 24px;
+  left: 120px;
+  right: 120px;
+}
+
+:where([data-skill-market-v2]) .sk-stage-heading button {
+  pointer-events: auto;
+}
+
+:where([data-skill-market-v2]) .sk-scope {
+  pointer-events: auto;
+  background: #ffffffd9;
+  border-radius: 20px;
+  gap: 3px;
+  margin: 0 auto;
+  padding: 3px;
+  display: inline-flex;
+  box-shadow: 0 2px 10px #9e8bb00d;
+}
+
+:where([data-skill-market-v2]) .sk-scope button {
+  color: var(--sk-text);
+  border-radius: 20px;
+  align-items: center;
+  gap: 6px;
+  min-height: 26px;
+  padding: 3px 16px;
+  font-size: 11px;
+  display: inline-flex;
+}
+
+/* Sits under the canvas, so pearls can pass in front of it. */
+:where([data-skill-market-v2]) .sk-stage-title {
+  text-align: center;
+  letter-spacing: -2px;
+  color: #292341;
+  pointer-events: none;
+  font-size: 46px;
+  font-weight: 500;
+  line-height: 1.2;
+  position: absolute;
+  top: 72px;
+  left: 120px;
+  right: 120px;
+}
+
+:where([data-skill-market-v2]) .sk-breadcrumb {
+  color: var(--sk-muted);
+  letter-spacing: 0.3px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  min-height: 20px;
+  font-size: 11px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-breadcrumb button {
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  display: inline-flex;
+}
+
+:where([data-skill-market-v2]) .sk-breadcrumb button:hover {
+  color: #4f3c75;
+}
+
+:where([data-skill-market-v2]) .sk-breadcrumb [aria-current] {
+  color: var(--sk-ink);
+}
+
+:where([data-skill-market-v2]) .sk-recenter {
+  z-index: 9;
+  color: #5d5374;
+  background: #fff;
+  border-radius: 7px;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  position: absolute;
+  top: 50%;
+  right: 28px;
+  box-shadow: var(--sk-shadow);
+}
+
+:where([data-skill-market-v2]) .sk-recenter:hover {
+  color: var(--sk-purple);
+}
+
+/* Labels and badges share the pearl's animated size and entrance/exit opacity. */
+:where([data-skill-market-v2]) .sk-body {
+  --size: calc(var(--d) * var(--zoom) * 1px);
+  container-type: size;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 6px #4c3d7466;
+  border-radius: 50%;
+  width: var(--size);
+  height: var(--size);
+  padding: 2px;
+  font-size: clamp(10px, calc(var(--d) * var(--zoom) * 0.095px), 20px);
+  line-height: 1.3;
+  opacity: var(--presence, 0);
+  position: relative;
+  display: block;
+}
+
+/* Labels never take the pointer: clicks and drags reach the pearls on the canvas. */
+:where([data-skill-market-v2]) .sk-label-wrap,
+:where([data-skill-market-v2]) .sk-label-wrap *,
+[data-skill-market-v2] .sk-body,
+[data-skill-market-v2] .sk-body * {
+  pointer-events: none;
+}
+
+[data-skill-market-v2] .sk-body {
+  color: var(--pearl-ink, #252341);
+  text-shadow: none;
+}
+
+:where([data-skill-market-v2]) .sk-label-inside {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  opacity: calc(1 - var(--label-outside, 0));
+}
+
+:where([data-skill-market-v2]) .sk-label-inside span {
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow-wrap: anywhere;
+  max-width: 88%;
+  font-size: calc(0.86em + var(--label-center, 0) * 0.14em);
+  font-weight: 450;
+  line-height: 1.2;
+  display: -webkit-box;
+  overflow: hidden;
+}
+
+:where([data-skill-market-v2]) .sk-label-inside small {
+  white-space: nowrap;
+  letter-spacing: -0.2px;
+  font-size: calc(1.12em + var(--label-center, 0) * 0.28em);
+  font-weight: 650;
+  transition: opacity 0.16s;
+}
+
+[data-skill-market-v2] .sk-body:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+}
+
+:where([data-skill-market-v2]) .sk-body.is-category {
+  font-size: clamp(10px, calc(var(--d) * var(--zoom) * 0.085px), 20px);
+}
+
+:where([data-skill-market-v2]) .sk-body.is-agent .sk-label-inside span {
+  max-width: none;
+  font-size: 1.15em;
+  font-weight: 550;
+  overflow: visible;
+}
+
+/* Show the close action throughout editing; otherwise reveal it on hover/focus. */
+:where([data-skill-market-v2]) .sk-body.is-agent small {
+  opacity: 0;
+  font-size: 0.82em;
+  font-weight: 450;
+}
+
+:where([data-skill-market-v2]) .sk-body.is-agent.is-hover small,
+:where([data-skill-market-v2]) .sk-body.is-agent[aria-expanded="true"] small,
+:where([data-skill-market-v2]) .sk-body.is-agent:focus-visible small {
+  opacity: 1;
+}
+
+[data-skill-market-v2] .sk-body.is-agent:focus-visible {
+  outline-color: var(--focus-ring);
+}
+
+/* Material conveys installation; selection and focus use their own outer contour. */
+[data-skill-market-v2] .sk-body[role='img'] { cursor: default; }
+[data-skill-market-v2] .sk-installed-rim {
+  position: absolute;
+  inset: 2px;
+  border: 1px solid #ffffffb3;
+  border-radius: 50%;
+  opacity: var(--installed-presence, 0);
+}
+[data-skill-market-v2] .sk-body.is-selected:not(:focus-visible)::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--focus-ring);
+  border-radius: 50%;
+}
+[data-skill-market-v2] .sk-orb-tooltip {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: 240px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: var(--sk-card);
+  color: var(--sk-ink);
+  box-shadow: var(--sk-shadow);
+  font-size: 11px;
+  line-height: 1.45;
+  text-align: left;
+  overflow-wrap: anywhere;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 120ms ease, visibility 120ms;
+}
+[data-skill-market-v2] .sk-orb-tooltip small {
+  display: block;
+  margin-top: 3px;
+  font-size: 10px;
+  color: var(--sk-muted);
+}
+[data-skill-market-v2] .sk-body[data-leaving='false']:is(.is-hover, :focus-visible) .sk-orb-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+[data-skill-market-v2] .sk-navigation {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  pointer-events: auto;
+}
+[data-skill-market-v2] .sk-fallback-context {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--sk-ink);
+  padding: 10px 12px;
+}
+[data-skill-market-v2] .sk-fallback-context strong { color: var(--sk-ink); margin-left: 0; }
+[data-skill-market-v2] .sk-fallback-context svg { flex-shrink: 0; }
+[data-skill-market-v2] .sk-fallback-context span { color: var(--sk-muted); font-size: 11px; }
+@media (prefers-reduced-motion: reduce) {
+  [data-skill-market-v2] .sk-orb-tooltip { transition: none; }
+}
+
+/* Two persistent label layers crossfade without changing their anchors or waiting for hover. */
+:where([data-skill-market-v2]) .sk-label-outside {
+  white-space: nowrap;
+  color: var(--sk-ink);
+  text-shadow: none;
+  opacity: var(--label-outside, 0);
+  background: color-mix(in srgb, var(--sk-card) 95%, transparent);
+  border-radius: 9px;
+  width: max-content;
+  max-width: 140px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: absolute;
+  top: calc(100% + var(--label-gap, 4px));
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 2px 8px #6f63a033;
+}
+
+@container (width < 84px) {
+  :where([data-skill-market-v2]) .sk-label-inside small {
+    opacity: 0;
+  }
+}
+
+
+
+/* Overlays above the galaxy */
+
+:where([data-skill-market-v2]) .sk-content {
+  z-index: 5;
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+}
+
+:where([data-skill-market-v2]) .sk-content > * {
+  pointer-events: auto;
+}
+
+:where([data-skill-market-v2]) .sk-loading {
+  color: var(--sk-muted);
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  min-height: 100px;
+  font-size: 12px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-empty {
+  text-align: center;
+  color: var(--sk-muted);
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  height: 100%;
+  padding: 28px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-empty h2 {
+  color: var(--sk-text);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+:where([data-skill-market-v2]) .sk-empty p {
+  font-size: 12px;
+}
+
+:where([data-skill-market-v2]) .sk-empty button {
+  box-shadow: var(--sk-shadow);
+  background: #fff;
+  border-radius: 6px;
+  align-items: center;
+  gap: 15px;
+  margin-top: 6px;
+  padding: 11px 20px;
+  display: flex;
+}
+
+/* With an empty collection the Agent stays visible; the call to action sits below it. */
+:where([data-skill-market-v2]) .sk-view-overview .sk-content > .sk-empty {
+  background: #ffffffe6;
+  border-radius: 14px;
+  width: 360px;
+  height: auto;
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: var(--sk-shadow);
+}
+
+:where([data-skill-market-v2]) .sk-scene-fallback {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+  align-content: start;
+  gap: 12px;
+  max-width: 720px;
+  height: auto;
+  margin: 0 auto;
+  padding: 0;
+  position: absolute;
+  inset: 64px 24px 24px;
+  display: grid;
+  overflow: auto;
+}
+
+:where([data-skill-market-v2]) .sk-scene-fallback button {
+  box-shadow: var(--sk-shadow);
+  text-align: left;
+  background: var(--sk-card);
+  color: var(--sk-ink);
+  overflow-wrap: anywhere;
+  min-width: 0;
+  border-radius: 10px;
+  align-items: center;
+  gap: 9px;
+  min-height: 58px;
+  padding: 15px;
+  font-size: 12px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-scene-fallback button:first-child {
+  grid-column: 1 / -1;
+}
+
+:where([data-skill-market-v2]) .sk-scene-fallback i {
+  border-radius: 50%;
+  flex-shrink: 0;
+  width: 12px;
+  height: 12px;
+}
+
+:where([data-skill-market-v2]) .sk-scene-fallback strong,
+:where([data-skill-market-v2]) .sk-scene-fallback small {
+  color: var(--sk-muted);
+  margin-left: auto;
+}
+
+:where([data-skill-market-v2]) .sk-search-results {
+  background: #fff;
+  border-radius: 13px;
+  padding: 22px 25px;
+  position: absolute;
+  inset: 150px 65px 18px;
+  overflow: auto;
+  box-shadow: 0 20px 50px #a599b81a;
+}
+
+:where([data-skill-market-v2]) .sk-search-results > header {
+  color: var(--sk-text);
+  border-bottom: 1px solid #f1edf6;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 9px 15px;
+  font-size: 12px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-search-results > header > small {
+  color: var(--sk-muted);
+  font-size: 11px;
+}
+
+:where([data-skill-market-v2]) .sk-search-error {
+  color: #a3506f;
+  padding: 20px 9px;
+  font-size: 12px;
+}
+
+:where([data-skill-market-v2]) .sk-skill-list {
+  flex-direction: column;
+  min-width: 0;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-skill-row {
+  text-align: left;
+  border-bottom: 1px solid #f0ecf5;
+  border-radius: 5px;
+  align-items: center;
+  gap: 15px;
+  width: 100%;
+  padding: 18px 10px;
+  transition: background 0.18s;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-skill-row:hover {
+  background: #f8f6fd;
+}
+
+:where([data-skill-market-v2]) .sk-mini-pearl {
+  background:
+    radial-gradient(circle at 34% 26%, #ffffffb8, transparent 52%),
+    radial-gradient(circle at 74% 79%, color-mix(in srgb, var(--tint) 70%, #5f3d92), var(--tint) 70%);
+  border-radius: 50%;
+  flex-shrink: 0;
+  width: 35px;
+  height: 35px;
+  box-shadow:
+    inset 1px 1px 4px #fff9,
+    0 5px 9px color-mix(in srgb, var(--tint) 25%, transparent);
+}
+
+:where([data-skill-market-v2]) .sk-row-copy {
+  flex-direction: column;
+  flex: 1;
+  gap: 5px;
+  min-width: 0;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-row-copy > strong {
+  font-size: 13px;
+  font-weight: 550;
+}
+
+:where([data-skill-market-v2]) .sk-row-copy > span {
+  color: var(--sk-muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 11px;
+  overflow: hidden;
+}
+
+:where([data-skill-market-v2]) .sk-row-meta {
+  color: var(--sk-muted);
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-skill-row > svg {
+  color: #b3a7c1;
+}
+
+/* Insights */
+
+:where([data-skill-market-v2]) .sk-insights {
+  grid-template-columns: minmax(0, 1.7fr) minmax(235px, 1fr);
+  gap: 23px;
+  animation: 0.35s sk-fade;
+  display: grid;
+  position: absolute;
+  inset: 150px 44px 18px;
+}
+
+:where([data-skill-market-v2]) .sk-history-card,
+:where([data-skill-market-v2]) .sk-ranking {
+  background: linear-gradient(130deg, #fff, #fcfbff);
+  border: 1px solid #fff;
+  border-radius: 13px;
+  min-height: 0;
+  overflow: hidden;
+  box-shadow: 0 20px 32px -14px #afa0c444;
+}
+
+:where([data-skill-market-v2]) .sk-history-card {
+  flex-direction: column;
+  padding: 22px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-chart-heading {
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-chart-heading > div:first-child > span {
+  color: var(--sk-muted);
+  letter-spacing: 0.7px;
+  margin-bottom: 3px;
+  font-size: 10px;
+  display: block;
+}
+
+:where([data-skill-market-v2]) .sk-chart-heading > div:first-child > button {
+  align-items: center;
+  gap: 9px;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 550;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-chart-heading > div:first-child > button svg {
+  color: #9d8db0;
+}
+
+:where([data-skill-market-v2]) .sk-range {
+  background: #f3f0f9;
+  border-radius: 15px;
+  gap: 1px;
+  padding: 3px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-range button {
+  color: #5f4f9a;
+  border-radius: 15px;
+  padding: 4px 10px;
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-range button[aria-pressed='true'] {
+  color: #fff;
+  background: var(--sk-purple);
+  box-shadow: 0 1px 3px #71569c33;
+}
+
+:where([data-skill-market-v2]) .sk-chart-value {
+  align-items: center;
+  gap: 16px;
+  margin-top: 18px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-chart-value > strong {
+  letter-spacing: -1.8px;
+  font-size: 37px;
+  font-weight: 450;
+}
+
+:where([data-skill-market-v2]) .sk-chart-value > span {
+  color: #6f53b0;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+:where([data-skill-market-v2]) .sk-chart-value small {
+  color: var(--sk-muted);
+  font-size: 10px;
+  display: block;
+}
+
+:where([data-skill-market-v2]) .sk-history-chart {
+  flex: 1;
+  width: 100%;
+  min-height: 130px;
+  overflow: visible;
+}
+
+:where([data-skill-market-v2]) .sk-history-chart text {
+  fill: var(--sk-muted);
+  font-family: inherit;
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-chart-empty {
+  color: var(--sk-muted);
+  flex: 1;
+  place-items: center;
+  min-height: 100px;
+  font-size: 12px;
+  display: grid;
+}
+
+:where([data-skill-market-v2]) .sk-chart-stats {
+  border-top: 1px solid #f2edf7;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 6px 0;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-chart-stats span {
+  color: var(--sk-muted);
+  font-size: 10px;
+  display: block;
+}
+
+:where([data-skill-market-v2]) .sk-chart-stats strong {
+  color: #5a4769;
+  letter-spacing: -0.8px;
+  font-size: 21px;
+  font-weight: 450;
+}
+
+:where([data-skill-market-v2]) .sk-ranking {
+  flex-direction: column;
+  padding: 22px 17px 16px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-ranking > header {
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 4px 16px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-ranking h2 {
+  font-size: 13px;
+  font-weight: 550;
+}
+
+:where([data-skill-market-v2]) .sk-ranking header > span {
+  color: var(--sk-muted);
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-ranking-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+:where([data-skill-market-v2]) .sk-ranking-scroll button {
+  text-align: left;
+  border-radius: 6px;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 10px 7px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-ranking-scroll button:hover,
+:where([data-skill-market-v2]) .sk-ranking-scroll button.is-selected {
+  background: #f5f0fc;
+}
+
+:where([data-skill-market-v2]) .sk-rank-number {
+  color: var(--sk-subtle);
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-rank-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+:where([data-skill-market-v2]) .sk-rank-copy strong {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--sk-text);
+  font-size: 11px;
+  font-weight: 500;
+  display: block;
+  overflow: hidden;
+}
+
+:where([data-skill-market-v2]) .sk-rank-copy > span {
+  background: #f0eaf7;
+  border-radius: 3px;
+  width: 100%;
+  height: 3px;
+  margin-top: 7px;
+  display: block;
+}
+
+:where([data-skill-market-v2]) .sk-rank-copy i {
+  border-radius: 3px;
+  height: 100%;
+  display: block;
+}
+
+:where([data-skill-market-v2]) .sk-ranking-scroll button > span:last-child {
+  color: var(--sk-muted);
+  text-align: right;
+  width: 38px;
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-ranking footer {
+  color: var(--sk-muted);
+  padding: 14px 4px 0;
+  font-size: 11px;
+}
+
+:where([data-skill-market-v2]) .sk-ranking footer strong {
+  color: var(--sk-ink);
+  font-weight: 500;
+}
+
+:where([data-skill-market-v2]) .sk-ranking footer > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+:where([data-skill-market-v2]) .sk-ranking footer > div + div {
+  margin-top: 6px;
+}
+
+:where([data-skill-market-v2]) .sk-ranking footer small {
+  color: var(--sk-subtle);
+  margin-top: 4px;
+  font-size: 10px;
+  display: block;
+}
+
+/* Sidebar detail or Agent editor */
+
+:where([data-skill-market-v2]) .sk-detail {
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-detail > header {
+  color: var(--sk-muted);
+  flex-shrink: 0;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px 8px;
+  font-size: 11px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-detail > header button {
+  color: var(--sk-text);
+  border-radius: 6px;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px 6px 6px;
+  font-size: 12px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-detail > header button:hover {
+  background: #f3eef8;
+}
+
+:where([data-skill-market-v2]) .sk-detail-scroll {
+  flex: 1;
+  min-height: 0;
+  padding: 0 22px 22px;
+  overflow: auto;
+}
+
+:where([data-skill-market-v2]) .sk-detail-hero,
+:where([data-skill-market-v2]) .sk-agent-hero {
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px 2px 19px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-detail-pearl {
+  background:
+    radial-gradient(circle at 33% 26%, #fff9, transparent 60%),
+    radial-gradient(circle at 74% 82%, color-mix(in srgb, var(--tint) 80%, #685099), var(--tint) 70%);
+  border-radius: 50%;
+  width: 64px;
+  height: 64px;
+  margin-bottom: 14px;
+  box-shadow:
+    inset 1px 1px 8px #fff8,
+    0 12px 18px -7px color-mix(in srgb, var(--tint) 40%, transparent);
+}
+
+:where([data-skill-market-v2]) .sk-detail-type {
+  color: var(--sk-muted);
+  font-size: 11px;
+}
+
+:where([data-skill-market-v2]) .sk-detail-hero h2,
+:where([data-skill-market-v2]) .sk-agent-hero h2 {
+  letter-spacing: -0.7px;
+  outline: none;
+  margin: 5px 0 11px;
+  font-size: 25px;
+  font-weight: 550;
+}
+
+:where([data-skill-market-v2]) .sk-detail-hero > p,
+:where([data-skill-market-v2]) .sk-agent-hero > p {
+  color: var(--sk-muted);
+  max-width: 320px;
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+:where([data-skill-market-v2]) .sk-agent-hero > .sk-avatar-thumb {
+  margin-bottom: 18px;
+}
+
+:where([data-skill-market-v2]) .sk-detail-author {
+  color: var(--sk-text);
+  align-items: center;
+  gap: 5px;
+  margin-top: 14px;
+  font-size: 11px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-detail-author > svg {
+  color: #fff;
+  background: #8f78b8;
+  border-radius: 50%;
+  padding: 1px;
+}
+
+:where([data-skill-market-v2]) .sk-detail-author > span {
+  color: var(--sk-muted);
+  border-left: 1px solid #e7ddec;
+  margin-left: 6px;
+  padding-left: 10px;
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-detail-facts {
+  border-top: 1px solid #f0eaf4;
+  border-bottom: 1px solid #f0eaf4;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 3px 0 22px;
+  padding: 16px 2px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-detail-facts > div {
+  flex-direction: column;
+  flex: 1;
+  align-items: center;
+  gap: 4px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-detail-facts strong {
+  color: #5a4769;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+:where([data-skill-market-v2]) .sk-detail-facts span {
+  color: var(--sk-muted);
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-intro {
+  color: var(--sk-muted);
+  font-size: 12px;
+  line-height: 1.85;
+}
+
+:where([data-skill-market-v2]) .sk-intro h3,
+:where([data-skill-market-v2]) .sk-references h3 {
+  color: #46344f;
+  margin: 22px 0 10px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+:where([data-skill-market-v2]) .sk-intro section:first-child h3 {
+  margin-top: 0;
+}
+
+:where([data-skill-market-v2]) .sk-intro > blockquote {
+  color: #6b5a8a;
+  background: #f7f3fc;
+  border-radius: 7px;
+  margin: 0 0 20px;
+  padding: 12px 15px;
+}
+
+:where([data-skill-market-v2]) .sk-intro > p {
+  white-space: pre-line;
+  margin: 10px 0;
+}
+
+:where([data-skill-market-v2]) .sk-intro ul {
+  margin: 12px 0;
+  padding-left: 18px;
+  list-style: outside;
+}
+
+:where([data-skill-market-v2]) .sk-intro li {
+  margin: 6px 0;
+  padding-left: 3px;
+}
+
+:where([data-skill-market-v2]) .sk-intro li::marker {
+  color: #c7b5d9;
+}
+
+:where([data-skill-market-v2]) .sk-tags {
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 22px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-tags > span {
+  color: #6b5a8a;
+  background: #f6f1fa;
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-size: 10px;
+}
+
+:where([data-skill-market-v2]) .sk-references a {
+  color: #7254a3;
+  justify-content: space-between;
+  align-items: center;
+  padding: 7px 0;
+  font-size: 11px;
+  display: flex;
+}
+
+:where([data-skill-market-v2]) .sk-detail > footer {
+  flex-shrink: 0;
+  padding: 14px 20px 12px;
+}
+
+[data-skill-market-v2] .sk-install {
+  color: #fff;
+  background: #7458d4;
+  border-radius: 7px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  font-size: 13px;
+  display: flex;
+  box-shadow:
+    0 5px 12px #9a7cb233,
+    inset 0 1px #bd9aee;
+}
+
+[data-skill-market-v2] .sk-install:hover {
+  background: #6849c9;
+}
+
+[data-skill-market-v2] .sk-install.is-installed {
+  color: #5f4a77;
+  background: #f4effa;
+  box-shadow: none;
+}
+
+:where([data-skill-market-v2]) .sk-install > span {
+  opacity: 0.75;
+  margin-left: auto;
+  font-size: 11px;
+}
+
+:where([data-skill-market-v2]) .sk-detail > footer > small {
+  text-align: center;
+  color: var(--sk-subtle);
+  margin-top: 10px;
+  font-size: 10px;
+  display: block;
+}
+
+:where([data-skill-market-v2]) .sk-detail-error {
+  color: #a3506f;
+  font-size: 12px;
+}
+
+:where([data-skill-market-v2]) .sk-panel-actions {
+  grid-template-columns: 1fr 1.6fr;
+  gap: 10px;
+  display: grid;
+}
+
+[data-skill-market-v2] .sk-secondary {
+  color: var(--sk-text);
+  background: #f4f1f9;
+  border-radius: 7px;
+  padding: 12px;
+  font-size: 13px;
+}
+
+:where([data-skill-market-v2]) .sk-field {
+  gap: 7px;
+  display: grid;
+}
+
+:where([data-skill-market-v2]) .sk-field > span,
+:where([data-skill-market-v2]) .sk-avatar-group legend {
+  color: #46344f;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+:where([data-skill-market-v2]) .sk-field input {
+  color: var(--sk-ink);
+  background: #f7f5fb;
+  border: 1px solid #ebe6f3;
+  border-radius: 7px;
+  padding: 10px 12px;
+  font-size: 13px;
+}
+
+:where([data-skill-market-v2]) .sk-field input:focus {
+  border-color: #a995ea;
+  box-shadow: 0 0 0 3px #a995ea33;
+}
+
+:where([data-skill-market-v2]) .sk-field small {
+  color: var(--sk-muted);
+  font-size: 11px;
+}
+
+:where([data-skill-market-v2]) .sk-field small.is-error {
+  color: #a3506f;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-group {
+  border: 0;
+  margin: 22px 0 0;
+  padding: 0;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-group legend {
+  margin-bottom: 10px;
+  padding: 0;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-group > div {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  display: grid;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-option {
+  color: var(--sk-text);
+  cursor: pointer;
+  border: 1px solid #eee9f5;
+  border-radius: 10px;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 12px 6px 10px;
+  font-size: 12px;
+  display: flex;
+  position: relative;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-option:hover {
+  background: #faf8fd;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-option input {
+  opacity: 0;
+  position: absolute;
+  inset: 0;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-option:has(input:checked) {
+  border-color: #a995ea;
+  box-shadow: 0 0 0 2px #a995ea55;
+}
+
+:where([data-skill-market-v2]) .sk-avatar-option:has(input:focus-visible) {
+  outline: 2px solid #8469cf;
+  outline-offset: 2px;
+}
+
+/* Notices and motion */
+
+:where([data-skill-market-v2]) .sk-notice {
+  z-index: 80;
+  color: #5f4a77;
+  background: #fff;
+  border-radius: 9px;
+  align-items: center;
+  gap: 9px;
+  max-width: calc(100vw - 30px);
+  padding: 13px 18px;
+  font-size: 12px;
+  animation: 0.18s sk-fade;
+  display: flex;
+  position: fixed;
+  bottom: 25px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0 7px 35px #65517433;
+}
+
+:where([data-skill-market-v2]) .sk-notice.is-error {
+  color: #a3506f;
+}
+
+:where([data-skill-market-v2]) .sk-notice > button {
+  color: var(--sk-muted);
+  place-items: center;
+  margin-left: 8px;
+  padding: 3px;
+  display: grid;
+}
+
+:where([data-skill-market-v2]) .sk-spin {
+  animation: 1s linear infinite sk-spin;
+}
+
+@keyframes sk-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sk-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-skill-market-v2] *,
+  [data-skill-market-v2] ::before,
+  [data-skill-market-v2] ::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+@media (width >= 1600px) {
+  :where([data-skill-market-v2]) .sk-brand {
+    width: 255px;
+  }
+
+  :where([data-skill-market-v2]) .sk-sidebar {
+    padding-left: 35px;
+    padding-right: 35px;
+  }
+
+  :where([data-skill-market-v2]) .sk-stage-title {
+    font-size: 50px;
+  }
+}
+
+@media (height <= 820px) {
+  :where([data-skill-market-v2]) .sk-sidebar {
+    gap: 12px;
+    padding-top: 19px;
+  }
+
+  :where([data-skill-market-v2]) .sk-ring {
+    width: 104px;
+    height: 104px;
+    margin-bottom: 4px;
+  }
+
+  :where([data-skill-market-v2]) .sk-ring > div {
+    inset: 21px;
+  }
+
+  :where([data-skill-market-v2]) .sk-ring strong {
+    font-size: 23px;
+  }
+
+  :where([data-skill-market-v2]) .sk-summary-card {
+    padding: 10px 17px 12px;
+  }
+
+  :where([data-skill-market-v2]) .sk-summary-rows {
+    margin-top: 11px;
+  }
+
+  :where([data-skill-market-v2]) .sk-violet-card {
+    padding: 13px 18px;
+  }
+
+  :where([data-skill-market-v2]) .sk-violet-card strong {
+    font-size: 25px;
+  }
+
+  :where([data-skill-market-v2]) .sk-violet-card > div + div {
+    margin-top: 9px;
+    padding-top: 9px;
+  }
+
+
+
+  :where([data-skill-market-v2]) .sk-stage-heading {
+    top: 18px;
+  }
+
+  :where([data-skill-market-v2]) .sk-stage-title {
+    top: 64px;
+    font-size: 40px;
+  }
+
+  :where([data-skill-market-v2]) .sk-insights,
+  :where([data-skill-market-v2]) .sk-search-results {
+    top: 136px;
+  }
+
+  :where([data-skill-market-v2]) .sk-history-card {
+    padding: 18px;
+  }
+
+  :where([data-skill-market-v2]) .sk-chart-value {
+    margin-top: 12px;
+  }
+
+  :where([data-skill-market-v2]) .sk-chart-stats strong {
+    font-size: 19px;
+  }
+}
+
+@media (width <= 1200px) {
+  :where([data-skill-market-v2]) .sk-brand {
+    width: 180px;
+  }
+
+  :where([data-skill-market-v2]) .sk-header {
+    gap: 24px;
+    padding: 0 25px;
+  }
+
+  :where([data-skill-market-v2]) .sk-nav {
+    gap: 24px;
+  }
+
+  :where([data-skill-market-v2]) .sk-sidebar {
+    padding: 23px 20px 0;
+  }
+
+  :where([data-skill-market-v2]) .sk-sidebar-heading h2 {
+    font-size: 20px;
+  }
+
+  :where([data-skill-market-v2]) .sk-insights {
+    grid-template-columns: minmax(0, 1.5fr) minmax(200px, 1fr);
+    gap: 15px;
+    left: 26px;
+    right: 26px;
+  }
+
+  :where([data-skill-market-v2]) .sk-history-card {
+    padding: 20px 16px;
+  }
+
+  :where([data-skill-market-v2]) .sk-range button {
+    padding: 4px 7px;
+  }
+
+  :where([data-skill-market-v2]) .sk-chart-value > strong {
+    font-size: 32px;
+  }
+}
+
+/* Workspace integration. Tokens also live on portal surfaces outside the page. */
+[data-skill-market-v2],
+.sk-portal {
+  --sk-ink: #252341;
+  --sk-text: #4f4762;
+  --sk-muted: #6b6480;
+  --sk-subtle: #716a86;
+  --sk-plane: #eef1fa;
+  --sk-purple: #7661d9;
+  --sk-card: #fff;
+  --sk-page: #fbfcff;
+  --sk-border: #e8e3f2;
+  --text-primary: var(--sk-ink);
+  --text-secondary: var(--sk-text);
+  --text-tertiary: var(--sk-muted);
+  --paper-bg: var(--sk-card);
+  --paper-border: var(--sk-border);
+  --brand-primary: var(--sk-purple);
+  --action-primary: #7255d0;
+  --focus-ring: #8c70dc;
+  --dialog-bg: var(--sk-card);
+  --dialog-gradient: none;
+  --dialog-border: var(--sk-border);
+  --dialog-text-secondary: var(--sk-text);
+  --foreground: var(--sk-ink);
+  --background: var(--sk-card);
+  --muted-foreground: var(--sk-muted);
+  --input: var(--sk-border);
+  color: var(--sk-ink);
+  font-family: var(--font-sans);
+}
+[data-skill-market-v2] .sk-header {
+  flex-shrink: 0;
+  min-height: 48px;
+  height: 48px;
+  gap: 18px;
+  padding: 0 24px;
+  /* Share the page canvas with the sidebar in both themes. */
+  background: transparent;
+}
+[data-skill-market-v2] .sk-mobile-controls {
+  display: none;
+}
+[data-skill-market-v2] .sk-brand {
+  width: auto;
+  margin-right: auto;
+  gap: 10px;
+  color: var(--sk-ink);
+  white-space: nowrap;
+}
+[data-skill-market-v2] .sk-brand-orb {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 25%, #d2bafb, #8468e0 54%, #392496);
+  box-shadow: inset -2px -2px 5px #3f256b44;
+}
+[data-skill-market-v2] .sk-search {
+  min-width: 140px;
+  max-width: 300px;
+  height: 32px;
+}
+[data-skill-market-v2] .sk-nav {
+  gap: 20px;
+  margin-left: auto;
+  align-self: stretch;
+}
+[data-skill-market-v2] .sk-nav button {
+  white-space: nowrap;
+}
+[data-skill-market-v2] .sk-create {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 6px 12px;
+  border-radius: 9px;
+  background: var(--action-primary);
+  color: white;
+  white-space: nowrap;
+  font-weight: 600;
+}
+[data-skill-market-v2] .sk-profile {
+  margin-left: 0;
+}
+[data-skill-market-v2] .sk-layout {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+  /* Keep the map stationary when collection, detail and Agent content swap. */
+  grid-template-columns: 320px minmax(0, 1fr);
+  padding-bottom: 16px;
+}
+[data-skill-market-v2] .sk-sidebar {
+  position: relative;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+}
+[data-skill-market-v2] .has-panel .sk-sidebar {
+  padding: 0;
+}
+[data-skill-market-v2] .sk-collection {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 22px var(--sk-sidebar-inset) 12px;
+  overflow-y: auto;
+}
+[data-skill-market-v2] .sk-collection > * {
+  flex-shrink: 0;
+}
+[data-skill-market-v2] .sk-collection[data-active='false'] {
+  visibility: hidden;
+  pointer-events: none;
+}
+/* Only content groups move. Sidebar, scroll surfaces and page backgrounds stay
+   still; native controls/cards keep their own theme fills inside these groups. */
+[data-skill-market-v2] .sk-sidebar [data-motion-group] {
+  --sk-group-delay: 0ms;
+  opacity: 1;
+  transform: none;
+}
+[data-skill-market-v2] .sk-sidebar [data-motion-group='1'] { --sk-group-delay: 25ms; }
+[data-skill-market-v2] .sk-sidebar [data-motion-group='2'] { --sk-group-delay: 50ms; }
+[data-skill-market-v2] .sk-sidebar [data-motion-group='3'] { --sk-group-delay: 75ms; }
+[data-skill-market-v2] .sk-sidebar [data-motion-group='4'] { --sk-group-delay: 100ms; }
+[data-skill-market-v2] .sk-sidebar[data-content-phase='staged'] [data-active='true'] [data-motion-group] {
+  opacity: 0;
+  transform: translateX(-16px);
+}
+[data-skill-market-v2] .sk-sidebar[data-content-phase='entering'] [data-active='true'] [data-motion-group] {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity var(--sk-content-enter) var(--sk-panel-easing) var(--sk-group-delay),
+    transform var(--sk-content-enter) var(--sk-panel-easing) var(--sk-group-delay);
+}
+[data-skill-market-v2] .sk-sidebar[data-content-reversing='true'] [data-active='true'] [data-motion-group] {
+  transition-delay: 0ms;
+}
+[data-skill-market-v2] .sk-sidebar[data-content-phase='exiting'] [data-active='true'] [data-motion-group] {
+  opacity: 0;
+  transform: var(--sk-exit-transform, none);
+  transition: opacity var(--sk-content-exit) var(--sk-panel-easing);
+}
+[data-skill-market-v2] .sk-sidebar:focus {
+  outline: none;
+}
+[data-skill-market-v2] .sk-sidebar-heading h2 {
+  font-size: 19px;
+}
+[data-skill-market-v2] .sk-summary-card,
+[data-skill-market-v2] .sk-history-card,
+[data-skill-market-v2] .sk-ranking {
+  background: var(--sk-card);
+}
+[data-skill-market-v2] .sk-ring {
+  width: 122px;
+  height: 122px;
+}
+
+
+[data-skill-market-v2] .sk-stage {
+  min-height: 0;
+  margin-right: 16px;
+  border-radius: 24px;
+  background: var(--sk-plane);
+}
+[data-skill-market-v2] .sk-stage:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -3px;
+}
+/* Keep a semantic page title without occupying any of the map's viewport. */
+[data-skill-market-v2] .sk-map-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+[data-skill-market-v2] .sk-stage-title {
+  top: 92px;
+  left: 24px;
+  right: 24px;
+  color: var(--sk-ink);
+  font-size: clamp(26px, 3vw, 44px);
+  margin: 0;
+}
+[data-skill-market-v2] .sk-stage-heading {
+  top: 158px;
+  left: 20px;
+  right: 20px;
+}
+[data-skill-market-v2] .sk-scope {
+  background: var(--sk-card);
+  align-items: center;
+  max-width: 100%;
+}
+[data-skill-market-v2] .sk-scope > button {
+  padding: 4px 12px;
+}
+[data-skill-market-v2] .sk-catalog-select {
+  min-width: 0;
+}
+[data-skill-market-v2] .sk-catalog-select > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 160px;
+}
+[data-skill-market-v2] .sk-catalog-select > svg {
+  flex-shrink: 0;
+}
+[data-skill-market-v2] .sk-scope > button:hover,
+[data-skill-market-v2] .sk-scope > button[data-state='open'] {
+  background: color-mix(in srgb, var(--sk-purple) 9%, transparent);
+}
+[data-skill-market-v2] .sk-scope > .sk-refinement-trigger {
+  position: relative;
+  flex-shrink: 0;
+  height: 30px;
+  width: 32px;
+  min-height: 30px;
+  justify-content: center;
+  padding: 3px;
+}
+[data-skill-market-v2] .sk-refinement-trigger[data-active='true'] {
+  color: var(--sk-purple);
+}
+[data-skill-market-v2] .sk-filter-count {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--action-primary);
+  color: #fff;
+  font-size: 10px;
+  line-height: 16px;
+}
+[data-skill-market-v2] .sk-toolbar {
+  position: absolute;
+  top: 12px;
+  left: 18px;
+  right: 18px;
+  z-index: 9;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  pointer-events: none;
+}
+[data-skill-market-v2] .sk-toolbar > .sk-navigation {
+  grid-column: 1;
+}
+[data-skill-market-v2] .sk-toolbar > .sk-scope {
+  grid-column: 2;
+  justify-self: end;
+  min-width: 0;
+  width: max-content;
+  margin: 0;
+}
+[data-skill-market-v2] .sk-kind {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  pointer-events: auto;
+}
+[data-skill-market-v2] .sk-toolbar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  min-height: 28px;
+  padding: 4px 9px;
+  font-size: 11px;
+  color: var(--sk-muted);
+}
+[data-skill-market-v2] .sk-toolbar button[aria-pressed='true'] {
+  background: var(--sk-card);
+  color: var(--sk-purple);
+  box-shadow: 0 1px 4px #62567b0e;
+}
+[data-skill-market-v2] .sk-toolbar button:disabled {
+  opacity: 0.4;
+}
+[data-skill-market-v2] .sk-flat-content {
+  position: absolute;
+  inset: 188px 24px 24px;
+  overflow-y: auto;
+  border-radius: 16px;
+  min-width: 0;
+}
+[data-skill-market-v2] .sk-flat-content > .sk-empty {
+  min-height: 260px;
+}
+[data-skill-market-v2] .sk-catalog-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+[data-skill-market-v2] [data-skill-row] {
+  padding: 14px;
+  background: var(--sk-card) !important;
+  border: 1px solid transparent;
+  border-radius: 13px;
+}
+[data-skill-market-v2] [data-skill-row][data-selected='true'] {
+  border-color: var(--sk-purple);
+}
+[data-skill-market-v2] [data-skill-row] h3 {
+  font-size: 14px;
+}
+[data-skill-market-v2] [data-skill-row] p {
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+[data-skill-market-v2] .sk-insights {
+  position: static;
+  inset: auto;
+  min-height: 100%;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+}
+[data-skill-market-v2] .sk-history-card {
+  min-width: 0;
+}
+[data-skill-market-v2] .sk-ranking {
+  min-height: 200px;
+}
+[data-skill-market-v2] .sk-ranking-scroll {
+  max-height: 340px;
+}
+[data-skill-market-v2] .sk-chart-value {
+  flex-wrap: wrap;
+}
+[data-skill-market-v2] .sk-chart-stats {
+  gap: 12px;
+}
+[data-skill-market-v2] .sk-detail {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  min-height: 0;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding-top: 8px;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+[data-skill-market-v2] .sk-detail[inert] {
+  pointer-events: none;
+}
+[data-skill-market-v2] .sk-detail > header {
+  min-height: 48px;
+  padding: 8px var(--sk-sidebar-inset);
+}
+[data-skill-market-v2] .sk-detail > header button:hover {
+  background: color-mix(in srgb, var(--sk-purple) 9%, transparent);
+}
+[data-skill-market-v2] .sk-detail > footer {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  padding: 12px var(--sk-sidebar-inset);
+}
+[data-skill-market-v2] .sk-detail > header h2 {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--sk-muted);
+}
+[data-skill-market-v2] .sk-detail-scroll {
+  padding: 0 var(--sk-sidebar-inset) 20px;
+}
+[data-skill-market-v2] .sk-shared-detail {
+  padding: 8px 0 20px;
+  width: 100%;
+  min-width: 0;
+}
+[data-skill-market-v2] .sk-shared-detail[data-compact] .sk-detail-header {
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding-top: 12px;
+}
+[data-skill-market-v2] .sk-shared-detail[data-compact] .sk-detail-header > .min-w-0 {
+  width: 100%;
+}
+[data-skill-market-v2] .sk-shared-detail[data-compact] .sk-detail-header > .min-w-0 > div:first-child {
+  justify-content: center;
+}
+[data-skill-market-v2] .sk-shared-detail[data-compact] .sk-detail-header h2 {
+  width: 100%;
+  text-align: center;
+  font-size: 25px;
+  line-height: 1.3;
+  margin-bottom: 8px;
+}
+[data-skill-market-v2] .sk-shared-detail[data-compact] .sk-detail-header p {
+  font-size: 13px;
+  line-height: 1.7;
+}
+[data-skill-market-v2] .sk-shared-detail[data-compact] .sk-detail-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+[data-skill-market-v2] .sk-shared-detail[data-compact] .sk-detail-columns > aside {
+  position: static;
+  border-left: 0;
+  padding-left: 0;
+  border-top: 1px solid var(--sk-border);
+  padding-top: 16px;
+}
+[data-skill-market-v2] .sk-shared-detail .course-prose {
+  font-size: 13px;
+  overflow-wrap: anywhere;
+}
+[data-skill-market-v2] .sk-shared-detail .course-prose h1 {
+  font-size: 23px;
+}
+[data-skill-market-v2] .sk-shared-detail .course-prose h2 {
+  font-size: 19px;
+}
+[data-skill-market-v2] .sk-shared-detail .course-prose h3 {
+  font-size: 16px;
+}
+[data-skill-market-v2] .sk-detail-page,
+.sk-detail-page[data-skill-market-v2] {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 0 0 32px;
+}
+.sk-detail-page[data-skill-market-v2] > div:last-of-type {
+  padding: 24px;
+}
+.sk-detail-page[data-skill-market-v2] .sk-shared-detail {
+  background: var(--sk-card);
+  border: 1px solid var(--sk-border);
+  border-radius: 24px;
+  padding: 28px;
+}
+[data-skill-market-v2] .sk-agent-hero {
+  margin-top: 16px;
+}
+[data-skill-market-v2] .sk-field input {
+  background: var(--sk-page);
+  color: var(--sk-ink);
+  border-color: var(--sk-border);
+}
+[data-skill-market-v2] .sk-service-notice {
+  position: absolute;
+  bottom: 12px;
+  left: 24px;
+  right: 24px;
+  z-index: 10;
+  font-size: 12px;
+  padding: 8px 12px;
+  background: var(--sk-card);
+  border: 1px solid var(--sk-border);
+  border-radius: 8px;
+}
+[data-skill-market-v2] .sk-service-notice button {
+  text-decoration: underline;
+}
+.sk-portal {
+  background: var(--sk-card) !important;
+  color: var(--sk-ink);
+  border: 1px solid var(--sk-border) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 16px 70px #32284720 !important;
+}
+.sk-catalog-menu {
+  width: min(280px, calc(100vw - 32px));
+  max-height: min(400px, var(--radix-popover-content-available-height, calc(100dvh - 32px)));
+  overflow-y: auto;
+  padding: 8px;
+}
+.sk-catalog-menu fieldset {
+  border: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+}
+.sk-catalog-menu legend {
+  width: 100%;
+  padding: 8px 10px;
+  color: var(--sk-muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+.sk-menu-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--sk-ink);
+}
+.sk-menu-choice:hover,
+.sk-menu-choice:has(input:checked) {
+  background: color-mix(in srgb, var(--sk-purple) 10%, transparent);
+}
+.sk-menu-choice input {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  accent-color: var(--action-primary);
+}
+.sk-menu-choice > span {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.sk-menu-choice small {
+  color: var(--sk-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.sk-clear-refinements {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px;
+  border-top: 1px solid var(--sk-border);
+  color: var(--sk-purple);
+  font-size: 12px;
+}
+.sk-editor-dialog {
+  padding: 26px;
+}
+.sk-editor-dialog h2 {
+  font-family: var(--font-sans);
+}
+.sk-editor-dialog input,
+.sk-editor-dialog textarea {
+  background: var(--sk-page);
+  color: var(--sk-ink);
+  border-color: var(--sk-border);
+}
+/* Hide scrollbars in every v2 surface, including portalled menus and editors.
+   Keep overflow and input events intact so scrolling still works normally. */
+[data-skill-market-v2],
+[data-skill-market-v2] *,
+.sk-portal,
+.sk-portal * {
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
+}
+[data-skill-market-v2]::-webkit-scrollbar,
+[data-skill-market-v2] *::-webkit-scrollbar,
+.sk-portal::-webkit-scrollbar,
+.sk-portal *::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+/* Set this on real scroll surfaces, never on every clipped decorative element. */
+[data-skill-market-v2]
+  :is(
+    .sk-sidebar,
+    .sk-collection,
+    .sk-detail-scroll,
+    .sk-flat-content,
+    .sk-ranking-scroll,
+    .sk-scene-fallback,
+    .overflow-x-auto,
+    .overflow-y-auto,
+    textarea,
+    input
+  ),
+.sk-detail-page[data-skill-market-v2],
+.sk-portal,
+.sk-portal :is(.overflow-y-auto, .overflow-x-auto, textarea, input) {
+  overscroll-behavior: none;
+}
+[data-skill-market-v2] :is(button, input, a):focus-visible,
+.sk-portal :is(button, input, textarea):focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+html[data-theme='dark'] [data-skill-market-v2],
+html[data-theme='dark'] .sk-portal {
+  --sk-ink: #eee9fc;
+  --sk-text: #d0c7e1;
+  --sk-muted: #b2a7c7;
+  --sk-subtle: #aaa0be;
+  --sk-plane: #222137;
+  --sk-card: #29253b;
+  --sk-page: #201e30;
+  --sk-border: #423956;
+  --sk-purple: #b6a0f2;
+  --action-primary: #7757cd;
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-tray {
+  background:
+    radial-gradient(ellipse at 25% 80%, #5a354855, transparent 55%),
+    radial-gradient(ellipse at 80% 15%, #49417399, transparent 58%), #302b48;
+  box-shadow:
+    0 0 0 12px #39314b66,
+    inset 0 0 35px #9a7ae914;
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-search {
+  background: #39314c;
+}
+html[data-theme='dark']
+  [data-skill-market-v2]
+  :is(.sk-search input, .sk-brand, .sk-nav button, .sk-chart-value > strong) {
+  color: var(--sk-ink);
+}
+html[data-theme='dark']
+  [data-skill-market-v2]
+  :is(.sk-recenter, .sk-scope, .sk-avatar-option) {
+  background: var(--sk-card);
+  color: var(--sk-text);
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-ranking button.is-selected {
+  background: #453653;
+}
+
+html[data-theme='dark'] [data-skill-market-v2] .sk-row-meta {
+  background: #463755;
+  color: var(--sk-text);
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-history-chart text {
+  fill: var(--sk-muted);
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-stage {
+  box-shadow: inset 0 0 0 1px var(--sk-border);
+}
+html[data-theme='dark']
+  [data-skill-market-v2]
+  :is(.sk-summary-card, .sk-history-card, .sk-ranking) {
+  border-color: var(--sk-border);
+  box-shadow: 0 6px 20px #0002;
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-ring > div {
+  background: radial-gradient(#3b3155, var(--sk-card) 75%);
+}
+html[data-theme='dark']
+  [data-skill-market-v2]
+  :is(.sk-chart-stats strong, .sk-range button, .sk-ranking-name) {
+  color: var(--sk-text);
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-range {
+  background: var(--sk-plane);
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-range button[aria-pressed='true'] {
+  background: var(--action-primary);
+  color: white;
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-chart-stats {
+  border-color: var(--sk-border);
+}
+html[data-theme='dark'] [data-skill-market-v2] .sk-history-chart line {
+  stroke: var(--sk-border);
+}
+
+@media (min-width: 1600px) {
+  [data-skill-market-v2] .sk-insights {
+    grid-template-columns: minmax(0, 1.6fr) minmax(220px, 1fr);
+  }
+}
+@media (max-width: 1200px) and (min-width: 1024px) {
+  [data-skill-market-v2] .sk-header {
+    gap: 12px;
+    padding-inline: 18px;
+  }
+  [data-skill-market-v2] .sk-search {
+    max-width: 220px;
+  }
+  [data-skill-market-v2] .sk-nav {
+    gap: 14px;
+  }
+}
+@media (max-width: 1023px) {
+  [data-skill-market-v2] .sk-header {
+    gap: 10px;
+    padding: 0 16px;
+  }
+  [data-skill-market-v2] .sk-brand {
+    flex: 1;
+    min-width: 0;
+    font-size: 17px;
+  }
+  [data-skill-market-v2] .sk-brand > span:last-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  [data-skill-market-v2] .sk-mobile-controls {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 16px;
+    background: transparent;
+  }
+  [data-skill-market-v2] .sk-search {
+    flex: 0 0 34px;
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+    height: 34px;
+  }
+  [data-skill-market-v2] .sk-nav {
+    width: 100%;
+    height: 32px;
+    margin-left: 0;
+    justify-content: center;
+    gap: 32px;
+  }
+  [data-skill-market-v2] .sk-layout,
+  [data-skill-market-v2] .sk-layout.has-panel {
+    display: flex;
+    position: relative;
+    padding: 0 10px 10px;
+  }
+  [data-skill-market-v2] .sk-sidebar {
+    display: none;
+  }
+  [data-skill-market-v2] .has-panel-content .sk-sidebar {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: var(--sk-page);
+    padding: 0;
+  }
+  [data-skill-market-v2] .has-panel-content .sk-sidebar[data-panel-open='false'] {
+    pointer-events: none;
+  }
+  [data-skill-market-v2] .sk-collection {
+    display: none;
+  }
+  [data-skill-market-v2] .sk-detail {
+    max-width: 560px;
+    margin-inline: auto;
+  }
+  [data-skill-market-v2] .sk-stage {
+    flex: 1;
+    width: 100%;
+    margin: 0;
+    border-radius: 16px;
+  }
+  [data-skill-market-v2] .sk-stage-title {
+    top: 104px;
+    font-size: 28px;
+    left: 14px;
+    right: 14px;
+    letter-spacing: -0.8px;
+  }
+  [data-skill-market-v2] .sk-stage-heading {
+    top: 144px;
+    left: 10px;
+    right: 10px;
+  }
+  [data-skill-market-v2] .sk-toolbar {
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: 8px;
+  }
+  [data-skill-market-v2] .sk-toolbar > .sk-navigation {
+    grid-column: 1;
+    grid-row: 1;
+  }
+  [data-skill-market-v2] .sk-toolbar > .sk-scope {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+  [data-skill-market-v2] .sk-breadcrumb {
+    font-size: 11px;
+  }
+  [data-skill-market-v2] .sk-breadcrumb > span:only-child {
+    display: none;
+  }
+  [data-skill-market-v2] .sk-flat-content {
+    inset: 170px 10px 10px;
+  }
+  [data-skill-market-v2] [data-skill-row] {
+    padding: 12px 10px;
+  }
+  [data-skill-market-v2] .sk-flat-content .sk-insights {
+    gap: 12px;
+  }
+  [data-skill-market-v2] .sk-history-card {
+    padding: 16px 12px;
+  }
+  [data-skill-market-v2] .sk-chart-heading {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+  [data-skill-market-v2] .sk-chart-value > strong {
+    font-size: 30px;
+  }
+  [data-skill-market-v2] .sk-chart-stats strong {
+    font-size: 20px;
+  }
+  [data-skill-market-v2] .sk-range {
+    flex-wrap: wrap;
+  }
+  .sk-detail-page[data-skill-market-v2] > div:last-of-type {
+    padding: 12px;
+  }
+  .sk-detail-page[data-skill-market-v2] .sk-shared-detail {
+    padding: 20px 16px;
+  }
+  .sk-editor-dialog {
+    padding: 20px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-skill-market-v2] *,
+  .sk-portal {
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+
+/* Region adapters live inside the persistent, theme-owned workspace frame. */
+.market-shell .market-region-content[data-skill-market-v2] {
+  --sk-shadow: 0 16px 28px -14px #81759d55, 0 2px 4px #7b738611;
+  font-size: 13px;
+  line-height: 1.5;
+  --sk-content-exit: 120ms;
+  --sk-content-enter: 180ms;
+  --sk-panel-easing: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --sk-sidebar-inset: 20px;
+}
+.market-shell .sk-sidebar-content { display: flex; flex-direction: column; height: 100%; min-height: 0; }
+.market-shell [data-skill-market-v2] .sk-sidebar { flex: 1; min-height: 0; background: transparent; }
+.market-shell [data-skill-market-v2] .sk-stage { width: 100%; height: 100%; min-height: 0; margin: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.market-shell [data-skill-market-v2] .sk-content-navigation { display: flex; align-items: center; gap: 16px; min-height: 48px; padding: 0 20px; flex-shrink: 0; }
+.market-shell [data-skill-market-v2] .sk-content-navigation .sk-nav { display: flex; align-items: stretch; gap: 20px; margin: 0 auto 0 0; }
+.market-shell [data-skill-market-v2] .sk-content-navigation .sk-nav button { height: 48px; font-size: 12px; }
+.market-shell [data-skill-market-v2] .sk-profile { flex-shrink: 0; width: 30px; height: 30px; }
+.market-shell [data-skill-market-v2] .sk-collection { padding-top: 12px; }
+@media (max-width: 1023px) {
+  .market-shell .market-region-content[data-skill-market-v2] { --sk-sidebar-inset: 16px; }
+  .market-shell [data-skill-market-v2] .sk-content-navigation { min-height: 36px; padding: 0; }
+  .market-shell [data-skill-market-v2] .sk-content-navigation .sk-nav button { height: 36px; }
+  .market-shell [data-skill-market-v2] .has-panel-content .sk-sidebar { position: relative; inset: auto; display: block; background: transparent; }
+}

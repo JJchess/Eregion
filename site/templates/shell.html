@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="{{lang}}">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#efeff3" />
+    <meta name="description" content="{{description}}" />
+    <meta property="og:title" content="{{title}}" />
+    <meta property="og:description" content="{{description}}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="{{canonical}}" />
+    <link rel="canonical" href="{{canonical}}" />
+    <link rel="alternate" hreflang="en" href="{{alternate_en}}" />
+    <link rel="alternate" hreflang="zh-CN" href="{{alternate_zh}}" />
+    <link rel="alternate" hreflang="x-default" href="{{alternate_en}}" />
+    <link rel="icon" href="{{base}}assets/mark.svg" type="image/svg+xml" />
+    <link
+      rel="preload"
+      href="{{base}}assets/manrope-latin.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link rel="stylesheet" href="{{base}}style.css" />
+    <link rel="stylesheet" href="{{base}}playground.css" />
+    <link rel="stylesheet" href="{{base}}route-transitions.css" />
+    <link rel="stylesheet" href="{{base}}fluid-cursor.css" />
+    <script type="module" src="{{base}}app.js"></script>
+    <title>{{title}}</title>
+  </head>
+  <body class="{{page}}-page" data-locale="{{locale}}" data-base="{{base}}">
+    <a class="skip-link" href="#main">{{skip_label}}</a>
+    <header class="header">
+      <a
+        class="wordmark"
+        href="{{home_url}}"
+        aria-label="JJchess — {{nav_home}}"
+        ><svg
+          class="brand-logo"
+          viewBox="0 0 244 64"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <use href="{{base}}assets/brand.svg#wordmark"></use></svg
+      ></a>
+      <div class="header-actions">
+        <a
+          class="locale-switch"
+          data-language
+          href="{{locale_url}}"
+          aria-label="{{language_label}}"
+          >{{locale_label}}</a
+        >
+        <a
+          class="pill github-pill"
+          href="{{github_url}}"
+          target="_blank"
+          rel="noopener"
+          >GitHub <span aria-hidden="true">↗</span></a
+        >
+        <button
+          class="pill menu-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="navigation"
+          data-open-label="{{menu_label}}"
+          data-close-label="{{menu_close}}"
+        >
+          <span data-menu-label>{{menu_label}}</span
+          ><span class="menu-symbol" aria-hidden="true"><i></i><i></i></span>
+        </button>
+      </div>
+      <div class="menu" id="navigation" hidden>
+        <nav aria-label="{{menu_nav_label}}">
+          <a href="{{home_url}}" {{active_home}}
+            ><span>01</span>{{nav_home}}<i aria-hidden="true">↗</i></a
+          >
+          <a href="{{projects_url}}" {{active_projects}}
+            ><span>02</span>{{nav_projects}}<i aria-hidden="true">↗</i></a
+          >
+          <a href="{{about_url}}" {{active_about}}
+            ><span>03</span>{{nav_about}}<i aria-hidden="true">↗</i></a
+          >
+        </nav>
+        <a
+          class="menu-github"
+          href="{{github_url}}"
+          target="_blank"
+          rel="noopener"
+          >{{nav_github}} ↗</a
+        >
+      </div>
+    </header>
+    <noscript
+      ><nav class="no-script-nav" aria-label="{{menu_nav_label}}">
+        <a href="{{home_url}}">{{nav_home}}</a
+        ><a href="{{projects_url}}">{{nav_projects}}</a
+        ><a href="{{about_url}}">{{nav_about}}</a>
+      </nav></noscript
+    >
+    <main
+      id="main"
+      tabindex="-1"
+      data-page="{{page}}"
+      data-nav-error="{{navigation_error}}"
+      data-results-label="{{results_label}}"
+    >
+      {{body}}
+    </main>
+    <footer class="footer">
+      <div class="footer-top">
+        <a
+          class="footer-wordmark"
+          href="{{home_url}}"
+          aria-label="JJchess — {{nav_home}}"
+          ><svg
+            class="brand-logo"
+            viewBox="0 0 244 64"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <use href="{{base}}assets/brand.svg#wordmark"></use></svg
+        ></a>
+        <p>{{footer_note}}</p>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2026 JJCHESS</span
+        ><a href="{{repository_url}}" target="_blank" rel="noopener"
+          >{{footer_source}} ↗</a
+        ><a href="#main" data-top>{{back_top}} ↑</a>
+      </div>
+    </footer>
+    <p class="sr-only" id="page-status" role="status" aria-live="polite"></p>
+  </body>
+</html>
