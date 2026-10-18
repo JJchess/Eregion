@@ -1,0 +1,97 @@
+[
+  {
+    "name": "@fontsource-variable/geist",
+    "version": "5.3.0",
+    "license": "OFL-1.1"
+  },
+  {
+    "name": "@fontsource-variable/geist-mono",
+    "version": "5.2.8",
+    "license": "OFL-1.1"
+  },
+  {
+    "name": "@fontsource-variable/noto-serif-sc",
+    "version": "5.2.6",
+    "license": "OFL-1.1"
+  },
+  {
+    "name": "@fontsource/enriqueta",
+    "version": "5.2.7",
+    "license": "OFL-1.1"
+  },
+  {
+    "name": "@formatjs/fast-memoize",
+    "version": "3.1.7",
+    "license": "MIT"
+  },
+  {
+    "name": "@formatjs/icu-messageformat-parser",
+    "version": "3.5.18",
+    "license": "MIT"
+  },
+  {
+    "name": "@formatjs/icu-skeleton-parser",
+    "version": "2.1.11",
+    "license": "MIT"
+  },
+  {
+    "name": "framer-motion",
+    "version": "12.38.0",
+    "license": "MIT"
+  },
+  {
+    "name": "gsap",
+    "version": "3.15.0",
+    "license": "Standard 'no charge' license: https://gsap.com/standard-license."
+  },
+  {
+    "name": "intl-messageformat",
+    "version": "11.2.15",
+    "license": "BSD-3-Clause"
+  },
+  {
+    "name": "lucide-react",
+    "version": "0.522.0",
+    "license": "ISC"
+  },
+  {
+    "name": "motion-dom",
+    "version": "12.43.0",
+    "license": "MIT"
+  },
+  {
+    "name": "motion-utils",
+    "version": "12.39.0",
+    "license": "MIT"
+  },
+  {
+    "name": "react",
+    "version": "19.2.1",
+    "license": "MIT"
+  },
+  {
+    "name": "react-dom",
+    "version": "19.2.1",
+    "license": "MIT"
+  },
+  {
+    "name": "scheduler",
+    "version": "0.27.0",
+    "license": "MIT"
+  },
+  {
+    "name": "split-type",
+    "version": "0.3.4",
+    "license": "ISC"
+  },
+  {
+    "name": "three",
+    "version": "0.182.0",
+    "license": "MIT"
+  },
+  {
+    "name": "use-intl",
+    "version": "4.13.2",
+    "license": "MIT"
+  }
+]

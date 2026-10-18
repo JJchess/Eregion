@@ -1,0 +1,154 @@
+{
+  "project": "edumanus-frontend",
+  "commit": "8618744e1597811d433749996fd71b171673db94",
+  "source_files": [
+    {
+      "path": "components/ai-cosmos-logo.tsx",
+      "source_sha256": "41e799f5016b091a65a52435d957695b9eefa95ee97204ec6047c810f1333a2f"
+    },
+    {
+      "path": "components/landing/Footer.tsx",
+      "source_sha256": "5ad22372650f8f9f520de51dbd45f9d5779ddf9fba658decd56be27529a414f2"
+    },
+    {
+      "path": "components/landing/LandingPage.tsx",
+      "source_sha256": "1366ceec517a1be32ac08d9893cdbf1b8f0b39d0a42fb6ce4bd2b8e352980e3c"
+    },
+    {
+      "path": "components/landing/NavBar.tsx",
+      "source_sha256": "879ef3ef17ebd403a222a146b0a7dd90ce9b6ca559ede5aa83e5104d3fe7a412"
+    },
+    {
+      "path": "components/landing/SceneBackdrop.tsx",
+      "source_sha256": "c58dfe127a4222f5bb2ef8d1e81a394d226bab1b9b081d6c15121858840fb045"
+    },
+    {
+      "path": "components/landing/cosmos/CosmicBackdrop.tsx",
+      "source_sha256": "3c2da2e02b2db8b9d6f55131ccbf831b91ee9bb852c7516bce2254d342f78528"
+    },
+    {
+      "path": "components/landing/cosmos/CosmicGalaxyCanvas.tsx",
+      "source_sha256": "242161317614565e705225aa00b5c9d2464052c91d2d59b240b65699b9804083"
+    },
+    {
+      "path": "components/landing/cosmos/cosmic-backdrop.module.css",
+      "source_sha256": "3091b110cab1c286a081f394e0289485bb4d555862482adbe856efe418a7f73f"
+    },
+    {
+      "path": "components/landing/finale/Finale.tsx",
+      "source_sha256": "7795798ec4b5a587c0ecbdcc3f751cbf382315cfb783f7cf020e969bbd9120b2"
+    },
+    {
+      "path": "components/landing/finale/finale.module.css",
+      "source_sha256": "17fd3a443114106eeca0485c53109166ab13a45eed6c0ff30c533468897cc170"
+    },
+    {
+      "path": "components/landing/flow/OrbitFlow.tsx",
+      "source_sha256": "f406344d5b3412b2b51d50764255a9b75f4a85aca4f7db7071445b4eeb9d9d40"
+    },
+    {
+      "path": "components/landing/flow/flow.module.css",
+      "source_sha256": "4aa1318badaf7b5c3daeadcb51e3bcec97a9adf02cd9028834db98e9bded4b56"
+    },
+    {
+      "path": "components/landing/hero/Hero.tsx",
+      "source_sha256": "6a23995b766ee28a9fff9f9beb1e564850f57fcfd35bf827b0b7860f0f087aa9"
+    },
+    {
+      "path": "components/landing/hero/hero.module.css",
+      "source_sha256": "bfdddb225c6773bd31aa5eec94da2db693f6ca5c9e7b291e6723b59acbbd7fcc"
+    },
+    {
+      "path": "components/landing/hooks/useQualityTier.ts",
+      "source_sha256": "8312e2969277fe3a9dd2be198c527967318b6e3f71f53adbb025d0e4f3a427a0"
+    },
+    {
+      "path": "components/landing/hooks/useScrollContainer.ts",
+      "source_sha256": "589cb284d022c7100b7210b98077629ae773e023b9a12fef5bed5b00633d3995"
+    },
+    {
+      "path": "components/landing/hooks/useSectionTransitions.ts",
+      "source_sha256": "78475ea9008d72d05b7b23908041822742017aab1f3484e2f7a4027eff735891"
+    },
+    {
+      "path": "components/landing/hooks/useVisible.ts",
+      "source_sha256": "71ce69cc760ff309360990f8d862b821b01efdd1a7796cb325c9a4f2739e4d5f"
+    },
+    {
+      "path": "components/landing/isometric/IsometricGrid.tsx",
+      "source_sha256": "0ace1059fa8474be7d6dffca78b1cf6b7cb4e2935f094bf880cdf003e0c7debe"
+    },
+    {
+      "path": "components/landing/isometric/isometric-grid.module.css",
+      "source_sha256": "75974ce8312aa75b8fcb90a524cb53f3e37aba5d27dabdf0a4b773188b6c2ebe"
+    },
+    {
+      "path": "components/landing/journey/ProductPrelude.tsx",
+      "source_sha256": "e7a8bde4b1164d5f471c1a67d48ceccbf80873dab3f2b4f2c637072e79ee0511"
+    },
+    {
+      "path": "components/landing/journey/journey.module.css",
+      "source_sha256": "83e4b654f75252ea22d3f9c2cdceee45167eab7715b413e9662125a0b6f98dbc"
+    },
+    {
+      "path": "components/landing/landing.module.css",
+      "source_sha256": "8b8a94de09833d032498491aa46cf040666a6217ba853994fe8b82e232069af5"
+    },
+    {
+      "path": "components/landing/outcomes/Outcomes.tsx",
+      "source_sha256": "f4987bf733e44564a49bddfd5c637a18defd58b6fcb64608b42ebc56828df427"
+    },
+    {
+      "path": "components/landing/outcomes/outcomes.module.css",
+      "source_sha256": "e577c0c8c799b50a9934334c5a908572f9a0c7a862bbbada5cbb3d0bcca4746f"
+    },
+    {
+      "path": "components/landing/primitives.tsx",
+      "source_sha256": "f1e68c683a33f96901dcec078aabe55b38e52c2a456f6c8fe38612bed36de4fd"
+    },
+    {
+      "path": "components/landing/product/ProductShowcase.tsx",
+      "source_sha256": "ae763d75ff924473250f2f6f5be8bfd3d031f95a7e2085a2642345f147d9f410"
+    },
+    {
+      "path": "components/landing/product/product.module.css",
+      "source_sha256": "d4cf3dfb4f9e17334daafd8cc8ea3be5ae2353c97c4bd5fc520b0c3bce0ae7e1"
+    },
+    {
+      "path": "components/landing/tokens.ts",
+      "source_sha256": "d31bc25d73f02889b847f2e4071d19e6c8587f7113e2345c311a88139943a95c"
+    },
+    {
+      "path": "messages/en/landing.json",
+      "source_sha256": "3b5b38d3a2fcdcf3b9f3771e8efd579d9d063e6da4c8ced6f93fc4e84da29937",
+      "extraction": "Full Landing namespace"
+    },
+    {
+      "path": "messages/en/common.json",
+      "source_sha256": "f9f65ce761151dbc1f0bad956421965f38683f7c4a3e43584c9ab632019bb17b",
+      "extraction": "Common.logIn only"
+    },
+    {
+      "path": "messages/zh/landing.json",
+      "source_sha256": "6760657b729ca78273ec0cef290bff4ca416fea3dc27b04bb9cb176d5ae54af7",
+      "extraction": "Full Landing namespace"
+    },
+    {
+      "path": "messages/zh/common.json",
+      "source_sha256": "52defb27bbbc3a01b53b78d70c9ce832d385a02c69d39d43be2be740946ba29f",
+      "extraction": "Common.logIn only"
+    },
+    {
+      "path": "types/isometric-grid-vendors.d.ts",
+      "destination": "app/isometric-grid-vendors.d.ts",
+      "source_sha256": "bf4e86454fa3469626bd806e95c6f1fc311aeb58c7da3a0c3391c9a0826de6b1"
+    }
+  ],
+  "adaptation": [
+    "Removed authenticated redirects and registration gates",
+    "Native image/link adapters and React lazy replace Next runtime",
+    "Standalone en/zh locale query and local-only business action dialog",
+    "Relative asset URLs; isometric PNG files optimized to WebP",
+    "Only required typography and layout tokens retained from global styles"
+  ]
+}

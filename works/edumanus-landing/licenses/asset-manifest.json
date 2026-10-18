@@ -1,0 +1,771 @@
+{
+  "checked_date": "2026-10-18",
+  "media_review": "All 35 educational illustrations, five Codrops covers, five posters and 20 thumbnails visually reviewed. Eight sampled frames per video plus two-second contact sheets for four account-containing clips. Output eight sampled frames per video and all re-extracted stills visually reviewed. Not every frame; not exhaustive anonymization.",
+  "files": [
+    {
+      "file": "brand/logo-static.svg",
+      "source_sha256": "b590d156eff52835f83bc3187bf09780ff65fdf8b9c84ce3e9991c7eeef74a55",
+      "output_sha256": "b590d156eff52835f83bc3187bf09780ff65fdf8b9c84ce3e9991c7eeef74a55",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/hero-galaxy-dark.webp",
+      "source_sha256": "4c358a3959c299dbfff38587697c3eaf0af8aaa5e8847466a5734f5bd54a2c51",
+      "output_sha256": "4c358a3959c299dbfff38587697c3eaf0af8aaa5e8847466a5734f5bd54a2c51",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/hero-galaxy-dark-mobile.webp",
+      "source_sha256": "340f737c5f0b365525948210af4265be0183b114425fa76fab1f17be690926e2",
+      "output_sha256": "340f737c5f0b365525948210af4265be0183b114425fa76fab1f17be690926e2",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/hero-galaxy-light.webp",
+      "source_sha256": "ff5c35cf86adadc1a3bd5afaebc125c111600ea6829cb10ff265282b0b8ebf61",
+      "output_sha256": "ff5c35cf86adadc1a3bd5afaebc125c111600ea6829cb10ff265282b0b8ebf61",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/hero-galaxy-light-mobile.webp",
+      "source_sha256": "77d36fc2d72f9d84bc4144c504914864f77c95f5aaeddf003d0ae7ebbe782de9",
+      "output_sha256": "77d36fc2d72f9d84bc4144c504914864f77c95f5aaeddf003d0ae7ebbe782de9",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/codrops-image-to-content/7.jpg",
+      "source_sha256": "7b98313969195d2b062ca8cb6232cc53d7917b09e745ab9f212e7f5202497670",
+      "output_sha256": "7b98313969195d2b062ca8cb6232cc53d7917b09e745ab9f212e7f5202497670",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/codrops-image-to-content/4.jpg",
+      "source_sha256": "af9962b521fdaa4404b1a45f35138564f6d8f0ae7c34b439474751efc0600810",
+      "output_sha256": "af9962b521fdaa4404b1a45f35138564f6d8f0ae7c34b439474751efc0600810",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/codrops-image-to-content/8.jpg",
+      "source_sha256": "10a12ad02cde1ccf0b96ce1096f00f6b41301f33008a847b814fb2c5b8a9885f",
+      "output_sha256": "10a12ad02cde1ccf0b96ce1096f00f6b41301f33008a847b814fb2c5b8a9885f",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/codrops-image-to-content/2.jpg",
+      "source_sha256": "816ad3a7fa1e9bcb97da96cb2b1cd6ea89cdcb6c69bd7faf708a61eb72a82d5b",
+      "output_sha256": "816ad3a7fa1e9bcb97da96cb2b1cd6ea89cdcb6c69bd7faf708a61eb72a82d5b",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/codrops-image-to-content/6.jpg",
+      "source_sha256": "419ac5ca242a9fc0b6db0806d055153eba52bedea205c495daec8f55b5c268da",
+      "output_sha256": "419ac5ca242a9fc0b6db0806d055153eba52bedea205c495daec8f55b5c268da",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/vendor/isometric-grids/imagesloaded.pkgd.min.js",
+      "source_sha256": "4e206abc1ad15f949b3a7cc630c9bec5953a8f6be9b1cbedf1eff1efc9d86991",
+      "output_sha256": "4e206abc1ad15f949b3a7cc630c9bec5953a8f6be9b1cbedf1eff1efc9d86991",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/vendor/isometric-grids/wireframe.png",
+      "source_sha256": "f754c9e7d620d1fbef9199525e1b2b3887a3c6227d9b36f470d6b56b7fa46f89",
+      "output_sha256": "f754c9e7d620d1fbef9199525e1b2b3887a3c6227d9b36f470d6b56b7fa46f89",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/vendor/isometric-grids/masonry.pkgd.min.js",
+      "source_sha256": "3ca3e467b7d4d6b403aa4619019d9250b11449c8ee9c91c90bcbc9acdd64fea2",
+      "output_sha256": "3ca3e467b7d4d6b403aa4619019d9250b11449c8ee9c91c90bcbc9acdd64fea2",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/vendor/isometric-grids/canvas.png",
+      "source_sha256": "6f3dbd3df0f0ff83bed55579e4c97143ce12d92739668075f14af2944651d651",
+      "output_sha256": "6f3dbd3df0f0ff83bed55579e4c97143ce12d92739668075f14af2944651d651",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/vendor/isometric-grids/dynamics.min.js",
+      "source_sha256": "9472626707d519e0dec66ed03e2cea9a677e1069e59ea0875582c14ea6a866fb",
+      "output_sha256": "9472626707d519e0dec66ed03e2cea9a677e1069e59ea0875582c14ea6a866fb",
+      "operation": "unchanged"
+    },
+    {
+      "file": "landing/isometric-grids/01-course.webp",
+      "source_sha256": "f4721c45d1532145ac4f6a5d8ad48d4d9ca156901126b6dc31b2d88a881af50a",
+      "output_sha256": "fd1e6abb2c23df5cf24e2982dcdc97a441b8a6839ed0a8776a2eac3e39f0ec87",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/02-course.webp",
+      "source_sha256": "6d2591a18f70252194863edfc973d566320b29be6446105fc2e0e7fa6888054d",
+      "output_sha256": "b5e4fa8a30c4e13d5f53a5b58e02851984a6f49cbaf4ab2e8ee1718eea356132",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/03-video.webp",
+      "source_sha256": "237cffe31ba3eef8442dcf3047460bd87c1e2022b9e0e6f97a79f45e7b1d1851",
+      "output_sha256": "55529e60eebd4710c6d7bcd63d427df7bb2e6e03f37d4aa7061a00f5d28b8780",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/04-course.webp",
+      "source_sha256": "ac199e696f4f0477db49c5997396bbb98a5e1a1b1a18c24a62df24adb7dda281",
+      "output_sha256": "82ba75a35844ccf07cb124d5d2d39ffb539c9288ef3534e514f7dc0bbd095cdf",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/05-course.webp",
+      "source_sha256": "914566ac5fbed795ef1641e4916f8a96b05b98480b16b6c0cd4d669b32a4a02c",
+      "output_sha256": "81c4d1e99ee773f95623923d2ed1f2db00a728923fa6300cee8e69bd592ed99f",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/06-course.webp",
+      "source_sha256": "158906593b32d4a97612b1f9e6213ca8bf1bec63f207deecbadea7c56cda7f19",
+      "output_sha256": "ad316367ce278c53048bd02b3b9b930d478a84225d4eb478d9d19d45f85d1b9e",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/07-course.webp",
+      "source_sha256": "730a7f6f0f1c9d9a73eabec643b2eddcd97165a3fe9f90e861737d4699d8d25c",
+      "output_sha256": "36e74897ca78d09cea612fded29352281692f4a4213f0eb84566078df6c55bc5",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/08-course.webp",
+      "source_sha256": "266e5ce10152a80b9014f012945188e4ae5bf24e5055c885dd56168141ea588e",
+      "output_sha256": "7819cc59b3d61c0c00ec8a8ac52a1abe4e6a8f1e424d8f3b7b39799b7649541b",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/09-course.webp",
+      "source_sha256": "8dd7a96becd7f7810067bfd2b79e40b192731d79e6aa62d486a66b4ea5b756dc",
+      "output_sha256": "b549e78f2a26e7d02b9c106cfc91c6b749bab72707ba7c8b834cf890f5a6c1c0",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/10-course.webp",
+      "source_sha256": "85691b4ffc45608f9e8b254fa897cf0a5f2e078132af13bc3de81d0f062e177a",
+      "output_sha256": "dd78e2e3d27989e0a2422c7186441379e18b9f5e190a8b8605bdb7e97f85cd24",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/11-course.webp",
+      "source_sha256": "eec93b08ce79053f9269b9f6efee7cd281ce8d3b98dedd108ee4ec1180a7829a",
+      "output_sha256": "f9a03f8f4c2744c90ac1f16f23e4c9e6e0e3e0490e1ef4f31bc2377bcdc15027",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/12-course.webp",
+      "source_sha256": "f88ff5e96983a21d6299cc538a862dee2ec407da4d0cc394494531e687837744",
+      "output_sha256": "627ab8260a08578baf70acd8254d0774856ded57fac18bd79b2cd035618920f9",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/13-video.webp",
+      "source_sha256": "b4f99641efb1706dbd772cf8ee378d83353b6b467d2f9830282c783ed9507d82",
+      "output_sha256": "d3e7c148bd49b0b83718731b65bb4a97733e52e0bc8f862e75b59ee3bce75ffc",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/14-course.webp",
+      "source_sha256": "063fda61775f700c063360cd25293afc1a7291945b790481335f1dd0188672b5",
+      "output_sha256": "762859c172f17f9d3e4203e4e67bb7fe576ef90d2d9529fa2a8821dcb58ae3f8",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/15-lab.webp",
+      "source_sha256": "7b1c72581beb727836cfdd952c20b268b18386bb4e268633e79e6b88ed1bccad",
+      "output_sha256": "f48ed83cfdf2f4e9a0c93ef4d0cd533444020a6c701257fcbb751f178fac69dc",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/16-course.webp",
+      "source_sha256": "6c264dc5399b9437ab81d22a3c80ffbb120eea2a2dccdf50bcbcb7c537f833fa",
+      "output_sha256": "8573880fc596d75690c8193e7cb3ac2d991bb785b700f84e2f1dcf5506ad3067",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/17-course.webp",
+      "source_sha256": "c987ee68bf74c3493b3695c129382fcf6f82d8685326b03bc2818cc36827f475",
+      "output_sha256": "0e39e925fde1d0f08d03ac16fd20780acbc329a32c0234c9263fcb5f28a9ec1d",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/18-course.webp",
+      "source_sha256": "87d3b21a513fa6f740ccfb1f086c809b847b55d3d816d7f4cabd77f64035f3cb",
+      "output_sha256": "3bda3e43945458ec9340f2e30ac2b732f87ccefa8c21d2e3ef771c175d4318fe",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/19-lab.webp",
+      "source_sha256": "47f5bd5e7a81a6c3ea15675d3d64a4d8f427cccd5a6a7be893c99924c0c4f330",
+      "output_sha256": "5c3cb56ccb84e51e8d73c0dc95b5b32345989cbe2a961664016b25cd9d00717d",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/20-course.webp",
+      "source_sha256": "7c5addb2aa678db2a982ae8038ca0eca07f3d3a55124c0f551c2a665fe0ca365",
+      "output_sha256": "3bf419793697ef57ea1deba16287c9f4c2f7185d368ee2bf941466072da2e115",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/21-course.webp",
+      "source_sha256": "f7ea5881e60d33524f2bc5755b18b550a88a181ba740e7305dd8b387575a1787",
+      "output_sha256": "49dcd35678743de68d696a048552298c65bd94b9ebf3b5b1fc5d3e9e3780e4bf",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/22-course.webp",
+      "source_sha256": "3d97692a359c1b4f9ed117292f344fc326318997581595a1fe0199c1917c50be",
+      "output_sha256": "2746fda2c21191dde383327acfee9b326c9845c8a52f35d3549499cb255e2323",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/23-course.webp",
+      "source_sha256": "f059fa05a7edd1e038b08d3cddb14659b30a6882fea22634e6ecae25b3d34c14",
+      "output_sha256": "10ed7ed62ca390d95aa0c1d5dadbcca74718a30a4fbf6c5e2f0552ae1310a7d5",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/24-jupyterlab.webp",
+      "source_sha256": "9bd57e294eb3636e7bebfdcbd4f6b9c2a76b5dfa1b73c6da975198d4effed7e9",
+      "output_sha256": "4c8f4e8abf67b296366280b143d8466b06e2a4d8d1728e63cf2629145d082893",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/25-course.webp",
+      "source_sha256": "ee87570bad61d35ad95e0504af0d1bb694130da37d1a62c1d857b8d4277ae1e4",
+      "output_sha256": "1203384f82cd1aa44129695ee80a06bf4a3f1b95dfb5adfe129dd058dc2cd53a",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/26-course.webp",
+      "source_sha256": "d409e52f22977a889df38555b0344097025642ecd3b4560b2f6a52cf4b4c57a3",
+      "output_sha256": "474b549ae5a44cb9529f213ee3ef7cf8061c3512597a89c72b6a5e83605b42e7",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/27-course.webp",
+      "source_sha256": "6d241e0284eb978e00f219c2412bed8cd674a92270f1345fbab9a5298ab8b57a",
+      "output_sha256": "4e9c472fdb529a8921616ce819519b0ba633c5c470f12da8b968359a34a90426",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/28-jupyterlab.webp",
+      "source_sha256": "5f9ba142c61d362e5fb97a44dd482192848eb69471a5291521a700ab8733b093",
+      "output_sha256": "f89e0f965fa5064dc245c4b4bcf010c69a274764851eafae621bc1334b72c976",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/29-course.webp",
+      "source_sha256": "dcbe689090dcc2cf115053c3025a0744ce87cd4d78581e9fe75b6e3d20d94398",
+      "output_sha256": "3f056f74a573af5df9630d42d4d131c42887f2a98a4ab7b7598db36e8ceb2b0e",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/30-course.webp",
+      "source_sha256": "9a485082ae762abbe51d98f5b64661c950008814144c9ea0d19bd6d5df4c28a5",
+      "output_sha256": "d887025747ed75a7902ba06c7497a26f70c748cf738700ae47d9391cc88f97a7",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/31-lab.webp",
+      "source_sha256": "67b0a8eb514d5a5cda4bab3b25c95a94461504f8bb726fe0358137934b159fd0",
+      "output_sha256": "93f566b591cc2fa4e5955a156fd772833ea84062391733e5bc4ea31f6f63f939",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/32-lab.webp",
+      "source_sha256": "21ffc182f7175cdf3add1b24b42ba5d75feb5a00dca2907e28b98562e4572107",
+      "output_sha256": "c4f3442694ff16ca751fcedf3cf4ab07ac8b40c7e44915585dc7e467125f1434",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/33-course.webp",
+      "source_sha256": "30b4af08aadef660d91d34878a8e8df09d297f2f3d99494ac386cd5b0fd48944",
+      "output_sha256": "6e8d3054137eca9475a13c2cbf4f093ba4ae7f422ec8a961227ed573f8356a86",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/34-jupyterlab.webp",
+      "source_sha256": "1559eb8a1268e254ddfa592b409297231c8e4e1fe3b73bd98b5ba7b3f655699f",
+      "output_sha256": "3b1af2bb27c4716b7559c09ae4b004ab54fdc421c6b452c56c93ede7252790b8",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/isometric-grids/35-lab.webp",
+      "source_sha256": "cf144ade7224894b4ea0bb32880034066537603030363f5faa0a6e34b87d8de3",
+      "output_sha256": "0922457da199ded3afb5e043017eea9bf8278041f62013d394ae0f96fc1f7059",
+      "operation": "WebP quality 88, method 6; original dimensions preserved"
+    },
+    {
+      "file": "landing/product-videos/cloud-classroom.mp4",
+      "source_sha256": "a1c787d2145f8e7f9aac71c9b59e2005fecc1bb6db2a716c92683f9dfac448e6",
+      "output_sha256": "9dc76b3afcf3b42ad100229680815d9756fa2306a20b122568076d4d105ea3b4",
+      "operation": "FFmpeg drawbox account-region redaction; H.264 CRF 21; metadata removed; original dimensions/duration retained",
+      "redaction_rectangles_xywh_start_end": [
+        [
+          1125,
+          0,
+          85,
+          44,
+          5,
+          12
+        ],
+        [
+          850,
+          0,
+          125,
+          44,
+          43,
+          65
+        ],
+        [
+          1225,
+          40,
+          55,
+          100,
+          5,
+          12
+        ],
+        [
+          495,
+          5,
+          65,
+          35,
+          65,
+          78
+        ],
+        [
+          60,
+          380,
+          1150,
+          328,
+          65,
+          78
+        ]
+      ],
+      "review_sample_times_seconds": [
+        1.5519999999999998,
+        11.639999999999999,
+        23.279999999999998,
+        34.92,
+        46.559999999999995,
+        58.199999999999996,
+        69.84,
+        76.04799999999999
+      ]
+    },
+    {
+      "file": "landing/product-videos/code-lab.mp4",
+      "source_sha256": "f4fc7647bb7bfd65df3807b02ffd29a10f7cb30232141b31612a2f758ef003de",
+      "output_sha256": "b177dba6b656a7bac6e1d903829992ee213f383d4b995cd49e668fd61c2cf2b5",
+      "operation": "FFmpeg drawbox account-region redaction; H.264 CRF 21; metadata removed; original dimensions/duration retained",
+      "redaction_rectangles_xywh_start_end": [
+        [
+          590,
+          70,
+          500,
+          110,
+          0,
+          7.3
+        ],
+        [
+          0,
+          664,
+          48,
+          44,
+          0,
+          45
+        ],
+        [
+          1135,
+          0,
+          78,
+          45,
+          7.3,
+          45
+        ],
+        [
+          1218,
+          45,
+          62,
+          600,
+          7.3,
+          45
+        ]
+      ],
+      "review_sample_times_seconds": [
+        0.8906666599999999,
+        6.67999995,
+        13.3599999,
+        20.03999985,
+        26.7199998,
+        33.39999975,
+        40.0799997,
+        43.64266634
+      ]
+    },
+    {
+      "file": "landing/product-videos/interactive-lab.mp4",
+      "source_sha256": "cdf381044f4a0b7b3cfdaa7326394831009b17b5ac7bdcc128f37e6bc204cc07",
+      "output_sha256": "9c77656cdc816d08d0a45612c697a5b89403ed1ea1cff3be2468b014c9392c49",
+      "operation": "FFmpeg drawbox account-region redaction; H.264 CRF 21; metadata removed; original dimensions/duration retained",
+      "redaction_rectangles_xywh_start_end": [
+        [
+          645,
+          166,
+          130,
+          74,
+          0,
+          1.7
+        ],
+        [
+          0,
+          660,
+          52,
+          48,
+          0,
+          35
+        ],
+        [
+          1130,
+          0,
+          82,
+          44,
+          8,
+          18
+        ],
+        [
+          1230,
+          45,
+          50,
+          580,
+          8,
+          18
+        ]
+      ],
+      "review_sample_times_seconds": [
+        0.68533334,
+        5.140000049999999,
+        10.280000099999999,
+        15.42000015,
+        20.560000199999998,
+        25.70000025,
+        30.8400003,
+        33.58133366
+      ]
+    },
+    {
+      "file": "landing/product-videos/interactive-lecture.mp4",
+      "source_sha256": "38ec70a138116a34c695ab8204f0ea3b87c27cbdaa612a5615bb2bd7e9afe192",
+      "output_sha256": "f018c69697b2be1b513ab07449b7ad0aa0dfe7173b95bf43491280ab09c3b203",
+      "operation": "FFmpeg drawbox account-region redaction; H.264 CRF 21; metadata removed; original dimensions/duration retained",
+      "redaction_rectangles_xywh_start_end": [
+        [
+          820,
+          200,
+          280,
+          80,
+          0,
+          1.8
+        ],
+        [
+          0,
+          660,
+          52,
+          48,
+          0,
+          27
+        ],
+        [
+          1120,
+          0,
+          95,
+          45,
+          12,
+          18
+        ],
+        [
+          1225,
+          45,
+          55,
+          580,
+          12,
+          18
+        ]
+      ],
+      "review_sample_times_seconds": [
+        0.52333334,
+        3.92500005,
+        7.8500001,
+        11.77500015,
+        15.7000002,
+        19.62500025,
+        23.5500003,
+        25.64333366
+      ]
+    },
+    {
+      "file": "landing/product-videos/interactive-video.mp4",
+      "source_sha256": "6e9c4565918f6230e2a72629ba35141fd0ce9b689a81b485242b20d973345feb",
+      "output_sha256": "ce89c4a6c0fe47312ba5e9d7fdd96b818e4bbbdfcc67d895bc81da5e1365af44",
+      "operation": "FFmpeg drawbox account-region redaction; H.264 CRF 21; metadata removed; original dimensions/duration retained",
+      "redaction_rectangles_xywh_start_end": [
+        [
+          1125,
+          0,
+          85,
+          44,
+          4,
+          9.5
+        ],
+        [
+          1220,
+          44,
+          60,
+          65,
+          4,
+          9.5
+        ]
+      ],
+      "review_sample_times_seconds": [
+        0.91,
+        6.825,
+        13.65,
+        20.475,
+        27.3,
+        34.125,
+        40.95,
+        44.589999999999996
+      ]
+    },
+    {
+      "file": "landing/poster-lab.webp",
+      "output_sha256": "15fd9c5ef27d05e4b4d55fbe831ebb521db4508c3a1cc8ecea9465db36f8345e",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/code-lab.mp4",
+      "timestamp_seconds": 26.75
+    },
+    {
+      "file": "landing/product-thumbs/code-lab/1.webp",
+      "output_sha256": "f2293b1ec7cdf6e6bf974bc18ac56c4d8b8681b56d1d894dbb59438cf562fbcd",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/code-lab.mp4",
+      "timestamp_seconds": 6.25
+    },
+    {
+      "file": "landing/product-thumbs/code-lab/2.webp",
+      "output_sha256": "3877a9d7b80712b9aabdd388e5487071fc7a2fd0e8f4bad389c3d4f173ccabb0",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/code-lab.mp4",
+      "timestamp_seconds": 15.75
+    },
+    {
+      "file": "landing/product-thumbs/code-lab/3.webp",
+      "output_sha256": "b45721a83c701d83841cb00e29727f7f45f51cce997551d3b06d15f62a2c02c9",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/code-lab.mp4",
+      "timestamp_seconds": 24.25
+    },
+    {
+      "file": "landing/product-thumbs/code-lab/4.webp",
+      "output_sha256": "60ddda522ee23414e6a2f8c2052096465aa545cd1281c4b0dbf0966859cd60bf",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/code-lab.mp4",
+      "timestamp_seconds": 33.75
+    },
+    {
+      "file": "landing/poster-notes.webp",
+      "output_sha256": "e3af2b4904149ca8042a5a01338dec6b2fcad902161addacf074963e0cd03d17",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lecture.mp4",
+      "timestamp_seconds": 17.25
+    },
+    {
+      "file": "landing/product-thumbs/notes/1.webp",
+      "output_sha256": "7c3a7b348598809aa4c009bbcfaee9d817bead0788cd75b3fc0e7e7557e34857",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lecture.mp4",
+      "timestamp_seconds": 4.25
+    },
+    {
+      "file": "landing/product-thumbs/notes/2.webp",
+      "output_sha256": "692c4cab267111e39543c59a27110ced4a94431fc4004c31d227dcc3abce7e8d",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lecture.mp4",
+      "timestamp_seconds": 9.25
+    },
+    {
+      "file": "landing/product-thumbs/notes/3.webp",
+      "output_sha256": "28e60d294935e5b96ace7a75de695dc01fdc5c44ad323f2afaeee5843b1a651c",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lecture.mp4",
+      "timestamp_seconds": 14.25
+    },
+    {
+      "file": "landing/product-thumbs/notes/4.webp",
+      "output_sha256": "bfa1d03476cac2760b669d183a0069ffd48388bc46ca493ef83c9800949ffe00",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lecture.mp4",
+      "timestamp_seconds": 19.75
+    },
+    {
+      "file": "landing/poster-interactive-lab.webp",
+      "output_sha256": "116282e733c5db4aa831bee7e77bbb3e719643ac1105601998375b76c409a0dd",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lab.mp4",
+      "timestamp_seconds": 22.75
+    },
+    {
+      "file": "landing/product-thumbs/interactive-lab/1.webp",
+      "output_sha256": "5fb78473f4d0d932cc90eb205ddf3515582c0107f8dbe9ba824abfd201fd0f5e",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lab.mp4",
+      "timestamp_seconds": 5.25
+    },
+    {
+      "file": "landing/product-thumbs/interactive-lab/2.webp",
+      "output_sha256": "87e3cb0615316bde6a3b4bb2076c9586883da19fdedb3d4b8c58332b19068013",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lab.mp4",
+      "timestamp_seconds": 11.75
+    },
+    {
+      "file": "landing/product-thumbs/interactive-lab/3.webp",
+      "output_sha256": "7168b7b8af71c25502ce449deaefd6f40c1118b188d5809d3b5fde627bfc5286",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lab.mp4",
+      "timestamp_seconds": 18.75
+    },
+    {
+      "file": "landing/product-thumbs/interactive-lab/4.webp",
+      "output_sha256": "7801462a942b1f758dbaa636ac2ff7c69bc7c22ae71c81c42f3eac4ffbeda678",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-lab.mp4",
+      "timestamp_seconds": 25.75
+    },
+    {
+      "file": "landing/poster-video.webp",
+      "output_sha256": "d7d0785996e8cae3debb7f0b06931ff4f7e70118c48d4f1e27970d8edb754aa5",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-video.mp4",
+      "timestamp_seconds": 9.25
+    },
+    {
+      "file": "landing/product-thumbs/video/1.webp",
+      "output_sha256": "a703640fd14c64aad61206ac00f4bfc20ea841b9506b75f4bb92e14f5d6c205c",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-video.mp4",
+      "timestamp_seconds": 6.75
+    },
+    {
+      "file": "landing/product-thumbs/video/2.webp",
+      "output_sha256": "64e145f5e8e72b703940d035ff77cee56767a5ce049a51012a2a9dd171f12888",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-video.mp4",
+      "timestamp_seconds": 16.25
+    },
+    {
+      "file": "landing/product-thumbs/video/3.webp",
+      "output_sha256": "146a2ecbf49a1e253d55c8da5b4911ac13b173a064abaff23ff636eb8f57a0f0",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-video.mp4",
+      "timestamp_seconds": 22.75
+    },
+    {
+      "file": "landing/product-thumbs/video/4.webp",
+      "output_sha256": "f861672940a803c5a92081863ad53c8acb556dc3b5cb12704e518f09dec91255",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/interactive-video.mp4",
+      "timestamp_seconds": 33.75
+    },
+    {
+      "file": "landing/poster-classroom.webp",
+      "output_sha256": "4a60c4f6bb7f9c9f9455368d110f1f86c7dfec9c377b22f738a080a95d54da8f",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/cloud-classroom.mp4",
+      "timestamp_seconds": 26.25
+    },
+    {
+      "file": "landing/product-thumbs/classroom/1.webp",
+      "output_sha256": "7955cc3c7b3f83d1560f558b4229d73b66f48aae59ebda11e503619ba6f424b5",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/cloud-classroom.mp4",
+      "timestamp_seconds": 11.75
+    },
+    {
+      "file": "landing/product-thumbs/classroom/2.webp",
+      "output_sha256": "2bfcf97533d9f9d3a26272242a99b8e85ebadec4140bac264e4d7b783d0b31a6",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/cloud-classroom.mp4",
+      "timestamp_seconds": 27.25
+    },
+    {
+      "file": "landing/product-thumbs/classroom/3.webp",
+      "output_sha256": "2ce4f7cbd0abd78b55e29aab7c200b6f6911725fbdf5f8ca09657b100874607b",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/cloud-classroom.mp4",
+      "timestamp_seconds": 42.75
+    },
+    {
+      "file": "landing/product-thumbs/classroom/4.webp",
+      "output_sha256": "785545086912c26f930687c497c310163f8a455c0b051735560387919154fe5c",
+      "operation": "Real frame extracted from treated video; WebP quality 90; original image dimensions",
+      "video": "landing/product-videos/cloud-classroom.mp4",
+      "timestamp_seconds": 57.25
+    }
+  ],
+  "verified_upstream_files": [
+    {
+      "source_url": "https://raw.githubusercontent.com/codrops/ImageToContent/b4bbdc7b1809e56ee129ac296c5dcf1849a00c2d/src/img/2.jpg",
+      "sha256": "816ad3a7fa1e9bcb97da96cb2b1cd6ea89cdcb6c69bd7faf708a61eb72a82d5b",
+      "identical_to_included_file": true
+    },
+    {
+      "source_url": "https://raw.githubusercontent.com/codrops/ImageToContent/b4bbdc7b1809e56ee129ac296c5dcf1849a00c2d/src/img/4.jpg",
+      "sha256": "af9962b521fdaa4404b1a45f35138564f6d8f0ae7c34b439474751efc0600810",
+      "identical_to_included_file": true
+    },
+    {
+      "source_url": "https://raw.githubusercontent.com/codrops/ImageToContent/b4bbdc7b1809e56ee129ac296c5dcf1849a00c2d/src/img/6.jpg",
+      "sha256": "419ac5ca242a9fc0b6db0806d055153eba52bedea205c495daec8f55b5c268da",
+      "identical_to_included_file": true
+    },
+    {
+      "source_url": "https://raw.githubusercontent.com/codrops/ImageToContent/b4bbdc7b1809e56ee129ac296c5dcf1849a00c2d/src/img/7.jpg",
+      "sha256": "7b98313969195d2b062ca8cb6232cc53d7917b09e745ab9f212e7f5202497670",
+      "identical_to_included_file": true
+    },
+    {
+      "source_url": "https://raw.githubusercontent.com/codrops/ImageToContent/b4bbdc7b1809e56ee129ac296c5dcf1849a00c2d/src/img/8.jpg",
+      "sha256": "10a12ad02cde1ccf0b96ce1096f00f6b41301f33008a847b814fb2c5b8a9885f",
+      "identical_to_included_file": true
+    },
+    {
+      "source_url": "https://raw.githubusercontent.com/JJchess/IsometricGrids/ab6aba37616c29eda294d9909a50f4d9c7b25699/js/imagesloaded.pkgd.min.js",
+      "sha256": "37dbf4b6012d4e23cbc1cba50baa3572c93a5c371b9873fb5440cb84dfbf9902",
+      "identical_to_included_file": false,
+      "difference": "Exactly one added trailing newline in the Edumanus copy; stripped bytes are identical.",
+      "identical_after_whitespace_trim": true
+    },
+    {
+      "source_url": "https://raw.githubusercontent.com/JJchess/IsometricGrids/ab6aba37616c29eda294d9909a50f4d9c7b25699/js/masonry.pkgd.min.js",
+      "sha256": "733d7c26a5fb7240e83e8af2c822218b321b5143e28c2dd65ab2492297ac6bd7",
+      "identical_to_included_file": false,
+      "difference": "Exactly one added trailing newline in the Edumanus copy; stripped bytes are identical.",
+      "identical_after_whitespace_trim": true
+    },
+    {
+      "source_url": "https://raw.githubusercontent.com/JJchess/IsometricGrids/ab6aba37616c29eda294d9909a50f4d9c7b25699/js/dynamics.min.js",
+      "sha256": "7004acdfe1c46fa965a151cf84638cd85ef2d9b3b25bf441c72e0a08102e9e02",
+      "identical_to_included_file": false,
+      "difference": "Exactly one added trailing newline in the Edumanus copy; stripped bytes are identical.",
+      "identical_after_whitespace_trim": true
+    }
+  ]
+}

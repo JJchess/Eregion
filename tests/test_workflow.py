@@ -273,7 +273,8 @@ class BuildTests(unittest.TestCase):
             self.assertIn('href="/Eregion/demos/test-component/"', page)
             self.assertIn('href="https://github.com/JJchess/Eregion/tree/main/works/test-component"', page)
             self.assertIn(f'href="https://jjchess.github.io/Eregion/{locale}projects/test-component/"', page)
-            self.assertIn(f'href="/Eregion/{locale}projects/test-component/"', self.page(locale + "projects/index.html"))
+            language = "zh" if locale else "en"
+            self.assertIn(f'href="/Eregion/demos/test-component/?lang={language}"', self.page(locale + "projects/index.html"))
             self.assertNotIn('/portfolio/', page)
         self.assertIn('href="/Eregion/zh/projects/test-component/"', self.page("projects/test-component/index.html"))
         self.assertIn('href="/Eregion/projects/test-component/"', self.page("zh/projects/test-component/index.html"))

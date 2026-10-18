@@ -1,0 +1,308 @@
+{
+  "Landing": {
+    "nav": {
+      "product": "Product",
+      "scenes": "Learning",
+      "teams": "Audience",
+      "about": "About",
+      "cta": "Get started",
+      "homeAria": "AICosmos home",
+      "toLight": "Switch to light",
+      "toDark": "Switch to dark"
+    },
+    "player": {
+      "watch": "Watch demo",
+      "demo": "Product demo",
+      "close": "Close demo",
+      "back": "Back to products",
+      "collection": "Five product demos",
+      "railTitle": "Create, teach, and learn on one platform.",
+      "railBody": "Content flows into courses and classrooms. Student questions, answers, and lab results flow back to help teachers keep improving the course.",
+      "chapter": "Jump to demo chapter {number}",
+      "loading": "Loading demo",
+      "error": "The demo could not be played. Close it and try again."
+    },
+    "hero": {
+      "eyebrow": "Developed by the CoAI Lab at Tsinghua University",
+      "headline": "<line>From one question to a</line><line>whole <accent>universe of knowledge</accent>.</line>",
+      "body": "Videos, notes, and experiments are generated around the same question.<br></br> Content, courses, and learning records stay connected on one platform.",
+      "interactionLabel": "Drag or use the arrow keys to rotate the galaxy"
+    },
+    "journey": {
+      "title": "From question to verification in four steps.",
+      "steps": [
+        {
+          "index": "01",
+          "tag": "Ask",
+          "title": "Ask the question that is holding you back",
+          "body": "A concept from class, an assignment,<br></br> or a real problem at work."
+        },
+        {
+          "index": "02",
+          "tag": "Generate",
+          "title": "Generate video, notes, and experiments together",
+          "body": "All three are generated around the same question.<br></br> Start with any format."
+        },
+        {
+          "index": "03",
+          "tag": "Interact",
+          "title": "Ask as you watch. Change things as you work.",
+          "body": "Pause the explanation, ask about details, run the code, or adjust a parameter and try again."
+        },
+        {
+          "index": "04",
+          "tag": "Verify",
+          "title": "Conclusions you can review. Sources you can trace.",
+          "body": "Return to experiment records and original sources, verify where the result came from, and confirm it can be reproduced."
+        }
+      ]
+    },
+    "video": {
+      "title": "Interactive video",
+      "titleLines": [
+        "Interactive",
+        "video"
+      ],
+      "body": "Pause and ask at any moment. Switch explanations or adjust the level of detail without leaving the player.",
+      "frame": {
+        "path": "How a Transformer works",
+        "badge": "Interactive",
+        "caption": "Pause the frame and ask about it directly",
+        "status": "Adjustable depth"
+      },
+      "aside": {
+        "title": "After a question, continue from the same place",
+        "body": "After the answer, playback resumes where you left off without losing context.",
+        "checks": [
+          "Frame-level questions",
+          "Resume from the same point"
+        ],
+        "eyebrow": "FROM WATCHING TO DIALOGUE"
+      },
+      "eyebrow": "PLATFORM 01 · INTERACTIVE VIDEO",
+      "metric": {
+        "value": "3 ways",
+        "label": "into the same idea",
+        "note": "Build intuition with video, find the structure in notes, then test it in a lab."
+      }
+    },
+    "notes": {
+      "title": "Interactive notes",
+      "titleLines": [
+        "Interactive",
+        "notes"
+      ],
+      "body": "The outline, explanations, experiments, and sources grow from the same conversation and keep updating with every follow-up.",
+      "frame": {
+        "path": "SVD: from geometric intuition to AI practice",
+        "badge": "Notes",
+        "caption": "Every page links to the original conversation",
+        "status": "Outline synced"
+      },
+      "metric": {
+        "label": "Notes that keep growing with the question",
+        "items": [
+          "Build a full outline from a question",
+          "Add detail after each follow-up",
+          "Return to the original conversation"
+        ],
+        "eyebrow": "ONE QUESTION",
+        "value": "1 → N"
+      },
+      "closing": {
+        "title": "Keep asking after the notes are generated.",
+        "body": "Key ideas, relationships, experiments, and sources stay in one set of notes.<br></br> Continue learning from any page."
+      },
+      "eyebrow": "PLATFORM 02 · INTERACTIVE NOTES"
+    },
+    "lab": {
+      "title": "Code lab",
+      "titleLines": [
+        "Code",
+        "lab"
+      ],
+      "body": "Learners, teachers, and agents share one notebook, with every run, revision, and discussion on the record.",
+      "frame": {
+        "path": "lab-04.ipynb",
+        "badge": "Running",
+        "caption": "Run, observe, revise, and verify again",
+        "status": "Kernel ready"
+      },
+      "closing": {
+        "title": "Runnable. Reproducible.",
+        "body": "Agents offer guidance at key steps while learners do the work and make the decisions.<br></br> Everyone shares the same code, output, and discussion.",
+        "chips": [
+          "Live collaboration",
+          "Reproducible results"
+        ],
+        "badge": "REPRODUCIBLE"
+      },
+      "eyebrow": "PLATFORM 03 · CODE LAB"
+    },
+    "interactiveLab": {
+      "title": "Interactive lab",
+      "titleLines": [
+        "Interactive",
+        "lab"
+      ],
+      "body": "Describe what you want to test and generate a bench you can wire, tune, and try again. It works across digital circuits, mechanics, algorithms, and more, with no coding required.",
+      "frame": {
+        "path": "NAND gate experiment",
+        "badge": "Simulating",
+        "caption": "Add logic gates and see each connection take effect",
+        "status": "Circuit powered"
+      },
+      "steps": {
+        "items": [
+          "Describe the phenomenon you want to test",
+          "Generate the bench and required components",
+          "Wire components, adjust inputs, and observe the results"
+        ],
+        "eyebrow": "FROM DESCRIPTION TO EXPERIMENT"
+      },
+      "closing": {
+        "title": "Take it apart, change it, and see the result instantly.",
+        "body": "Connections and parameter changes produce immediate feedback.<br></br> When something is wired incorrectly, the result points directly to the cause."
+      },
+      "eyebrow": "PLATFORM 04 · INTERACTIVE LAB"
+    },
+    "classroom": {
+      "title": "Cloud Classroom",
+      "titleLines": [
+        "Cloud",
+        "Classroom"
+      ],
+      "body": "Let the classroom grow into a textbook. Bring lesson planning, teaching, practice, and learning data together in one course.",
+      "frame": {
+        "path": "Data Structures · Chapter 3",
+        "badge": "Cloud Classroom",
+        "caption": "Edit by hand or work with AI",
+        "status": "Syllabus synced"
+      },
+      "closing": {
+        "title": "Keep your time for the decisions that need a teacher.",
+        "body": "AI turns course materials into a chapter structure with 1-2 complete, long-form lessons per chapter. Videos and labs are embedded in each lesson, and end-of-chapter quizzes can be retaken. Teachers decide what stays and what changes.<br></br> Student answers, questions, and lab results flow back into the course to inform what you teach next.",
+        "chips": [
+          "Textbook-length lessons",
+          "Embedded labs",
+          "Retakeable quizzes"
+        ]
+      },
+      "eyebrow": "PLATFORM 05 · CLOUD CLASSROOM",
+      "stats": [
+        {
+          "value": "1 → N",
+          "label": "ONE OUTLINE, A FULL COURSE"
+        },
+        {
+          "value": "4",
+          "label": "NOTES / PRACTICE / INTERACTION / ASSESSMENT"
+        },
+        {
+          "value": "100%",
+          "label": "EVERY PAGE STAYS EDITABLE"
+        }
+      ]
+    },
+    "flow": {
+      "ariaLabel": "Creation and learning flow",
+      "nodes": [
+        {
+          "index": "01",
+          "title": "Create",
+          "caption": "Generate video, notes, and labs"
+        },
+        {
+          "index": "02",
+          "title": "Organize",
+          "caption": "Build knowledge bases and courses"
+        },
+        {
+          "index": "03",
+          "title": "Teach & learn",
+          "caption": "Interact in class and work together"
+        },
+        {
+          "index": "04",
+          "title": "Build on it",
+          "caption": "Share work and review learning"
+        }
+      ],
+      "eyebrow": "CREATE · TEACH · LEARN"
+    },
+    "outcomes": {
+      "title": "One platform for every teaching and learning scenario.",
+      "body": "Learners, educators, and teams can start with the task at hand.",
+      "cards": [
+        {
+          "index": "01",
+          "code": "Learners",
+          "title": "Learn one question deeply, at your own pace",
+          "body": "Start with a question: watch an explanation, run an experiment,<br></br> check the source, and go deeper step by step.",
+          "tags": "Interactive video · Interactive notes · Personal labs",
+          "glyph": "∞",
+          "footer": "FROM QUESTION TO UNDERSTANDING"
+        },
+        {
+          "index": "02",
+          "code": "Universities & educators",
+          "title": "Keep improving the course, from lesson planning to after class",
+          "body": "Create and revise course content, run lessons and assignments,<br></br> and use student learning records to improve what comes next.",
+          "tags": "Course building · Interactive teaching · Learning analytics",
+          "glyph": "1:N",
+          "footer": "FROM SOURCE MATERIAL TO A COURSE"
+        },
+        {
+          "index": "03",
+          "code": "Teams & organizations",
+          "title": "Complete projects together, with the process and results preserved",
+          "body": "Divide the work, discuss, and experiment around one task.<br></br> Materials, run results, and outcomes are shared across the team.",
+          "tags": "Team collaboration · Shared knowledge · Publishing",
+          "glyph": "LIVE",
+          "footer": "KEEP THE PROCESS AND THE RESULT"
+        }
+      ],
+      "eyebrow": "LEARNERS · EDUCATORS · TEAMS"
+    },
+    "finale": {
+      "title": "Your next question<br></br> starts <accent>here</accent>.",
+      "body": "Start with a question, a set of materials, or a course:<br></br> create content, build a course, or learn independently.",
+      "ctaPrimary": "Get started",
+      "ctaSecondary": "Watch the demo",
+      "eyebrow": "START HERE",
+      "note": "CONTENT · COURSES · LABS · COLLABORATION"
+    },
+    "footer": {
+      "tagline": "Creating, teaching, and learning, connected on one platform.",
+      "attribution": "AI Cosmos is built by the <link>Tsinghua University Conversational AI (CoAI) lab</link>.",
+      "productHeading": "Product",
+      "platformHeading": "Platform",
+      "startHeading": "Get started",
+      "resourcesHeading": "Resources",
+      "aboutHeading": "About",
+      "linkVideo": "Interactive video",
+      "linkNotes": "Interactive notes",
+      "linkLab": "Code lab",
+      "linkInteractiveLab": "Interactive lab",
+      "linkClassroom": "Cloud Classroom",
+      "linkJourney": "Learning path",
+      "linkFlow": "Platform workflow",
+      "linkOutcomes": "Learning scenarios",
+      "linkLogin": "Log in",
+      "linkRegister": "Sign up",
+      "linkManual": "User manual",
+      "linkAbout": "About AI Cosmos",
+      "linkCoai": "Tsinghua CoAI lab",
+      "linkTerms": "Terms of service",
+      "rights": "© 2026 AI Cosmos. All rights reserved.",
+      "motto": "BUILT FOR CREATING, TEACHING, AND LEARNING"
+    }
+  },
+  "Meta": {
+    "title": "AI Cosmos | AI Education for Creating, Teaching, and Learning",
+    "description": "An AI education platform developed by Tsinghua University's CoAI Lab, with interactive videos you can question, interactive notes that update, reproducible code experiments, and shareable Cloud Classrooms."
+  },
+  "Common": {
+    "logIn": "Log in"
+  }
+}

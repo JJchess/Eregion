@@ -1,0 +1,73 @@
+.section {
+  --isometric-scene-height: 660dvh;
+  position: relative;
+  z-index: 1;
+  height: var(--isometric-scene-height);
+  min-height: 100dvh;
+  color: var(--landing-text);
+  background: transparent;
+}
+
+.stickyStage {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  min-height: 640px;
+  overflow: hidden;
+  background: transparent;
+}
+
+.copy {
+  position: absolute;
+  top: calc(var(--landing-nav-height) + 3vmax);
+  left: 3vmax;
+  z-index: 3;
+  max-width: min(620px, 48vw);
+  pointer-events: none;
+}
+
+.heading {
+  margin: 0;
+  padding: 0;
+  color: var(--landing-text);
+  font-family: 'Avenir Next', Avenir, var(--font-geist), 'Helvetica Neue', Helvetica, Arial,
+    sans-serif;
+  font-size: clamp(2.35rem, 3.15vw, 3.25rem);
+  font-weight: 500;
+  letter-spacing: -0.035em;
+  line-height: 1.08;
+}
+
+.subtitle {
+  max-width: 500px;
+  margin: 0.4em 0 0;
+  color: var(--landing-text-muted);
+  font-size: 1.25em;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+@media screen and (max-width: 50em) {
+  .section {
+    --isometric-scene-height: 1200dvh;
+  }
+
+  .stickyStage {
+    min-height: 100dvh;
+  }
+
+  .copy {
+    top: calc(var(--landing-nav-height) + 1.5em);
+    left: 1.5em;
+    max-width: calc(100vw - 3em);
+  }
+
+  .heading {
+    font-size: 1.5em;
+  }
+
+  .subtitle {
+    max-width: 300px;
+    font-size: 0.85em;
+  }
+}

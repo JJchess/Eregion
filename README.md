@@ -17,6 +17,8 @@ Open `http://localhost:4179/portfolio/` for English or `http://localhost:4179/po
 
 The personal site includes Home, About, Projects and individual pages generated for approved works. Its light palette, large typography and original four-part UI installation are shared across both languages. Native controls provide the interaction; optional Three.js rendering adds decoration. Approved works include [Galaxy Skill Market](works/galaxy-skill-market/README.md), a navigable pearl-like skill map, and [Voice Mode UI](works/voice-mode-ui/README.md), a chat voice dock with progressive text and a procedural orb. Both use synthetic data and standalone demos. Empty states remain available when a filter has no matching works.
 
+[Edumanus Landing Page](works/edumanus-landing/README.md) adds the complete AI Cosmos homepage: an interactive galaxy, five recorded product demonstrations, scroll-driven typography and an isometric image field. Its bilingual standalone demo opens directly from the work card. Login and registration are local presentation controls; the archive does not connect to the product backend.
+
 The personal site, Galaxy Skill Market and Voice Mode UI are validated locally with official Google Chrome 155. GitHub Actions builds and publishes the approved archive through Pages; see the [design and verification record](docs/homepage-design.md) and each work's README for their separate tested scopes and remaining device-test limits.
 
 ## 个人站与作品资料

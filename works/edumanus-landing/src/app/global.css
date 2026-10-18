@@ -1,0 +1,69 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'Geist Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --font-mono: 'Geist Mono Variable', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --text-xs: 12px;
+  --text-xs--line-height: calc(18 / 12);
+  --text-sm: 14px;
+  --text-sm--line-height: var(--leading-body);
+  --text-base: 16px;
+  --text-base--line-height: var(--leading-body-lg);
+  --text-lg: 20px;
+  --text-lg--line-height: calc(28 / 20);
+}
+@utility font-display-en { font-family: var(--font-display-en); }
+@utility font-display-zh { font-family: var(--font-display-zh); }
+
+:root {
+  color-scheme: dark;
+  --font-display-en: 'Enriqueta', 'Noto Serif SC Variable', 'Source Han Serif SC', serif;
+  --font-display-zh: 'Noto Serif SC Variable', 'Source Han Serif SC', serif;
+  --font-noto-serif-sc: 'Noto Serif SC Variable';
+  --font-geist: 'Geist Variable';
+  --font-geist-mono: 'Geist Mono Variable';
+  --landing-font-mono: var(--font-mono);
+  --leading-body: calc(22 / 14);
+  --leading-body-lg: calc(26 / 16);
+  --text-display-hero: 68px;
+  --text-display-hero--line-height: 82px;
+  --text-display-section: 42px;
+  --text-display-section--line-height: 1.3;
+  --cosmos-deep-space: #09070f;
+}
+html[lang^='zh'] { --leading-body: calc(24 / 14); --leading-body-lg: calc(28 / 16); }
+:root:where(html[lang^='en']) { --text-display-hero: 52px; --text-display-hero--line-height: 64px; }
+@media (max-width: 1279px) {
+  :root { --text-display-hero: 60px; --text-display-hero--line-height: 72px; --text-display-section: 38px; }
+  :root:where(html[lang^='en']) { --text-display-hero: 48px; --text-display-hero--line-height: 60px; }
+}
+@media (max-width: 1023px) {
+  :root { --text-display-hero: 52px; --text-display-hero--line-height: 64px; --text-display-section: 34px; }
+  :root:where(html[lang^='en']) { --text-display-hero: 40px; --text-display-hero--line-height: 52px; }
+}
+@media (max-width: 767px) {
+  :root { --text-display-hero: 42px; --text-display-hero--line-height: 52px; --text-display-section: 32px; }
+  :root:where(html[lang^='en']) { --text-display-hero: 32px; --text-display-hero--line-height: 42px; }
+}
+@media (max-width: 389px) {
+  :root { --text-display-hero: 36px; --text-display-hero--line-height: 46px; --text-display-section: 28px; }
+  :root:where(html[lang^='en']) { --text-display-hero: 30px; --text-display-hero--line-height: 40px; }
+}
+html, body, #root { width: 100%; height: 100%; margin: 0; overscroll-behavior: none; }
+body { overflow: hidden; background: #09070f; color: #f6f1ff; font-family: var(--font-sans); font-size: 14px; line-height: var(--leading-body); -webkit-font-smoothing: antialiased; font-optical-sizing: auto; }
+.landing-scroll-root { width: 100%; height: 100dvh; overflow-y: auto; overflow-x: clip; overscroll-behavior: none; scrollbar-width: none; }
+.landing-scroll-root::-webkit-scrollbar { display: none; }
+button, a { -webkit-tap-highlight-color: transparent; }
+button { cursor: pointer; }
+:lang(en) p { text-wrap: pretty; }
+:lang(zh) { word-break: auto-phrase; line-break: strict; }
+.demo-language { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; height: 44px; color: var(--landing-text-muted, #c8bed6); background: transparent; border: 0; padding: 8px; font-size: 14px; white-space: nowrap; }
+.demo-language:hover { color: var(--landing-text, #f6f1ff); }
+.demo-language:focus-visible { outline: 2px solid #c4b5fd; outline-offset: 1px; border-radius: 8px; }
+.demo-dialog { position: fixed; inset: 0; margin: auto; width: min(460px, calc(100vw - 32px)); max-height: calc(100dvh - 32px); padding: 0; border: 1px solid #c4b5fd40; border-radius: 20px; background: #181021; color: #f6f1ff; overflow: auto; overscroll-behavior: none; box-shadow: 0 30px 100px #0009; }
+.demo-dialog::backdrop { background: #09070fbf; backdrop-filter: blur(8px); }
+.demo-dialog-content { padding: 28px; }
+.demo-dialog h2 { font-size: 24px; font-weight: 600; line-height: 1.3; }
+.demo-dialog p { margin-top: 16px; font-size: 16px; line-height: 1.7; color: #c8bed6; }
+.demo-dialog button { margin-top: 24px; min-height: 44px; padding: 10px 20px; background: #7c3aed; color: #fffaff; border: 0; border-radius: 999px; font-size: 15px; }
+@media (prefers-reduced-motion: reduce) { .landing-scroll-root { scroll-behavior: auto; } }

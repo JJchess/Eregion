@@ -1,0 +1,15 @@
+Source: https://github.com/JJchess/IsometricGrids/tree/ab6aba37616c29eda294d9909a50f4d9c7b25699
+Fork of: https://github.com/codrops/IsometricGrids
+Verified: 2026-10-18
+
+README license statement:
+Integrate or build upon it for free in your personal or commercial projects. Don't republish, redistribute or sell "as-is".
+Read more here: https://tympanus.net/codrops/licensing/
+
+js/main.js copyright header:
+Licensed under the MIT license.
+http://www.opensource.org/licenses/mit-license.php
+Copyright 2016, Codrops
+http://www.codrops.com
+
+This work adapts the interaction into a React product landing page with custom educational illustrations, scoped scrolling, lifecycle cleanup and responsive behavior. It is not an as-is redistribution of the original demonstration. The MIT text accompanying the source-code header is preserved in codrops-isometric-grids-MIT.txt.

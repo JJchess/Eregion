@@ -1,0 +1,938 @@
+/* ────────────────────────────────────────────────────────────────────────────
+   Landing — token layer, page shell and shared keyframes.
+
+   Light values are declared on `.root`; the dark set overrides them under
+   `:global([data-theme='dark'])`.
+   Components never name a colour — they reference `landingTokens.*` from `tokens.ts`, which
+   points here. That is the whole light/dark adaptation in one place.
+
+   The `--landing-core-*` group re-colours the inlined cosmos SVG (see CosmosCoreSvg),
+   so the hero and finale share one asset across both themes.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+.root {
+  --landing-nav-height: 64px;
+  --landing-bg-light: #f8f6fc;
+  --landing-cosmos-mist: #ddd9f3;
+  --landing-cosmos-depth: #c6c3e9;
+  --landing-brand: #8068e8;
+  --landing-brand-soft: #a99bef;
+  --landing-star: #fffdfc;
+  --landing-star-warm: #fff1de;
+  --landing-star-cyan: #b4dff8;
+  --landing-scene-journey: color-mix(in srgb, var(--landing-brand-soft) 6%, transparent);
+  --landing-scene-products: color-mix(in srgb, var(--landing-cosmos-mist) 8%, transparent);
+  --landing-scene-orbit: color-mix(in srgb, var(--landing-brand-soft) 5%, transparent);
+  --landing-scene-outcomes: color-mix(in srgb, var(--landing-cosmos-depth) 6%, transparent);
+  --landing-scene-finale: color-mix(in srgb, var(--landing-brand-soft) 7%, transparent);
+
+  /* ── surfaces & text (light) ── */
+  --landing-bg: #f2eefb;
+  --landing-surface: rgba(248, 246, 252, 0.82);
+  --landing-surface-raised: #f8f6fc;
+  --landing-text: #171321;
+  --landing-text-muted: #595367;
+  --landing-text-faint: #777183;
+  --landing-border: rgba(216, 209, 234, 0.88);
+  --landing-border-strong: #c9bfdf;
+  /* opaque-enough label chips and the hero contrast veil's midpoint */
+  --landing-label-bg: rgba(248, 246, 252, 0.84);
+  --landing-veil-mid: rgba(242, 238, 251, 0.88);
+  --landing-hero-scrim: rgba(248, 246, 252, 0.96);
+  --landing-galaxy-core: #fff1de;
+  --landing-dust-bright: rgba(128, 104, 232, 0.42);
+  --landing-dust-soft: rgba(169, 155, 239, 0.34);
+  --landing-dust-opacity: 0.14;
+  /* product frames: pale surface needs a cast shadow, not a glow */
+  --landing-frame-shadow: 0 34px 70px rgba(36, 41, 54, 0.14), 0 2px 8px rgba(36, 41, 54, 0.06);
+  /* panel material: directional wash + lit top edge + cast shadow */
+  --landing-panel-wash-a: rgba(169, 155, 239, 0.08);
+  --landing-panel-wash-b: rgba(221, 217, 243, 0.02);
+  --landing-panel-lit: rgba(255, 253, 252, 0.82);
+  --landing-panel-cast: rgba(128, 104, 232, 0.1);
+  --landing-pill-bg: rgba(248, 246, 252, 0.92);
+  --landing-pill-text: #171321;
+  --landing-cta-bg: #8068e8;
+  --landing-cta-fg: #fffdfc;
+  --landing-cta-shadow: 0 14px 34px rgba(128, 104, 232, 0.26);
+
+  /* ── world identity accents; darkened so they carry on a pale canvas ── */
+  --landing-violet: #8068e8;
+  --landing-lilac: #a99bef;
+  --landing-cyan: #b4dff8;
+  --landing-green: #8068e8;
+  --landing-pink: #a99bef;
+  /* Small luminous marks inside the cosmos illustration. These remain vivid in
+     light mode but are deliberately quieter on the deep-purple dark canvas. */
+  --landing-signal-violet: #8068e8;
+  --landing-signal-lilac: #a99bef;
+  --landing-signal-cyan: #b4dff8;
+  --landing-signal-green: #a99bef;
+  --landing-signal-pink: #8068e8;
+  --landing-moon-video-1: #bcf8ff;
+  --landing-moon-video-2: #5ddced;
+  --landing-moon-video-3: #16738f;
+  --landing-moon-video-4: #08293d;
+  --landing-moon-video-5: #01050a;
+  --landing-moon-notes-1: #e3d5ff;
+  --landing-moon-notes-2: #9b80f7;
+  --landing-moon-notes-3: #5235a2;
+  --landing-moon-notes-4: #1b103a;
+  --landing-moon-notes-5: #030207;
+  --landing-moon-lab-1: #c6ffe9;
+  --landing-moon-lab-2: #68e7b7;
+  --landing-moon-lab-3: #16815f;
+  --landing-moon-lab-4: #083b2c;
+  --landing-moon-lab-5: #010705;
+  --landing-moon-citation-1: #ffe0f9;
+  --landing-moon-citation-2: #ee8ddf;
+  --landing-moon-citation-3: #a43d94;
+  --landing-moon-citation-4: #42153d;
+  --landing-moon-citation-5: #080207;
+
+  /* ── cosmos core material (light): a violet body on a pale sky ──
+     Seven body stops from the lit zone to the far limb, plus a separate shade ink used
+     by both the terminator and the limb-darkening pass. */
+  --landing-core-1: #c3b4f4;
+  --landing-core-2: #a08ce4;
+  --landing-core-3: #7d66cc;
+  --landing-core-4: #5d47a8;
+  --landing-core-5: #43317f;
+  --landing-core-6: #2f2159;
+  --landing-core-7: #241a45;
+  --landing-core-shade: #1b1235;
+  /* The ground the beacon's atom ellipses are drawn against — see `beaconWell` in
+     CosmosCoreSvg. Deeper than the body so the well reads as depth, not as a smudge. */
+  --landing-beacon-well: #2b1f57;
+  --landing-core-spec: #ffffff;
+  --landing-core-spec-op: 0.52;
+  --landing-core-bloom: #e9e2ff;
+  --landing-core-halo: #8b6cff;
+  --landing-core-shadow: drop-shadow(0 34px 60px rgba(74, 52, 132, 0.26));
+  --landing-band-tint: #6a54a8;
+  --landing-relief-warm: #6b57a6;
+  --landing-relief-cool: #3f8ba0;
+  --landing-route: #6f5bb5;
+  --landing-star-opacity: 0.3;
+
+  /* The trajectory rail's x. One declaration read by both `.railTrack` and the hero's
+     stub — two elements computing this gutter independently is how they drift apart.
+     max(): centre the shell at wide viewports, hug the gutter below 1440. */
+  --landing-rail-x: calc(max(0px, (100% - 1440px) / 2) + 98px);
+
+  /* ── type ── */
+  --landing-font-mono: var(--font-mono), ui-monospace, "SFMono-Regular", "SF Mono", "Cascadia Mono", "Segoe UI Mono",
+    "Liberation Mono", Menlo, Consolas, monospace;
+
+  /* Strength of the page-scale atmosphere wash (see `.root::before`). Dark mode turns
+     it down because the three star clusters already carry the depth there. */
+  position: relative;
+  flex: none;
+  width: 100%;
+  min-height: 100dvh;
+  background: var(--landing-bg);
+  color: var(--landing-text);
+  font-feature-settings: 'kern' 1, 'liga' 1;
+  overflow-x: clip;
+  /* Makes `.root` a stacking context so the sky can sit at z-index -1: above this
+     element's own background, below every section. Without it, `position: relative;
+     z-index: auto` is not a stacking context and a negative-z child would paint behind
+     `--landing-bg` and vanish. */
+  isolation: isolate;
+}
+
+/* ── page atmosphere ──────────────────────────────────────────────────────────
+   Without this the page is one flat sheet of `--landing-bg` for ~9000px and every section
+   reads as paper laid on paper — the light theme had no backdrop at all, because the
+   three `Starfield` clusters are dark-only (see `isDark()` in Starfield.tsx).
+
+   It is deliberately NOT `position: fixed`. A viewport-pinned sky was the first
+   implementation of the star field and got reverted for the reason recorded at the top
+   of Starfield.tsx: a background that never moves reads as detached from the content
+   scrolling over it. This layer is the height of the whole page instead, so each stop
+   on the voyage sits over a different colour and the wash travels with the copy.
+
+   Percentages are page-scale, so the hues follow the section order: violet hero, cyan
+   video, violet notes, green lab, pink interactive lab, lilac classroom, violet close.
+   One painted layer, no DOM, no JS, no per-frame cost.
+   ──────────────────────────────────────────────────────────────────────────── */
+.root::before {
+  content: none;
+}
+
+:global([data-theme='dark']) .root,
+:global(html.dark) .root,
+.root[data-landing-theme='dark'] {
+  --landing-bg-light: #09070f;
+  --landing-cosmos-mist: #2b1557;
+  --landing-cosmos-depth: #160c2a;
+  --landing-brand: #c4b5fd;
+  --landing-brand-soft: #c4b5fd;
+  --landing-star: #fffaff;
+  --landing-star-warm: #fff6ff;
+  --landing-star-cyan: #67e8f9;
+  --landing-scene-journey: color-mix(in srgb, var(--landing-lilac) 6%, transparent);
+  --landing-scene-products: color-mix(in srgb, var(--landing-violet) 4%, transparent);
+  --landing-scene-orbit: color-mix(in srgb, var(--landing-violet) 7%, transparent);
+  --landing-scene-outcomes: color-mix(in srgb, var(--landing-lilac) 5%, transparent);
+  --landing-scene-finale: color-mix(in srgb, var(--landing-lilac) 8%, transparent);
+  --landing-bg: #09070f;
+  --landing-surface: rgba(22, 14, 32, 0.76);
+  --landing-surface-raised: #181021;
+  --landing-text: #f6f1ff;
+  --landing-text-muted: #c8bed6;
+  --landing-text-faint: #988da8;
+  --landing-border: rgba(196, 181, 253, 0.18);
+  --landing-border-strong: rgba(196, 181, 253, 0.34);
+  --landing-label-bg: rgba(20, 13, 29, 0.86);
+  --landing-veil-mid: rgba(9, 7, 15, 0.9);
+  --landing-hero-scrim: rgba(9, 7, 15, 0.95);
+  --landing-galaxy-core: #a78bfa;
+  --landing-dust-bright: rgba(226, 221, 254, 0.88);
+  --landing-dust-soft: rgba(167, 139, 250, 0.72);
+  --landing-dust-opacity: 0.33;
+  --landing-frame-shadow: 0 34px 72px rgba(0, 0, 0, 0.48), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --landing-panel-wash-a: rgba(179, 136, 199, 0.07);
+  --landing-panel-wash-b: rgba(179, 136, 199, 0.012);
+  --landing-panel-lit: rgba(255, 255, 255, 0.055);
+  --landing-panel-cast: rgba(0, 0, 0, 0.38);
+  --landing-pill-bg: rgba(24, 16, 33, 0.9);
+  --landing-pill-text: #f6f1ff;
+  --landing-cta-bg: #7c3aed;
+  --landing-cta-fg: #fffaff;
+  --landing-cta-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+
+  --landing-violet: #9b7bff;
+  --landing-lilac: #c4b5fd;
+  --landing-cyan: #67e8f9;
+  --landing-green: #6ee7b7;
+  --landing-pink: #f0abfc;
+  --landing-signal-violet: #a78bfa;
+  --landing-signal-lilac: #d8ccff;
+  --landing-signal-cyan: #67e8f9;
+  --landing-signal-green: #6ee7b7;
+  --landing-signal-pink: #f0abfc;
+  --landing-moon-video-1: #c9f8ff;
+  --landing-moon-video-2: #67e8f9;
+  --landing-moon-video-3: #1688a0;
+  --landing-moon-video-4: #0d4555;
+  --landing-moon-video-5: #06151c;
+  --landing-moon-notes-1: #eee9ff;
+  --landing-moon-notes-2: #b69cff;
+  --landing-moon-notes-3: #7041d5;
+  --landing-moon-notes-4: #361873;
+  --landing-moon-notes-5: #130925;
+  --landing-moon-lab-1: #d2ffed;
+  --landing-moon-lab-2: #6ee7b7;
+  --landing-moon-lab-3: #248665;
+  --landing-moon-lab-4: #124936;
+  --landing-moon-lab-5: #071812;
+  --landing-moon-citation-1: #ffe1fb;
+  --landing-moon-citation-2: #f0abfc;
+  --landing-moon-citation-3: #b34fbd;
+  --landing-moon-citation-4: #5b225f;
+  --landing-moon-citation-5: #1e0b20;
+
+  /* Dark: a restrained steel-blue body with a deep falloff. The core remains
+     the sole atmospheric accent while surrounding product surfaces stay purple-tinted. */
+  --landing-core-1: #d8ccff;
+  --landing-core-2: #b69cff;
+  --landing-core-3: #936df4;
+  --landing-core-4: #7041d5;
+  --landing-core-5: #49258e;
+  --landing-core-6: #2b1557;
+  --landing-core-7: #160c2a;
+  --landing-core-shade: #09070f;
+  --landing-beacon-well: #1b0e34;
+  --landing-core-spec: #fffaff;
+  --landing-core-spec-op: 0.48;
+  --landing-core-bloom: #d8ccff;
+  --landing-core-halo: #9b7bff;
+  --landing-core-shadow: none;
+  --landing-band-tint: #8c6ce1;
+  --landing-relief-warm: #c4b5fd;
+  --landing-relief-cool: #67e8f9;
+  --landing-route: #a78bfa;
+  --landing-star-opacity: 0.44;
+}
+
+.foreground {
+  position: relative;
+  z-index: 1;
+}
+
+/* Every section shares the same cosmic ground. Its sticky plane now carries only a
+   local low-opacity bloom, so scene hand-offs keep their depth without hiding the
+   page-length stardust. */
+.sceneSection {
+  position: relative;
+  min-height: 100dvh;
+  isolation: isolate;
+}
+
+.sceneBackdropHost {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.sceneBackdrop {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  height: 100dvh;
+  background: radial-gradient(
+    ellipse 76% 62% at var(--landing-scene-origin-x, 50%) var(--landing-scene-origin-y, 50%),
+    var(--landing-scene-background, transparent),
+    transparent 74%
+  );
+}
+
+.sceneSection[data-landing-scene='hero'] {
+  --landing-scene-background: transparent;
+  z-index: 0;
+}
+
+.sceneSection[data-landing-scene='journey'] {
+  --landing-scene-background: var(--landing-scene-journey);
+  --landing-scene-origin-x: 78%;
+  --landing-scene-origin-y: 44%;
+  z-index: 1;
+}
+
+.sceneSection[data-landing-scene='products'] {
+  --landing-scene-background: var(--landing-scene-products);
+  --landing-scene-origin-x: 24%;
+  --landing-scene-origin-y: 52%;
+  z-index: 2;
+}
+
+.sceneSection[data-landing-scene='orbit'] {
+  --landing-scene-background: var(--landing-scene-orbit);
+  --landing-scene-origin-x: 72%;
+  --landing-scene-origin-y: 46%;
+  z-index: 3;
+}
+
+.sceneSection[data-landing-scene='outcomes'] {
+  --landing-scene-background: var(--landing-scene-outcomes);
+  --landing-scene-origin-x: 28%;
+  --landing-scene-origin-y: 48%;
+  z-index: 4;
+}
+
+.sceneSection[data-landing-scene='finale'] {
+  --landing-scene-background: var(--landing-scene-finale);
+  --landing-scene-origin-x: 76%;
+  --landing-scene-origin-y: 42%;
+  z-index: 5;
+}
+
+/* The viewport-height hero becomes a stacked card. Longer narrative sections keep
+   their own internal sticky mechanics instead of being nested inside another pin. */
+.sceneSection[data-landing-scene='hero'] {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sceneSection[data-landing-scene='hero'] {
+    position: relative;
+    height: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sceneBackdrop {
+    position: absolute;
+    inset: 0;
+    height: auto;
+  }
+}
+
+/* ── layout shell ─────────────────────────────────────────────────────────────
+   The design system specifies 1248px of CONTENT with 96px side margins, i.e.
+   96 + 1248 + 96 = 1440. So the outer box is 1440 and the padding lives inside it —
+   `max-width: 1248px` *plus* `padding-inline: 96px` would inset content to 192px and
+   leave only 1056px to work with, which reads as a uniformly cramped page.
+   ──────────────────────────────────────────────────────────────────────────── */
+.shell {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding-inline: 96px;
+}
+
+@media (max-width: 1279px) {
+  .shell {
+    padding-inline: 56px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .shell {
+    padding-inline: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .shell {
+    padding-inline: 20px;
+  }
+}
+
+/* The footer closes the page as a broad information rail, so it can occupy more of
+   the viewport than the reading-focused sections above it. */
+.footerShell {
+  max-width: 1600px;
+  padding-inline: 64px;
+}
+
+.footer {
+  position: relative;
+  z-index: 6;
+  background: radial-gradient(
+    ellipse 76% 130% at 76% 0%,
+    var(--landing-scene-finale),
+    transparent 72%
+  );
+}
+
+@media (max-width: 1279px) {
+  .footerShell {
+    padding-inline: 40px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .footerShell {
+    padding-inline: 32px;
+  }
+}
+
+@media (max-width: 767px) {
+  .footerShell {
+    padding-inline: 20px;
+  }
+}
+
+/* ── local star cluster ───────────────────────────────────────────────────────
+   Scoped to a region, not the page. `.skyHost` is placed by the section that owns it
+   (see the `className` prop on Starfield); the layer inside is deliberately taller than
+   the host so a ±70px parallax translate never exposes an edge.
+
+   The radial mask is what stops this reading as a rectangle of stars: density falls to
+   zero well before the host's bounds, so the cluster has no boundary to notice. Its
+   origin comes from the `focus` prop via `--sky-origin`.
+   ──────────────────────────────────────────────────────────────────────────── */
+/* The box is driven by custom properties rather than an `inset` shorthand that placement
+   classes then have to override. `.skyHost` and a placement class like `.finaleSky` live
+   in different CSS modules, so their relative order isn't guaranteed — an override of the
+   same longhand can silently lose, which is how the finale cluster ended up full-width
+   instead of inset. A var() fallback can't lose: it only applies when nothing set it. */
+.skyHost {
+  position: absolute;
+  top: var(--sky-top, 0px);
+  right: var(--sky-right, 0px);
+  bottom: var(--sky-bottom, 0px);
+  left: var(--sky-left, 0px);
+  z-index: 0;
+  pointer-events: none;
+  overflow: clip;
+}
+
+.skyLayer {
+  position: absolute;
+  /* The overhang the parallax travels into. */
+  top: -70px;
+  bottom: -70px;
+  left: 0;
+  right: 0;
+  will-change: transform;
+}
+
+.sky {
+  display: block;
+  width: 100%;
+  height: 100%;
+  -webkit-mask-image: radial-gradient(
+    ellipse 62% 58% at var(--sky-origin, 50% 50%),
+    #000 0%,
+    rgba(0, 0, 0, 0.85) 42%,
+    rgba(0, 0, 0, 0.3) 74%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 62% 58% at var(--sky-origin, 50% 50%),
+    #000 0%,
+    rgba(0, 0, 0, 0.85) 42%,
+    rgba(0, 0, 0, 0.3) 74%,
+    transparent 100%
+  );
+}
+
+/* No parallax when motion is reduced: the drift is the motion, and the cluster still
+   reads correctly frozen. */
+@media (prefers-reduced-motion: reduce) {
+  .skyLayer {
+    transform: none !important;
+  }
+}
+
+/* Scroll sentinel for the nav — see the note in NavBar.tsx. Absolute so it adds no
+   height to the page, 12px tall so it stops intersecting after 12px of scroll. */
+.navSentinel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 12px;
+  pointer-events: none;
+}
+
+/* The primary nav action uses a compact, dark optical surface in both themes. Keeping
+   this material stable makes the action legible while the sky behind the nav changes. */
+.navCta {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  min-width: 120px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 17px;
+  border: 0;
+  border-radius: 7px;
+  cursor: pointer;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--landing-brand) 90%, white) 0%,
+    var(--landing-brand) 100%
+  );
+  box-shadow:
+    0 10px 30px rgba(128, 104, 232, 0.24),
+    0 0 22px rgba(169, 155, 239, 0.16);
+  color: rgba(255, 253, 252, 0.94);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  transition:
+    color 1s cubic-bezier(0.15, 0.83, 0.66, 1),
+    transform 1s cubic-bezier(0.15, 0.83, 0.66, 1),
+    box-shadow 1s cubic-bezier(0.15, 0.83, 0.66, 1);
+}
+
+.navCta::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 15%;
+  width: 70%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgba(206, 181, 255, 0) 0%,
+    rgba(226, 210, 255, 0.96) 50%,
+    rgba(206, 181, 255, 0) 100%
+  );
+  opacity: 0.2;
+  transition: opacity 1s cubic-bezier(0.15, 0.83, 0.66, 1);
+  pointer-events: none;
+}
+
+.navCta:hover {
+  color: rgba(255, 253, 252, 1);
+  box-shadow:
+    0 14px 36px rgba(128, 104, 232, 0.34),
+    0 0 30px rgba(169, 155, 239, 0.24);
+}
+
+:global([data-theme='dark']) .navCta,
+:global(html.dark) .navCta,
+.root[data-landing-theme='dark'] .navCta {
+  background: radial-gradient(
+    ellipse at bottom,
+    rgba(109, 56, 165, 1) 0%,
+    rgba(43, 18, 63, 1) 34%,
+    rgba(10, 6, 16, 1) 68%
+  );
+  box-shadow:
+    0 10px 30px rgba(116, 62, 188, 0.24),
+    0 0 22px rgba(139, 92, 246, 0.12);
+  color: rgba(255, 255, 255, 0.66);
+}
+
+:global([data-theme='dark']) .navCta:hover,
+:global(html.dark) .navCta:hover,
+.root[data-landing-theme='dark'] .navCta:hover {
+  color: rgba(255, 255, 255, 1);
+  box-shadow:
+    0 14px 36px rgba(116, 62, 188, 0.38),
+    0 0 30px rgba(139, 92, 246, 0.24);
+}
+
+.navCta:hover::before {
+  opacity: 1;
+}
+
+.navCta:active {
+  transform: scale(1.03) translateY(-1px);
+  transition-duration: 120ms;
+}
+
+.navCta:focus-visible {
+  outline: 2px solid var(--landing-lilac);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .navCta,
+  .navCta::before {
+    transition: none;
+  }
+
+  .navCta:hover,
+  .navCta:active {
+    transform: none;
+  }
+}
+
+/* ── the page-spanning trajectory rail ────────────────────────────────────────
+   Sits just inside the 96px safe margin, at the same x as the journey's own node
+   column, so the two read as one line. Positioned off the shell geometry (not a fixed
+   px value) so it tracks the gutter at every breakpoint.
+   ──────────────────────────────────────────────────────────────────────────── */
+.railHost {
+  position: relative;
+}
+
+.railTrack {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--landing-rail-x);
+  width: 4px;
+  border-radius: 999px;
+  background: var(--landing-border);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.railProgress {
+  position: absolute;
+  inset: 0;
+  transform-origin: top center;
+  transform: scaleY(0);
+  background: linear-gradient(
+    to bottom,
+    var(--landing-cyan) 0%,
+    var(--landing-violet) 34%,
+    var(--landing-pink) 68%,
+    var(--landing-green) 100%
+  );
+}
+
+@media (max-width: 1279px) {
+  .root {
+    --landing-rail-x: 58px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .root {
+    --landing-rail-x: 42px;
+  }
+  .railTrack {
+    width: 3px;
+  }
+}
+
+/* Below 768 the journey renders its own tight rail inside the step list; a full-page
+   one would collide with edge-to-edge product frames. */
+@media (max-width: 767px) {
+  .railTrack {
+    display: none;
+  }
+}
+
+/* Content in railed sections is inset past the rail, so the trajectory runs down a
+   clear gutter — the same offset the design uses for every mid-page section. Applied
+   to the shell rather than each section so the inset can't drift between them. */
+.railed {
+  padding-left: 174px;
+}
+
+@media (max-width: 1279px) {
+  .railed {
+    padding-left: 114px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .railed {
+    padding-left: 84px;
+  }
+}
+
+@media (max-width: 767px) {
+  .railed {
+    padding-left: 20px;
+  }
+}
+
+/* ── mono utility: coordinates, status labels, section codes ── */
+.mono {
+  font-family: var(--landing-font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.5;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-variant-ligatures: none;
+}
+
+/* Chinese, and any mono label that is a real title rather than a status code,
+   should not be uppercased or letter-spaced into gaps. */
+.mono.plain {
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+
+/* ── display heading: Noto Serif SC for zh, already in the theme ── */
+.display {
+  font-family: var(--landing-font-display, var(--font-display-zh));
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+/* ── type scale ────────────────────────────────────────────────────────────────
+   Every text size on this page comes from here.
+
+   `.display` above sets family and weight but deliberately no size, and for a while
+   nothing else did either — so ~35 sizes were hand-picked at their call sites, split
+   between these CSS modules and Tailwind arbitrary values. That is how six sections
+   ended up with four different H2 sizes, three parallel sub-headings ended up at
+   33/36/38, and the micro band sprawled across 9/10.5/11.5/12/12.5/13.5px. Each role
+   now owns exactly one block, carrying its size, its leading and every breakpoint, so
+   changing a role is a single edit and a new section has an obvious size to reach for
+   (see `Display`'s `size` prop in primitives.tsx).
+
+   Not covered on purpose: the large display numerals (`.metricValue` 122px, `.glyph`
+   92px, the `.verifyMark` group). Those are graphic figures rather than running text —
+   folding them into a text ramp would flatten the design. Same for the nav wordmark.
+
+   Integers only. Half-pixel sizes don't render distinctly and were the clearest
+   fingerprint of per-component guessing.
+   ──────────────────────────────────────────────────────────────────────────── */
+
+/* Hero H1. Chinese and English deliberately use different scales: the English second
+   line is substantially wider, and matching the Chinese point size would either create
+   a third line or push the field out of the composition. */
+.h1 {
+  /* Global display tier (app/globals.css) — shared with the organization homepage; the
+     zh/en scales and every breakpoint live there. Reserve two lines against CLS. */
+  font-size: var(--text-display-hero);
+  line-height: var(--text-display-hero--line-height);
+  min-height: calc(2 * var(--text-display-hero--line-height));
+}
+
+.h2Finale {
+  font-size: 52px;
+  line-height: 1.26;
+}
+
+.h2 {
+  font-size: var(--text-display-section);
+  line-height: var(--text-display-section--line-height);
+}
+
+.h3Product {
+  font-size: 32px;
+  line-height: 1.32;
+}
+
+.h3Step {
+  font-size: 28px;
+  line-height: 1.4;
+}
+
+.h3Card {
+  font-size: 20px;
+  line-height: 1.4;
+}
+
+/* Node label on the flow S-curve — sits between the card heading and body copy. */
+.h3Node {
+  font-size: 18px;
+  line-height: 1.4;
+}
+
+/* The hero's lead is the one paragraph the design system sizes explicitly (20/32); every
+   other section lead sits one step below it so the hero still leads the page. */
+.leadHero {
+  font-size: 20px;
+  line-height: 32px;
+}
+
+.lead {
+  font-size: 18px;
+  line-height: 30px;
+}
+
+.bodyCopy {
+  font-size: 15px;
+  line-height: 26px;
+}
+
+.meta {
+  font-size: 13px;
+  line-height: 22px;
+}
+
+/* Smallest type on the page, for numerals inside the journey's 28px step dots. The floor
+   is 10px — the previous 9px was below anything legible. */
+.microMono {
+  font-family: var(--landing-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  font-variant-ligatures: none;
+}
+
+@media (max-width: 1279px) {
+  .h2Finale {
+    font-size: 46px;
+  }
+  .h3Product {
+    font-size: 33px;
+  }
+  .h3Step {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 1023px) {
+  .h2Finale {
+    font-size: 40px;
+  }
+  .h3Product {
+    font-size: 30px;
+  }
+  .h3Step {
+    font-size: 24px;
+  }
+  .leadHero {
+    font-size: 18px;
+    line-height: 30px;
+  }
+  .lead {
+    font-size: 17px;
+    line-height: 28px;
+  }
+}
+
+@media (max-width: 767px) {
+  /* English wraps to three lines here. */
+  :global(html[lang^='en']) .h1 {
+    min-height: calc(3 * var(--text-display-hero--line-height));
+  }
+  .h2Finale {
+    font-size: 34px;
+  }
+  .h3Product {
+    font-size: 27px;
+  }
+  .h3Step {
+    font-size: 22px;
+  }
+  .h3Card {
+    font-size: 19px;
+  }
+  .h3Node {
+    font-size: 17px;
+  }
+  .leadHero {
+    font-size: 17px;
+    line-height: 28px;
+  }
+  .lead {
+    font-size: 16px;
+    line-height: 27px;
+  }
+  .bodyCopy {
+    font-size: 14px;
+    line-height: 24px;
+  }
+  .meta {
+    font-size: 12px;
+    line-height: 20px;
+  }
+}
+
+@media (max-width: 389px) {
+  /* English wraps to three lines here. */
+  :global(html[lang^='en']) .h1 {
+    min-height: calc(3 * var(--text-display-hero--line-height));
+  }
+  .h2Finale {
+    font-size: 30px;
+  }
+  .h3Product {
+    font-size: 25px;
+  }
+}
+
+/* ── shared keyframes; transform/opacity only ── */
+@keyframes landingFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes landingDrift {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-14px);
+    opacity: 1;
+  }
+}
+
+@keyframes landingBreathe {
+  0%,
+  100% {
+    transform: scale(0.92);
+    opacity: 0.55;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes landingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Freeze every looping decoration; layout and contrast are unaffected. */
+@media (prefers-reduced-motion: reduce) {
+  .root *,
+  .root *::before,
+  .root *::after {
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0s !important;
+  }
+}

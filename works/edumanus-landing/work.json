@@ -1,0 +1,30 @@
+{
+  "locale": "en",
+  "title": "Edumanus Landing Page",
+  "summary": "The AI Cosmos product homepage: an interactive galaxy opens into five product demonstrations, scroll-driven typography and an isometric image field.",
+  "kind": "page",
+  "date": "2026-10-18",
+  "tags": ["React", "Three.js", "GSAP", "Interaction design"],
+  "highlights": [
+    "A draggable, keyboard-accessible galaxy dissolves into the page's continuous star field.",
+    "Five product covers expand into full-page video demonstrations with chapter controls.",
+    "Scroll-driven text and an isometric image field connect the product sections.",
+    "A standalone English/Chinese edition with local assets, responsive layouts and reduced-motion fallbacks."
+  ],
+  "preview": "preview.webp",
+  "cover": "preview.webp",
+  "demo": "demo/index.html",
+  "translations": {
+    "zh": {
+      "title": "Edumanus 产品首页",
+      "summary": "AI Cosmos 产品首页：从可交互的银河进入五组产品演示，以滚动文字和等距图片阵列串联完整页面。",
+      "tags": ["React", "Three.js", "GSAP", "交互设计"],
+      "highlights": [
+        "支持拖动与键盘操作的银河，随滚动散入贯穿页面的星空。",
+        "五组产品封面展开为完整视频演示，并提供章节切换。",
+        "滚动文字与等距图片阵列串联产品内容。",
+        "独立中英文版本，素材本地托管，保留响应式布局与减少动态效果的降级。"
+      ]
+    }
+  }
+}

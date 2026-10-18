@@ -1,0 +1,700 @@
+/* Plain CSS only — no @apply / theme(). Tailwind v4 requires a @reference header
+   for those inside a CSS module, and the shared page shell establishes the same
+   convention. Colours come from the --landing-* variables on `.root`. */
+
+/* ── the cosmos stage ─────────────────────────────────────────────────────────
+   A square box with a reserved aspect-ratio, so the layout never shifts when the
+   SVG paints (CLS).
+
+   Deliberately NOT `contain: paint`. It would clip the core's light-mode drop-shadow
+   at the stage box, which shows up as a hard rectangular edge around the finale's
+   cropped sphere on the pale canvas. The SVG's feTurbulence/feGaussianBlur only
+   re-rasterize if an *ancestor transform* animates, and none does — the stage is
+   statically positioned and only its descendants animate — so paint containment
+   isn't what protects that.
+
+   `isolation: isolate` keeps this stack's compositing self-contained, so a blend mode
+   added to any layer inside can never reach the page behind the stage.
+   ──────────────────────────────────────────────────────────────────────────── */
+.stage {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  isolation: isolate;
+  pointer-events: none;
+}
+
+.core {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  filter: var(--landing-core-shadow);
+}
+
+/* ── shader core ──────────────────────────────────────────────────────────────
+   Sits exactly on the SVG's core circle — centre (664,654) r=322 in the 1200-unit
+   viewBox, i.e. left 28.5% / top 27.667% / size 53.667%. Clipped to a circle so the
+   shader's square canvas can't show its corners, and placed *under* the SVG so the
+   SVG's rim, routes and beacon still paint on top.
+   ──────────────────────────────────────────────────────────────────────────── */
+.shaderCore {
+  position: absolute;
+  left: 28.5%;
+  top: 27.667%;
+  width: 53.667%;
+  height: 53.667%;
+  border-radius: 50%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+
+.shaderCore canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Revealed once the shader has produced a frame, so it cross-fades over the SVG body
+   instead of popping. */
+.stage[data-shader='ready'] .shaderCore {
+  opacity: 1;
+}
+
+/* ── orbit field (three.js Line2 canvas) ──────────────────────────────────────
+   Covers the whole stage, under the world bodies but over the core, so the rings
+   weave correctly: the depth-only sphere proxy in the scene culls the segments that
+   pass behind the core.
+   ──────────────────────────────────────────────────────────────────────────── */
+.orbitField {
+  position: absolute;
+  inset: 0;
+  /* Above the world bodies (z 2) and below the labels (z 4): the near half of each
+     ring has to cross in front of its body, but a line through a text chip is just
+     noise. */
+  z-index: 3;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.stage[data-orbits='ready'] .orbitField {
+  opacity: 1;
+}
+
+/* ── product worlds (DOM: shader material + lucide glyph + real text label) ────
+   Each world is positioned by its centre, so `--world-size` can scale the body
+   without moving it. The ring is a separate element so it can rotate independently
+   and extend past the body.
+   ──────────────────────────────────────────────────────────────────────────── */
+.worlds {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.worldLabels {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.world {
+  position: absolute;
+  width: var(--world-size);
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+}
+
+.world[data-depth='back'] {
+  opacity: 0.82;
+}
+
+.worldBody {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  overflow: hidden;
+  /* Fallback material for the static tier, and the base the shader paints over. */
+  background: radial-gradient(
+    circle at 30% 24%,
+    color-mix(in srgb, var(--world-accent) 55%, white) 0%,
+    var(--world-accent) 32%,
+    color-mix(in srgb, var(--world-accent) 34%, black) 62%,
+    #05030d 100%
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--world-accent) 34%, transparent),
+    0 0 24px color-mix(in srgb, var(--world-accent) 26%, transparent);
+}
+
+.worldBody canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Grain, so the CSS material doesn't read flat next to the shader-rendered core.
+   One inline SVG noise tile shared by all four bodies: it rasterises once, costs no
+   WebGL context, and is never animated — which is the only reason an feTurbulence is
+   affordable here (see the note in CosmosCoreSvg about animated ancestors). Plus an
+   inset shadow for the terminator, which is what the shader was really contributing. */
+.worldBody::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='90'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='90' height='90' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  background-size: 90px 90px;
+  opacity: 0.24;
+  mix-blend-mode: overlay;
+  box-shadow:
+    inset -8% -10% 22% rgba(3, 2, 10, 0.55),
+    inset 10% 12% 20% rgba(255, 255, 255, 0.09);
+}
+
+/* Glyph sits above the shader canvas, sized to the body. */
+.worldGlyph {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 42%;
+  height: 42%;
+  color: #ffffff;
+  opacity: 0.92;
+}
+
+.worldGlyph svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Tilted orbit ring, centred on the body and rotating at the world's own period.
+   The keyframes carry the centring translate as well as the rotation — `animation`
+   replaces the whole transform, so a separate `transform: translate(...)` would be
+   overwritten the moment the animation starts. */
+.worldRing {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 196%;
+  height: 60%;
+  border-radius: 50%;
+  border: 1.5px solid color-mix(in srgb, var(--world-accent) 70%, transparent);
+  transform: translate(-50%, -50%) rotate(var(--ring-tilt));
+  animation: landingRingSpin var(--ring-dur) linear infinite;
+}
+
+@keyframes landingRingSpin {
+  from {
+    transform: translate(-50%, -50%) rotate(var(--ring-tilt));
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(calc(var(--ring-tilt) + 360deg));
+  }
+}
+
+/* A soft halo so each body sits in space rather than being pasted on. */
+.world::after {
+  content: '';
+  position: absolute;
+  inset: -34%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--world-accent) 26%, transparent) 0%,
+    transparent 62%
+  );
+  z-index: -1;
+}
+
+.stage[data-visible='false'] .worldRing {
+  animation-play-state: paused;
+}
+
+/* Hangs off the body's own box — the offset must be relative to the world, not to
+   the stage, or the label lands on top of the sphere. */
+.worldLabel {
+  position: absolute;
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transform: translateY(-50%);
+  padding: 5px 11px 5px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--landing-border);
+  background: var(--landing-label-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--landing-text);
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.worldLabel::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: var(--world-accent);
+  box-shadow: 0 0 8px var(--world-accent);
+}
+
+@media (max-width: 767px) {
+  .worldLabel {
+    font-size: 10px;
+    padding: 4px 9px 4px 7px;
+  }
+}
+
+/* ── star particles ───────────────────────────────────────────────────────────
+   18 dots placed from a fixed table so SSR and client agree (no Math.random).
+   ──────────────────────────────────────────────────────────────────────────── */
+.stars {
+  position: absolute;
+  inset: 0;
+}
+
+.star {
+  position: absolute;
+  width: var(--s, 2px);
+  height: var(--s, 2px);
+  border-radius: 999px;
+  background: var(--star-color);
+  box-shadow: 0 0 6px var(--star-color);
+  animation: landingDrift var(--dur, 10s) ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+  will-change: transform, opacity;
+}
+
+/* Release the compositor layers once the hero is off screen. */
+.stage[data-visible='false'] .star {
+  will-change: auto;
+  animation-play-state: paused;
+}
+
+/* ── hero layout ──────────────────────────────────────────────────────────────
+   Desktop: copy in a wide editorial column, particle field cropped off the right.
+   `overflow: clip` on the section itself (not the ancestor) means the crop can't
+   produce a horizontal scrollbar — and unlike `hidden`, clip doesn't create a
+   scroll container, so it can't break sticky/fixed descendants.
+   ──────────────────────────────────────────────────────────────────────────── */
+/* The generous bottom padding is compositional, not decoration: the design's hero is
+   1032px tall with the citation world sitting near its lower edge, so the section has
+   to be tall enough to contain the full orbit. `journey` trims its own top padding to
+   match, keeping the seam between them at the design's rhythm. */
+.hero {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  min-height: 100dvh;
+  overflow: clip;
+  padding-top: 96px;
+  padding-bottom: 120px;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.copy {
+  position: relative;
+  z-index: 3;
+  max-width: 760px;
+  pointer-events: none;
+}
+
+.galaxyDragSurface {
+  position: absolute;
+  z-index: 2;
+  top: var(--landing-nav-height);
+  right: 0;
+  bottom: 0;
+  width: 62%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: grab;
+  touch-action: pan-y;
+}
+
+.galaxyDragSurface[data-dragging='true'] {
+  cursor: grabbing;
+}
+
+.galaxyDragSurface[data-transition-locked] {
+  cursor: default;
+}
+
+.galaxyDragSurface:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--landing-lilac) 70%, transparent);
+  outline-offset: -12px;
+}
+
+/* The field is intentionally off-centre. Its visual centre lands at roughly 74vw, so
+   the shell enters the composition behind the final title words without competing with
+   the first line. */
+.heroStage {
+  position: absolute;
+  top: var(--landing-nav-height);
+  right: -8%;
+  bottom: 44px;
+  left: 40%;
+  z-index: 0;
+}
+
+/* ── reactive hero field ─────────────────────────────────────────────────── */
+.reactiveVisual {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 700px;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.reactiveAtmosphere {
+  position: absolute;
+  inset: 2% -4% -2% 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 58% 49%, rgba(23, 13, 57, 0.98) 0 20%, rgba(28, 15, 68, 0.9) 35%, rgba(31, 18, 72, 0.42) 54%, transparent 72%),
+    radial-gradient(circle at 62% 48%, rgba(93, 72, 166, 0.28), transparent 58%);
+}
+
+:global([data-theme='dark']) .reactiveAtmosphere,
+:global(html.dark) .reactiveAtmosphere {
+  opacity: 0.78;
+}
+
+.reactivePoster,
+.reactiveCanvasMount {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.reactivePoster {
+  z-index: 1;
+  object-fit: contain;
+  object-position: 58% 50%;
+  opacity: 1;
+  transition: opacity 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reactiveCanvasMount {
+  z-index: 2;
+  opacity: 0;
+  transition: opacity 520ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.reactiveVisual[data-ready='true'] .reactiveCanvasMount {
+  opacity: 1;
+}
+
+.reactiveVisual[data-ready='true'] .reactivePoster {
+  opacity: 0;
+}
+
+.reactiveCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ── the seam ─────────────────────────────────────────────────────────────────
+   The right field deliberately overflows the hero. A raw crop would cut the particle
+   shell and atmosphere on one straight horizontal line, making the scene read as a
+   rectangular embed rather than part of the page.
+
+   This used to be a 230px band of opaque `--landing-bg` painted over the cut. That only works
+   while the ground *is* exactly `--landing-bg`, and it stopped being true the moment `.root`
+   grew its page-scale atmosphere wash (`.root::before` in landing.module.css): the
+   band became the one patch of the page with no wash on it, i.e. a white stripe with a
+   hard step at the hero's bottom edge — the seam it was supposed to hide.
+
+   So the sphere is masked out instead of painted over. Alpha owes nothing to whatever is
+   behind it, which makes the seam immune to the wash, the theme and any future token.
+
+   A mask on `.heroStage` itself would drift as its aspect ratio changes. `.stageMask`
+   uses the hero's own box, so its final transparent stop always meets the section edge.
+   ──────────────────────────────────────────────────────────────────────────── */
+.stageMask {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 calc(100% - 230px), transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 calc(100% - 230px), transparent 100%);
+}
+
+@media (max-width: 767px) {
+  /* Below 768 the cosmos is an in-flow figure under the copy and nothing is clipped, so
+     the wrapper has to get out of the way entirely — `inset: 0` here would tear the
+     stage out of the flow. */
+  .stageMask {
+    position: static;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}
+
+/* Left-to-right veil that buys the headline its contrast back from the cosmos.
+   Every stop is `--landing-veil-mid` (0.9 alpha) rather than opaque `--landing-bg`: the page's
+   atmosphere wash has to read through the veil, or the hero's left third becomes a
+   flat pale patch with a visible step at the seam below it. 10% of the wash is enough
+   for continuity, and the headline's contrast is unchanged — the ramp was already
+   heading to 0.9 by 44%. */
+/* Reaches further right than you'd expect on purpose: the cyan video world sits at
+   ~46% and in the design it reads as a dim body behind the copy, not a bright one
+   competing with the headline. Stopping the veil at 64% left it too present. */
+.veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to right,
+    var(--landing-veil-mid) 0%,
+    var(--landing-veil-mid) 26%,
+    var(--landing-veil-mid) 44%,
+    transparent 70%
+  );
+}
+
+/* ── layout guides ────────────────────────────────────────────────────────────
+   The design draws two hairlines across the hero: one along the nav baseline from the
+   left safe margin to the far edge, and one descending where the contrast veil begins.
+   They're a technical-drawing motif, not chrome — they say "this is a measured system",
+   which is the whole register of the page. Kept off the nav element itself, because the
+   nav's own border is an on-scroll state and these are static.
+   ─────────────────────────────────────────────────────────────────────────── */
+.guides {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.guideH,
+.guideV {
+  position: absolute;
+  background: var(--landing-border);
+  opacity: 0.55;
+}
+
+/* The hero starts at the top of the document and the nav floats over it, so this lands
+   exactly on the nav's baseline. */
+.guideH {
+  top: var(--landing-nav-height);
+  left: 96px;
+  right: 0;
+  height: 1px;
+}
+
+/* 57% of the stage-bearing hero, i.e. the veil's midpoint — so the line reads as the
+   boundary the gradient is already implying rather than an arbitrary rule. */
+.guideV {
+  top: var(--landing-nav-height);
+  bottom: 120px;
+  left: 57%;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--landing-border), transparent);
+}
+
+/* Below 1024 the core moves under the copy, so a vertical divider through the middle
+   of the text column would be nonsense. */
+@media (max-width: 1023px) {
+  .guideV {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .guideH {
+    left: 20px;
+  }
+}
+
+/* Translation markup owns the two semantic lines. At tablet and desktop each line is
+   kept intact; narrow English is allowed to wrap its longer second line so the heading
+   never has to shrink into body-copy territory. */
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.6;
+  letter-spacing: 0.02em;
+}
+
+.kickerIcon {
+  flex: none;
+  opacity: 0.88;
+}
+
+.headline {
+  margin: 32px 0 0;
+  text-wrap: normal;
+}
+
+.headlineLine {
+  display: block;
+  white-space: nowrap;
+}
+
+.body {
+  max-width: 620px;
+}
+
+/* The standard composition looks undersized inside cinema-sized viewports.
+   Scale only wide-and-tall displays so the common 1440x900 layout is unchanged. */
+@media (min-width: 1680px) and (min-height: 960px) {
+  .hero {
+    padding-top: clamp(116px, 9vh, 132px);
+    padding-bottom: clamp(64px, 5vh, 76px);
+  }
+
+  .copy {
+    max-width: clamp(800px, 34.4vw, 880px);
+  }
+
+  .copy .headline {
+    min-height: 2.32em;
+    font-size: clamp(72px, 5.4vh, 78px);
+    line-height: 1.16;
+  }
+
+  :global(html[lang^='en']) .copy .headline {
+    min-height: 2.34em;
+    font-size: clamp(56px, 4.3vh, 64px);
+    line-height: 1.17;
+  }
+
+  .copy .body {
+    max-width: 660px;
+    font-size: 21px;
+    line-height: 34px;
+  }
+}
+
+/* Hero copy enters via CSS, never framer-motion: a framer `initial={{opacity:0}}`
+   serializes `style="opacity:0"` into the SSR HTML, which would hide the headline
+   until hydration and move LCP to TTI. */
+.rise {
+  animation: landingRise 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes landingRise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 1279px) {
+  .hero {
+    padding-top: 96px;
+    padding-bottom: 120px;
+  }
+  .copy {
+    max-width: 700px;
+  }
+  .heroStage {
+    top: 88px;
+    right: -18%;
+    bottom: 50px;
+    left: 37%;
+  }
+}
+
+@media (max-width: 1023px) {
+  .hero {
+    padding-bottom: 112px;
+  }
+  .copy {
+    max-width: 600px;
+  }
+  .headline {
+    margin-top: 28px;
+  }
+  .heroStage {
+    top: 110px;
+    right: -32%;
+    bottom: 72px;
+    left: 32%;
+    opacity: 0.9;
+  }
+}
+
+/* Below 768 the cosmos stops being a backdrop and becomes a figure under the copy,
+   so the veil is no longer needed and nothing is cropped. */
+@media (max-width: 767px) {
+  .hero {
+    min-height: 100dvh;
+    padding-top: 88px;
+    padding-bottom: 72px;
+  }
+  .copy {
+    max-width: none;
+  }
+  .headline {
+    margin-top: 24px;
+  }
+  .galaxyDragSurface {
+    display: none;
+  }
+  .heroStage {
+    position: static;
+    width: min(100%, 500px);
+    height: 370px;
+    margin: 40px auto 0;
+    top: auto;
+    right: auto;
+    bottom: auto;
+    left: auto;
+    opacity: 1;
+  }
+  .reactiveVisual {
+    min-height: 370px;
+  }
+  .reactiveAtmosphere {
+    inset: 0 -16%;
+  }
+  .headlineLine {
+    white-space: normal;
+  }
+  .veil {
+    display: none;
+  }
+  .label {
+    font-size: 10px;
+    padding: 4px 9px 4px 7px;
+  }
+  .kicker {
+    font-size: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reactivePoster,
+  .reactiveCanvasMount {
+    transition: none;
+  }
+}

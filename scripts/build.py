@@ -162,8 +162,11 @@ def work_card(work, locale, base, copy, media):
     langs = item["content_languages"]
     title = escape(item["title"])
     tags = " · ".join(escape(tag) for tag in item["tags"])
+    destination = media["demo_url"] or route_url(base, locale, 'projects/' + item['slug'] + '/')
+    if work.get("demo") == "demo/index.html":
+        destination += f"?lang={locale}"
     return f'''<article class="work" data-kind="{item['kind']}">
-      <a class="project-card" href="{route_url(base, locale, 'projects/' + item['slug'] + '/')}" aria-label="{escape(item['title'], quote=True)}">
+      <a class="project-card" href="{escape(destination, quote=True)}" aria-label="{escape(item['title'], quote=True)}">
         <div class="project-cover"><img src="{escape(media['preview_url'], quote=True)}" alt="{escape(item['title'], quote=True)}" loading="lazy" width="1200" height="800"><span class="project-arrow" aria-hidden="true">↗</span></div>
         <div class="project-meta"><span>{escape(copy['kind_' + item['kind']])}</span><time datetime="{item['date']}">{item['date']}</time></div>
         <h3 lang="{language_tag(langs['title'])}">{title}</h3>

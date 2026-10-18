@@ -1,0 +1,11 @@
+GSAP 3.15.0
+Copyright 2008-2026, GreenSock. All rights reserved.
+Author: Jack Doyle
+
+This dependency uses the GSAP Standard No Charge License, not MIT.
+License: https://gsap.com/community/standard-license/
+Package: https://www.npmjs.com/package/gsap/v/3.15.0
+
+The original source distribution retains copyright and license-reference headers.
+The authoritative license was checked on 2026-10-18. This archive uses GSAP to animate
+a product demonstration; it does not provide a visual animation authoring tool.
